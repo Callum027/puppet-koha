@@ -1,6 +1,8 @@
-# == Class: koha
+# == Class: koha::install
 #
-# Full description of class koha here.
+# Installation of required packages for Koha, including Apache.
+# Also takes care of Apache module configuration, as this is required for
+# Koha to be properly installed from the packages.
 #
 # === Parameters
 #
@@ -35,7 +37,7 @@
 #
 # Copyright 2015 Callum Dickinson.
 #
-class koha
+class koha::install
 (
 	$a2dismod		= $koha::params::a2dismod,
 	$a2enmod		= $koha::params::a2enmod,
@@ -49,5 +51,34 @@ class koha
 	$koha_service		= $koha::params::koha_service,
 ) inherits koha::params
 {
-	require koha::install
+	require koha::repo
+
+	# Install Apache first, before installing Koha, so we can disable the event MPM.
+	# Koha uses the ITK MPM, and the libapache2-mod-itk package for Ubuntu does not always
+	# install properly with that MPM enabled. This will work around that problem.
+	package
+	{ $apache_packages:
+		ensure	=> installed,
+	}
+
+	# In addition to disabling the event MPM, enable the CGI and write Apache modules,
+	# which are required for Koha to run.
+	exec
+	{ ["$a2dismod $apache_a2dismod", "$a2enmod $apache_a2enmod"]:
+		require	=> Package[$apache_packages],
+	}
+
+	# Install the Koha packages.
+	package
+	{ $koha_packages:
+		ensure	=> installed,
+		require	=> Exec["$a2dismod $apache_a2dismod"],
+	}
+
+	# Refresh the Apache Service.
+	service
+	{ $apache_services:
+		ensure	=> running,
+		require	=> [ Package[[$apache_packages, $koha_packages]], Exec[["$a2dismod $apache_a2dismod", "$a2enmod $apache_a2enmod"]] ],
+	}
 }

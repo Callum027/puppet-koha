@@ -1,4 +1,4 @@
-# == Class: koha
+# == Class: koha::zebra
 #
 # Full description of class koha here.
 #
@@ -35,19 +35,18 @@
 #
 # Copyright 2015 Callum Dickinson.
 #
-class koha
+class koha::zebra
 (
-	$a2dismod		= $koha::params::a2dismod,
-	$a2enmod		= $koha::params::a2enmod,
-
-	$apache_a2dismod	= $koha::params::apache_a2dismod,
-	$apache_a2enmod		= $koha::params::apache_a2enmod,
-	$apache_packages	= $koha::params::apache_packages,
-	$apache_service		= $koha::params::apache_service,
-
-	$koha_packages		= $koha::params::koha_packages,
-	$koha_service		= $koha::params::koha_service,
+	$lang			= $koha::params::zebra_lang,
+	$marc_format		= $koha::params::zebra_marc_format,
+	$password		= undef,
+	$biblios_config		= $koha::params::zebra_biblios_config,
+	$authorities_config	= $koha::params::zebra_authorities_config
 ) inherits koha::params
 {
-	require koha::install
+
+
+	# Start the Koha zebra service, if it hasn't been already.
+	# $ koha-start-zebra "$name"
+	# $ koha-indexer --start "$name"
 }

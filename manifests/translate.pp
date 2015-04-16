@@ -1,6 +1,6 @@
-# == Class: koha
+# == Resource: koha::translate
 #
-# Full description of class koha here.
+# Install non-standard languages into Koha.
 #
 # === Parameters
 #
@@ -35,19 +35,24 @@
 #
 # Copyright 2015 Callum Dickinson.
 #
-class koha
-(
-	$a2dismod		= $koha::params::a2dismod,
-	$a2enmod		= $koha::params::a2enmod,
-
-	$apache_a2dismod	= $koha::params::apache_a2dismod,
-	$apache_a2enmod		= $koha::params::apache_a2enmod,
-	$apache_packages	= $koha::params::apache_packages,
-	$apache_service		= $koha::params::apache_service,
-
-	$koha_packages		= $koha::params::koha_packages,
-	$koha_service		= $koha::params::koha_service,
-) inherits koha::params
+define koha::translate($koha_translate = undef, $koha_packages = undef, $language_code)
 {
+	require koha::params
 	require koha::install
+
+	if ($koha_translate == undef)
+	{
+		$koha_translate = $koha::params::koha_translate
+	}
+
+	if ($koha_packages == undef)
+	{
+		$koha_packages = $koha::params::koha_packages
+	}
+
+	# This will fail if the given language code is not available.
+	exec
+	{ "$koha_translate --install $language_code":
+		require	=> Package[$koha_packages],
+	}
 }

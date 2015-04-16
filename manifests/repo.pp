@@ -1,6 +1,6 @@
-# == Class: koha
+# == Class: koha::repo
 #
-# Full description of class koha here.
+# Set up the Koha APT repository.
 #
 # === Parameters
 #
@@ -35,19 +35,31 @@
 #
 # Copyright 2015 Callum Dickinson.
 #
-class koha
+class koha::repo
 (
-	$a2dismod		= $koha::params::a2dismod,
-	$a2enmod		= $koha::params::a2enmod,
-
-	$apache_a2dismod	= $koha::params::apache_a2dismod,
-	$apache_a2enmod		= $koha::params::apache_a2enmod,
-	$apache_packages	= $koha::params::apache_packages,
-	$apache_service		= $koha::params::apache_service,
-
-	$koha_packages		= $koha::params::koha_packages,
-	$koha_service		= $koha::params::koha_service,
+	$koha_repo_release	= $koha::params::koha_repo_release,
 ) inherits koha::params
 {
-	require koha::install
+	# Prepare the package manager with the Koha repository.
+	case $::osfamily
+	{
+		'Debian':
+		{
+			apt::source
+			{ 'koha':
+				location	=> "http://debian.koha-community.org/koha",
+				release		=> $koha_repo_release,
+				repos		=> "main",
+				key		=> "A2E41F10",
+				key_source	=> "http://debian.koha-community.org/koha/gpg.asc",
+			}
+		}
+
+		# RedHat support will come at a later time!
+
+		default:
+		{
+			fail("Sorry, but the koha module does not support the $::osfamily OS family at this time")
+		}
+	}
 }

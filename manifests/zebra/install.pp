@@ -1,6 +1,8 @@
-# == Class: koha
+# == Class: koha::zebra::install
 #
-# Full description of class koha here.
+# Installation of required packages for Koha, including Apache.
+# Also takes care of Apache module configuration, as this is required for
+# Koha to be properly installed from the packages.
 #
 # === Parameters
 #
@@ -35,19 +37,30 @@
 #
 # Copyright 2015 Callum Dickinson.
 #
-class koha
+class koha::zebra::install
 (
-	$a2dismod		= $koha::params::a2dismod,
-	$a2enmod		= $koha::params::a2enmod,
 
-	$apache_a2dismod	= $koha::params::apache_a2dismod,
-	$apache_a2enmod		= $koha::params::apache_a2enmod,
-	$apache_packages	= $koha::params::apache_packages,
-	$apache_service		= $koha::params::apache_service,
 
-	$koha_packages		= $koha::params::koha_packages,
-	$koha_service		= $koha::params::koha_service,
+	$koha_zebra_packages	= $koha::params::koha_packages,
+	$koha_zebra_services	= $koha::params::koha_service,
 ) inherits koha::params
 {
-	require koha::install
+	require koha::repo
+
+	# This is a temporary requirement, while Zebra is still bound with Koha.
+	# When they are separate packages, they will be able to be installed independently.
+	if (Class["koha::install"] == undef)
+	{
+		package
+		{ $koha_zebra_packages:
+			ensure	=> installed,
+		}
+
+		# Refresh the Apache Service.
+		service
+		{ $koha_zebra_services:
+			ensure	=> running,
+			require	=> Package[$koha_zebra_packages],
+		}
+	}
 }
