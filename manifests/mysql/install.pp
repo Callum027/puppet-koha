@@ -1,6 +1,8 @@
-# == Class: koha::zebra
+# == Class: koha::zebra::install
 #
-# Full description of class koha here.
+# Installation of required packages for Koha, including Apache.
+# Also takes care of Apache module configuration, as this is required for
+# Koha to be properly installed from the packages.
 #
 # === Parameters
 #
@@ -35,16 +37,7 @@
 #
 # Copyright 2015 Callum Dickinson.
 #
-class koha::zebra
-(
-	$lang			= $koha::params::zebra_lang,
-	$marc_format		= $koha::params::zebra_marc_format,
-	$password		= undef,
-	$biblios_config		= $koha::params::zebra_biblios_config,
-	$authorities_config	= $koha::params::zebra_authorities_config
-) inherits koha::params
+class koha::mysql::install
 {
-	# Start the Koha zebra service, if it hasn't been already.
-	# $ koha-start-zebra "$name"
-	# $ koha-indexer --start "$name"
+	include mysql::server
 }

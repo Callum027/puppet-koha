@@ -35,16 +35,6 @@
 #
 # Copyright 2015 Callum Dickinson.
 #
-class koha::zebra
-(
-	$lang			= $koha::params::zebra_lang,
-	$marc_format		= $koha::params::zebra_marc_format,
-	$password		= undef,
-	$biblios_config		= $koha::params::zebra_biblios_config,
-	$authorities_config	= $koha::params::zebra_authorities_config
-) inherits koha::params
+class koha::mysql($password = undef) inherits koha::params
 {
-	# Start the Koha zebra service, if it hasn't been already.
-	# $ koha-start-zebra "$name"
-	# $ koha-indexer --start "$name"
 }

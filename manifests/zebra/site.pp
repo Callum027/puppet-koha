@@ -37,29 +37,70 @@
 #
 define koha::zebra::site
 (
-	$ensure			= present,
+	$ensure				= present,
 
-	$site_name		= $name,
-	$site_user		= "$site_name-koha",
-	$password		= undef,
+	$site_name			= $name,
 
-	$koha_site_dir		= $koha::params::koha_site_dir,
-	$koha_language		= $koha::params::koha_language,
-	$marc_format		= $koha::params::koha_marc_format,
-	$biblios_config		= $koha::params::koha_zebra_biblios_config,
-	$authorities_config	= $koha::params::koha_zebra_authorities_config,
+	$zebra_user			= "$site_name-koha",
+	$zebra_password			= undef,
 
-	$koha_zebra_services	= $koha::params::koha_zebra_services,
+	$koha_site_dir			= undef,
+	$koha_language			= undef,
+	$koha_marc_format		= undef,
+	$koha_zebra_biblios_config	= undef,
+	$koha_zebra_authorities_config	= undef,
 
-	$pwgen			= $koha::params::pwgen,
-	$sed			= $koha::params::sed,
-	$test			= $koha::params::test
-) inherits koha::params
+	$koha_zebra_services		= undef,
+
+	$pwgen				= undef,
+	$sed				= undef,
+	$test				= undef
+)
 {
+	require koha::params
+
 	# If a password wasn't passed into the resource, automatically generate it.
 	if ($password == undef)
 	{
 		$password = generate("$pwgen -s 16 1")
+	}
+
+	# Parameters from koha::params.
+	if ($koha_site_dir == undef)
+	{
+		$koha_site_dir = $koha::params::koha_site_dir
+	}
+	if ($koha_language == undef)
+	{
+		$koha_language = $koha::params::koha_language
+	}
+	if ($koha_marc_format == undef)
+	{
+		$koha_marc_format = $koha::params::koha_marc_format
+	}
+	if ($koha_zebra_biblios_config == undef)
+	{
+		$koha_zebra_biblios_config = $koha::params::koha_zebra_biblios_config
+	}
+	if ($koha_zebra_authorities_config == undef)
+	{
+		$koha_zebra_authorities_config = $koha::params::koha_zebra_authorities_config
+	}
+	if ($koha_zebra_services == undef)
+	{
+		$koha_zebra_services = $koha::params::koha_zebra_services
+	}
+	if ($pwgen == undef)
+	{
+		$pwgen = $koha::params::pwgen
+	}
+	if ($sed == undef)
+	{
+		$sed = $koha::params::sed
+	}
+	if ($test == undef)
+	{
+		$test = $koha::params::test
 	}
 
 	# Generate and install Zebra config files.
@@ -67,7 +108,7 @@ define koha::zebra::site
 	{ "$koha_site_dir/$site_name/zebra-biblios.cfg":
 		ensure	=> $ensure,
 		owner	=> root,
-		group	=> $site_user,
+		group	=> $zebra_user,
 		mode	=> 640,
 		content	=> template("koha/zebra-biblios.cfg.erb"),
 		notify	=> Service[$koha_zebra_services],
@@ -77,7 +118,7 @@ define koha::zebra::site
 	{ "$koha_site_dir/$site_name/zebra-biblios-dom-site.cfg":
 		ensure	=> $ensure,
 		owner	=> root,
-		group	=> $site_user,
+		group	=> $zebra_user,
 		mode	=> 640,
 		content	=> template("koha/zebra-biblios-dom-site.cfg.erb"),
 		notify	=> Service[$koha_zebra_services],
@@ -87,7 +128,7 @@ define koha::zebra::site
 	{ "$koha_site_dir/$site_name/zebra-authorities-site.cfg":
 		ensure	=> $ensure,
 		owner	=> root,
-		group	=> $site_user,
+		group	=> $zebra_user,
 		mode	=> 640,
 		content	=> template("koha/zebra-authorities-site.cfg.erb"),
 		notify	=> Service[$koha_zebra_services],
@@ -97,7 +138,7 @@ define koha::zebra::site
 	{ "$koha_site_dir/$site_name/zebra-authorities-dom-site.cfg":
 		ensure	=> $ensure,
 		owner	=> root,
-		group	=> $site_user,
+		group	=> $zebra_user,
 		mode	=> 640,
 		content	=> template("koha/zebra-authorities-dom-site.cfg.erb"),
 		notify	=> Service[$koha_zebra_services],
@@ -107,10 +148,10 @@ define koha::zebra::site
 	{ "$koha_site_dir/$site_name/zebra.passwd":
 		ensure	=> $ensure,
 		owner	=> root,
-		group	=> $site_user,
+		group	=> $zebra_user,
 		mode	=> 640,
 		content	=> template("koha/zebra.passwd.erb"),
-		unless	=> "$test \$($sed 's/^kohauser:.*/pass/' $koha_site_dir/$site_name/zebra.passwd) = 'pass'",
+		onlyif	=> "$test \$($sed 's/^kohauser:.*/pass/' $koha_site_dir/$site_name/zebra.passwd) != 'pass'",
 		notify	=> Service[$koha_zebra_services],
 	}
 }

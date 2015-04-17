@@ -39,33 +39,36 @@ class koha::params
 		'Debian':
 		{
 			# Executable files.
-			$a2dismod		= "/usr/sbin/a2dismod",
-			$a2enmod		= "/usr/sbin/a2enmod",
-			$koha_create		= "/usr/sbin/koha-create",
-			$koha_translate		= "/usr/sbin/koha-translate",
-			$pwgen			= "/usr/bin/pwgen",
-			$sed			= "/usr/bin/sed",
-			$test			= "/usr/bin/test",
+			$a2dismod		= "/usr/sbin/a2dismod"
+			$a2enmod		= "/usr/sbin/a2enmod"
+			$koha_create		= "/usr/sbin/koha-create"
+			$koha_translate		= "/usr/sbin/koha-translate"
+			$mysql			= "/usr/bin/mysql"
+			$pwgen			= "/usr/bin/pwgen"
+			$sed			= "/usr/bin/sed"
+			$test			= "/usr/bin/test"
 
 			# Apache configuration variables.
-			$apache_a2dismod	= [ "mpm_event" ],
-			$apache_a2enmod		= [ "cgi", "rewrite" ],
+			$apache_a2dismod	= [ "mpm_event" ]
+			$apache_a2enmod		= [ "cgi", "rewrite" ]
 
-			$apache_packages	= [ "apache2" ],
-			$apache_services	= [ "apache2" ],
+			$apache_packages	= [ "apache2" ]
+			$apache_services	= [ "apache2" ]
 
 			# Koha configuration variables.
 			$koha_repo_release	= "stable",
-			$koha_packages		= [ "koha-common" ],
-			$koha_services		= [ "koha-common" ],
+			$koha_packages		= [ "koha-common" ]
+			$koha_services		= [ "koha-common" ]
 
 			$koha_language		= "en",
-			$koha_site_dir		= "/etc/koha/sites",
+			$koha_site_dir		= "/etc/koha/sites"
 			
-
 			# Koha Zebra configuration variables.
-			$koha_zebra_packages	= $koha_packages,
-			$koha_zebra_services	= $koha_services,
+			$koha_zebra_packages	= $koha_packages
+			$koha_zebra_services	= $koha_services
+
+			# MySQL configuration variables.
+			$mysql_adminuser	= "1"
 		}
 
 		# RedHat support will come at a later time!
