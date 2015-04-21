@@ -1,8 +1,6 @@
-# == Class: koha::zebra::install
+# == Class: koha::mysql::install
 #
-# Installation of required packages for Koha, including Apache.
-# Also takes care of Apache module configuration, as this is required for
-# Koha to be properly installed from the packages.
+# Installation of the MySQL database packages.
 #
 # === Parameters
 #

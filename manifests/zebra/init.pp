@@ -1,6 +1,6 @@
 # == Class: koha::zebra
 #
-# Full description of class koha here.
+# Configure the Koha Zebra indexer.
 #
 # === Parameters
 #

@@ -1,6 +1,6 @@
 # == Class: koha::site
 #
-# Full description of class koha here.
+# Set up a Koha site instance 
 #
 # === Parameters
 #
@@ -39,21 +39,12 @@ define koha::site
 (
 	$ensure			= present,
 
-	$site_name		= $name,
+	$site_name		= $name
 ) inherits koha::params
 {
-	# If a password wasn't passed into the resource, automatically generate it.
-	if ($mysql_password == undef)
-	{
-		$mysql_password = generate("$pwgen -s 16 1")
-	}
-
-	if ($staff_password == undef)
-	{
-		$staff_password = generate("$pwgen -s 12 1")
-	}
-
 	# Generate and install Apache site-available file and log dir.
+	# TODO: integrate puppetlabs/apache module instead of manual Apache configuration?
+	#       Should take into account installing Koha sites
 
 	# Generate and install main Koha config file.
 

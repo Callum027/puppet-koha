@@ -56,6 +56,9 @@ class koha::install
 	# Install Apache first, before installing Koha, so we can disable the event MPM.
 	# Koha uses the ITK MPM, and the libapache2-mod-itk package for Ubuntu does not always
 	# install properly with that MPM enabled. This will work around that problem.
+	#
+	# TODO: integrate puppetlabs/apache module instead of manual Apache configuration?
+	#       Should take into account installing ITK MPM.
 	package
 	{ $apache_packages:
 		ensure	=> installed,

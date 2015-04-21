@@ -1,6 +1,6 @@
-# == Class: koha::zebra
+# == Class: koha::zebra::site
 #
-# Full description of class koha here.
+# Add a site to the Zebra indexer.
 #
 # === Parameters
 #

@@ -1,6 +1,6 @@
-# == Class: koha::zebra
+# == Class: koha::mysql
 #
-# Full description of class koha here.
+# Configure the MySQL database.
 #
 # === Parameters
 #

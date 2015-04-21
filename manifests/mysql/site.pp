@@ -1,6 +1,6 @@
-# == Class: koha::zebra
+# == Class: koha::mysql::site
 #
-# Full description of class koha here.
+# Add a Koha MySQL database for the given site name.
 #
 # === Parameters
 #
