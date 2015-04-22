@@ -35,10 +35,23 @@
 #
 # Copyright 2015 Callum Dickinson.
 #
-define koha::translate($koha_translate = undef, $koha_packages = undef, $language_code)
+define koha::translate
+(
+	$language_code = $name,
+
+	$grep = undef,
+	$koha_translate = undef,
+
+	$koha_packages = undef
+)
 {
 	require koha::params
 	require koha::install
+
+	if ($grep == undef)
+	{
+		$grep = $koha::params::grep
+	}
 
 	if ($koha_translate == undef)
 	{
@@ -54,5 +67,6 @@ define koha::translate($koha_translate = undef, $koha_packages = undef, $languag
 	exec
 	{ "$koha_translate --install $language_code":
 		require	=> Package[$koha_packages],
+		onlyif	=> "$koha_translate --list --available | $grep -v $language_code",
 	}
 }

@@ -41,11 +41,12 @@ class koha::params
 			# Executable files.
 			$a2dismod		= "/usr/sbin/a2dismod"
 			$a2enmod		= "/usr/sbin/a2enmod"
+			$grep			= "/bin/grep"
 			$koha_create		= "/usr/sbin/koha-create"
 			$koha_translate		= "/usr/sbin/koha-translate"
 			$mysql			= "/usr/bin/mysql"
 			$pwgen			= "/usr/bin/pwgen"
-			$sed			= "/usr/bin/sed"
+			$sed			= "/bin/sed"
 			$test			= "/usr/bin/test"
 
 			# Apache configuration variables.
