@@ -158,24 +158,6 @@ define koha::site
 		notify	=> Service[$koha_services],
 	}
 
-	# Ensure the Koha service is up and running.
-	if ($ensure == "present")
-	{
-		service
-		{ $koha_services:
-			ensure		=> "running",
-			enable		=> true,
-		}
-	}
-	else if ($ensure == "absent")
-	{
-		service
-		{ $koha_services:
-			ensure		=> "stopped",
-			enable		=> false,
-		}
-	}
-
 	# Generate Apache vhosts for the OPAC and Intranet servers for this Koha site.
 	apache::vhost
 	{ $opac_server_name:

@@ -58,11 +58,19 @@ class koha::install
 
 	if ($ensure == "present")
 	{
-		$ensure_package = "installed"
+		package
+		{ $koha_packages:
+			ensure	=> "installed",
+			require	=> [ Class["koha::repo"], Class["apache"], Class["apache::mod::itk"] ],
+		}
 	}
-	else
+	elsif ($ensure == "absent")
 	{
-		$ensure_package = $ensure
+		package
+		{ $koha_packages:
+			ensure	=> "purged",
+			require	=> [ Class["koha::repo"] ],
+		}
 	}
 
 	# Install the Koha packages, with the Debian repository.
@@ -71,9 +79,21 @@ class koha::install
 		ensure	=> $ensure,
 	}
 
-	package
-	{ $koha_packages:
-		ensure	=> $ensure_package,
-		require	=> [ Class["koha::repo"], Class["apache"], Class["apache::mod::itk"] ],
+	# Ensure the Koha service is up and running.
+	if ($ensure == "present")
+	{
+		service
+		{ $koha_services:
+			ensure		=> "running",
+			enable		=> true,
+		}
+	}
+	elsif ($ensure == "absent")
+	{
+		service
+		{ $koha_services:
+			ensure		=> "stopped",
+			enable		=> false,
+		}
 	}
 }
