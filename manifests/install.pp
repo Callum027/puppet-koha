@@ -40,8 +40,6 @@
 class koha::install
 (
 	$ensure			= "present",
-	$a2dismod		= $koha::params::a2dismod,
-	$a2enmod		= $koha::params::a2enmod,
 
 	$koha_packages		= $koha::params::koha_packages,
 	$koha_service		= $koha::params::koha_service
