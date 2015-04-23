@@ -39,49 +39,43 @@
 #
 class koha::install
 (
+	$ensure			= "present",
 	$a2dismod		= $koha::params::a2dismod,
 	$a2enmod		= $koha::params::a2enmod,
 
-	$apache_a2dismod	= $koha::params::apache_a2dismod,
-	$apache_a2enmod		= $koha::params::apache_a2enmod,
-	$apache_packages	= $koha::params::apache_packages,
-	$apache_service		= $koha::params::apache_service,
-
 	$koha_packages		= $koha::params::koha_packages,
-	$koha_service		= $koha::params::koha_service,
+	$koha_service		= $koha::params::koha_service
 ) inherits koha::params
 {
-	require koha::repo
-
 	# Install Apache first, before installing Koha, so we can disable the event MPM.
 	# Koha uses the ITK MPM, and the libapache2-mod-itk package for Ubuntu does not always
 	# install properly with that MPM enabled. This will work around that problem.
-	#
-	# TODO: integrate puppetlabs/apache module instead of manual Apache configuration?
-	#       Should take into account installing ITK MPM.
-	package
-	{ $apache_packages:
-		ensure	=> installed,
+	if ($ensure == "present")
+	{
+		include apache
+		include apache::mod::itk
+		include apache::mod::cgi
+		include apache::mod::rewrite
 	}
 
-	# In addition to disabling the event MPM, enable the CGI and write Apache modules,
-	# which are required for Koha to run.
-	exec
-	{ ["$a2dismod $apache_a2dismod", "$a2enmod $apache_a2enmod"]:
-		require	=> Package[$apache_packages],
+	if ($ensure == "present")
+	{
+		$ensure_package = "installed"
+	}
+	else
+	{
+		$ensure_package = $ensure
 	}
 
-	# Install the Koha packages.
+	# Install the Koha packages, with the Debian repository.
+	class
+	{ "koha::repo":
+		ensure	=> $ensure,
+	}
+
 	package
 	{ $koha_packages:
-		ensure	=> installed,
-		require	=> Exec["$a2dismod $apache_a2dismod"],
-	}
-
-	# Refresh the Apache Service.
-	service
-	{ $apache_services:
-		ensure	=> running,
-		require	=> [ Package[[$apache_packages, $koha_packages]], Exec[["$a2dismod $apache_a2dismod", "$a2enmod $apache_a2enmod"]] ],
+		ensure	=> $ensure_package,
+		require	=> [ Class["koha::repo"], Class["apache"], Class["apache::mod::itk"] ],
 	}
 }

@@ -49,19 +49,14 @@ class koha::params
 			$sed			= "/bin/sed"
 			$test			= "/usr/bin/test"
 
-			# Apache configuration variables.
-			$apache_a2dismod	= [ "mpm_event" ]
-			$apache_a2enmod		= [ "cgi", "rewrite" ]
-
-			$apache_packages	= [ "apache2" ]
-			$apache_services	= [ "apache2" ]
-
 			# Koha configuration variables.
-			$koha_repo_release	= "stable",
+			$koha_repo_release	= "stable"
 			$koha_packages		= [ "koha-common" ]
 			$koha_services		= [ "koha-common" ]
 
-			$koha_language		= "en",
+			$koha_language		= "en"
+			$koha_config_dir	= "/etc/koha"
+			$koha_log_dir		= "/var/log/koha"
 			$koha_site_dir		= "/etc/koha/sites"
 			
 			# Koha Zebra configuration variables.

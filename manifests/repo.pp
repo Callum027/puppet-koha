@@ -37,7 +37,8 @@
 #
 class koha::repo
 (
-	$koha_repo_release	= $koha::params::koha_repo_release,
+	$ensure			= "present",
+	$koha_repo_release	= $koha::params::koha_repo_release
 ) inherits koha::params
 {
 	# Prepare the package manager with the Koha repository.
@@ -47,6 +48,7 @@ class koha::repo
 		{
 			apt::source
 			{ 'koha':
+				ensure		=> $ensure,
 				location	=> "http://debian.koha-community.org/koha",
 				release		=> $koha_repo_release,
 				repos		=> "main",
