@@ -45,9 +45,9 @@ define koha::mysql::site
 
 	$mysql_db		= "koha_$site_name",
 	$mysql_user		= $mysql_db,
-	$mysql_password		= undef,
 
-	$staff_password		= undef
+	$mysql_password,
+	$staff_password
 )
 {
 	require koha::params
@@ -55,19 +55,6 @@ define koha::mysql::site
 	if ($mysql_adminuser == undef)
 	{
 		$mysql_adminuser = $koha::params::mysql_adminuser
-	}
-
-	# If a password wasn't passed into the resource, automatically generate it.
-	if ($mysql_password == undef)
-	{
-		# TODO: Remember the MySQL password and check for it in the database.
-		$mysql_password = generate("$pwgen -s 16 1")
-	}
-
-	if ($staff_password == undef)
-	{
-		# TODO: Remember the staff password/digest and check for it in the database.
-		$staff_password = generate("$pwgen -s 12 1")
 	}
 
 	# Set up MySQL database for this instance.

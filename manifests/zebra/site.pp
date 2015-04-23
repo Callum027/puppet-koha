@@ -41,8 +41,8 @@ define koha::zebra::site
 
 	$site_name			= $name,
 
-	$zebra_user			= "$site_name-koha",
-	$zebra_password			= undef,
+	$koha_user			= "$site_name-koha",
+	$zebra_password,
 
 	$koha_site_dir			= undef,
 	$koha_language			= undef,
@@ -58,12 +58,6 @@ define koha::zebra::site
 )
 {
 	require koha::params
-
-	# If a password wasn't passed into the resource, automatically generate it.
-	if ($password == undef)
-	{
-		$password = generate("$pwgen -s 16 1")
-	}
 
 	# Parameters from koha::params.
 	if ($koha_site_dir == undef)
@@ -108,7 +102,7 @@ define koha::zebra::site
 	{ "$koha_site_dir/$site_name/zebra-biblios.cfg":
 		ensure	=> $ensure,
 		owner	=> root,
-		group	=> $zebra_user,
+		group	=> $koha_user,
 		mode	=> 640,
 		content	=> template("koha/zebra-biblios.cfg.erb"),
 		notify	=> Service[$koha_zebra_services],
@@ -118,7 +112,7 @@ define koha::zebra::site
 	{ "$koha_site_dir/$site_name/zebra-biblios-dom-site.cfg":
 		ensure	=> $ensure,
 		owner	=> root,
-		group	=> $zebra_user,
+		group	=> $koha_user,
 		mode	=> 640,
 		content	=> template("koha/zebra-biblios-dom-site.cfg.erb"),
 		notify	=> Service[$koha_zebra_services],
@@ -128,7 +122,7 @@ define koha::zebra::site
 	{ "$koha_site_dir/$site_name/zebra-authorities-site.cfg":
 		ensure	=> $ensure,
 		owner	=> root,
-		group	=> $zebra_user,
+		group	=> $koha_user,
 		mode	=> 640,
 		content	=> template("koha/zebra-authorities-site.cfg.erb"),
 		notify	=> Service[$koha_zebra_services],
@@ -138,7 +132,7 @@ define koha::zebra::site
 	{ "$koha_site_dir/$site_name/zebra-authorities-dom-site.cfg":
 		ensure	=> $ensure,
 		owner	=> root,
-		group	=> $zebra_user,
+		group	=> $koha_user,
 		mode	=> 640,
 		content	=> template("koha/zebra-authorities-dom-site.cfg.erb"),
 		notify	=> Service[$koha_zebra_services],
@@ -148,10 +142,9 @@ define koha::zebra::site
 	{ "$koha_site_dir/$site_name/zebra.passwd":
 		ensure	=> $ensure,
 		owner	=> root,
-		group	=> $zebra_user,
+		group	=> $koha_user,
 		mode	=> 640,
 		content	=> template("koha/zebra.passwd.erb"),
-		onlyif	=> "$test \$($sed 's/^kohauser:.*/pass/' $koha_site_dir/$site_name/zebra.passwd) != 'pass'",
 		notify	=> Service[$koha_zebra_services],
 	}
 }

@@ -37,36 +37,56 @@
 #
 define koha::site
 (
-	$ensure			= "present",
+	$ensure					= "present",
 
-	$koha_site_dir		= undef,
-	$koha_site_opac_port	= undef,
-	$koha_site_intra_port	= undef,
+	$koha_site_dir				= undef,
+	$koha_site_opac_port			= undef,
+	$koha_site_intra_port			= undef,
 
-	$site_name		= $name,
-	$site_intra		= "$site_name-intra",
-	$site_user		= "$site_name-koha",
-	$site_group		= "$site_name-koha",
+	$koha_log_dir				= undef,
+	$koha_plugins_dir			= "/var/lib/koha/$site_name/plugins",
 
-	$memcached_servers	= [],
-	$memcached_namespace	= "koha_$site_name",
+	$koha_indexing_mode			= undef,
 
-	$opac_server_name	= "$site_name.$fqdn",
-	$intra_server_name	= "$site_intra.$fqdn",
+	$koha_zebra_biblios_config		= undef,
+	$koha_zebra_authorities_config		= undef,
 
-	$setenv			= undef,
-	$error_log_file		= undef
+	$koha_zebra_biblios_indexing_mode	= undef,
+	$koha_zebra_authorities_indexing_mode	= undef,
+
+	$koha_zebra_marc_format			= undef,
+
+	$koha_zebra_sru_host			= undef,
+	$koha_zebra_sru_biblios_port		= undef,
+
+	$site_name				= $name,
+	$site_intra				= "$site_name-intra",
+	$site_user				= "$site_name-koha",
+	$site_group				= "$site_name-koha",
+
+	$koha_user				= "$site_name-koha",
+	$zebra_password,
+
+	$mysql_db				= "koha_$site_name",
+	$mysql_hostname				= "localhost",
+	$mysql_port				= "3306",
+	$mysql_user				= $mysql_db,
+	$mysql_password,
+
+	$memcached_servers			= [],
+	$memcached_namespace			= "koha_$site_name",
+
+	$opac_server_name			= "$site_name.$fqdn",
+	$intra_server_name			= "$site_intra.$fqdn",
+
+	$setenv					= undef,
+	$error_log_file				= undef
 ) inherits koha::params
 {
 	# Define default parameters, if they haven't been defined by the user.
 	if ($koha_config_dir == undef)
 	{
 		$koha_config_dir = $koha::params::koha_config_dir
-	}
-
-	if ($koha_log_dir == undef)
-	{
-		$koha_log_dir = $koha::params::koha_log_dir
 	}
 
 	if ($koha_site_dir == undef)
@@ -84,6 +104,39 @@ define koha::site
 		$koha_site_intra_port = $koha::params::koha_site_intra_port
 	}
 
+	if ($koha_log_dir == undef)
+	{
+		$koha_log_dir = $koha::params::koha_log_dir
+	}
+
+	if ($koha_plugins_dir == undef)
+	{
+		$koha_plugins_dir = $koha::params::koha_plugins_dir
+	}
+
+	if ($koha_indexing_mode == undef)
+	{
+		$koha_indexing_mode = $koha::params::koha_indexing_mode
+	}
+
+	if ($koha_zebra_biblios_config == undef)
+	{
+		$koha_zebra_biblios_config = $koha::params::koha_zebra_biblios_config
+	}
+
+	if ($koha_zebra_marc_format == undef)
+	{
+		$koha_zebra_marc_format = $koha::params::koha_zebra_marc_format
+	}
+
+	if ($koha_zebra_sru_hostname != undef)
+	{
+		if ($koha_zebra_sru_biblios_port == undef)
+		{
+			fail("Zebra SRU biblios port not defined, but SRU hostname specified")
+		}
+	}
+
 	if ($error_log_file == undef)
 	{
 		$error_log_file = "$koha_log_dir/$site_name/intranet-error.log",
@@ -92,6 +145,35 @@ define koha::site
 	if ($setenv == undef)
 	{
 		$setenv = [ "KOHA_CONF \"$koha_site_dir/$site_name/koha-conf.xml\"", "MEMCACHED_NAMESPACE \"$memcached_namespace\"" ],
+	}
+
+	# Install the Koha configuration file for this site.
+	file
+	{ "$koha_config_dir/koha-conf.xml":
+		ensure	=> $ensure,
+		owner	=> "root",
+		group	=> $koha_user,
+		mode	=> 640,
+		content	=> template("koha/koha-conf-site.xml.erb"),
+		notify	=> Service[$koha_services],
+	}
+
+	# Ensure the Koha service is up and running.
+	if ($ensure == "present")
+	{
+		service
+		{ $koha_services:
+			ensure		=> "running",
+			enable		=> true,
+		}
+	}
+	else if ($ensure == "absent")
+	{
+		service
+		{ $koha_services:
+			ensure		=> "stopped",
+			enable		=> false,
+		}
 	}
 
 	# Generate Apache vhosts for the OPAC and Intranet servers for this Koha site.

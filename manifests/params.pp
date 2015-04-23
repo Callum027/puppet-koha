@@ -39,32 +39,40 @@ class koha::params
 		'Debian':
 		{
 			# Executable files.
-			$a2dismod		= "/usr/sbin/a2dismod"
-			$a2enmod		= "/usr/sbin/a2enmod"
-			$grep			= "/bin/grep"
-			$koha_create		= "/usr/sbin/koha-create"
-			$koha_translate		= "/usr/sbin/koha-translate"
-			$mysql			= "/usr/bin/mysql"
-			$pwgen			= "/usr/bin/pwgen"
-			$sed			= "/bin/sed"
-			$test			= "/usr/bin/test"
+			$a2dismod				= "/usr/sbin/a2dismod"
+			$a2enmod				= "/usr/sbin/a2enmod"
+			$grep					= "/bin/grep"
+			$koha_create				= "/usr/sbin/koha-create"
+			$koha_translate				= "/usr/sbin/koha-translate"
+			$mysql					= "/usr/bin/mysql"
+			$pwgen					= "/usr/bin/pwgen"
+			$sed					= "/bin/sed"
+			$test					= "/usr/bin/test"
 
 			# Koha configuration variables.
-			$koha_repo_release	= "stable"
-			$koha_packages		= [ "koha-common" ]
-			$koha_services		= [ "koha-common" ]
+			$koha_repo_release			= "stable"
+			$koha_packages				= [ "koha-common" ]
+			$koha_services				= [ "koha-common" ]
 
-			$koha_language		= "en"
-			$koha_config_dir	= "/etc/koha"
-			$koha_log_dir		= "/var/log/koha"
-			$koha_site_dir		= "/etc/koha/sites"
+			$koha_language				= "en"
+			$koha_config_dir			= "/etc/koha"
+			$koha_log_dir				= "/var/log/koha"
+			$koha_site_dir				= "/etc/koha/sites"
 			
 			# Koha Zebra configuration variables.
-			$koha_zebra_packages	= $koha_packages
-			$koha_zebra_services	= $koha_services
+			$koha_zebra_packages			= $koha_packages
+			$koha_zebra_services			= $koha_services
+
+			$koha_zebra_marc_format			= "marc21"
+
+			$koha_zebra_biblios_config		= "zebra-biblios.cfg"
+			$koha_zebra_authorities_config		= "zebra_authorities.cfg"
+
+			$koha_zebra_biblios_indexing_mode	= "dom"
+			$koha_zebra_authorities_indexing_mode	= "dom"
 
 			# MySQL configuration variables.
-			$mysql_adminuser	= "1"
+			$mysql_adminuser			= "1"
 		}
 
 		# RedHat support will come at a later time!
