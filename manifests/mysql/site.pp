@@ -75,8 +75,8 @@ define koha::mysql::site
 
 	# Set up MySQL database for this instance.
 	mysql::db
-	{ $mysql_db:
-		user		=> $mysql_user,
+	{ $mysql_db_real:
+		user		=> $mysql_user_real,
 		password	=> $mysql_password,
 		host		=> 'localhost',
 		grant		=> 'ALL',
