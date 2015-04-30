@@ -70,11 +70,7 @@ define koha::mysql::site
 	# Step 2: check if it was passed in and check if it exiss
 	# Step 3: pass it to MySQL
 
-	# Populate the database with default content.
-	exec
-	{ "koha::mysql::site::mysql_change_default_password":
-		command	=> "$echo 'USE \`$mysql_db\`; UPDATE borrowers SET password = '$staff_digest' WHERE borrowernumber = $mysql_admin_user;' | $mysql --host='localhost' --user='$mysql_user' --password='$mysql_password'",
-	}
+	# TODO: Populate the database with default content.
 
 	# Change the default user's password.
 	$staff_digest = md5($staff_password)
