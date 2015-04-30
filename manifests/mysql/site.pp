@@ -39,12 +39,12 @@ define koha::mysql::site
 (
 	$ensure			= present,
 
-	$echo			= $koha::params::echo,
-	$mysql			= $koha::params::mysql,
+	$echo			= undef,
+	$mysql			= undef,
 
 	$site_name		= $name,
 
-	$mysql_adminuser	= $koha::params::mysql_adminuser,
+	$mysql_adminuser	= undef,
 
 	$mysql_db		= undef,
 	$mysql_user		= undef,
@@ -54,6 +54,33 @@ define koha::mysql::site
 )
 {
 	require koha::params
+
+	if ($echo == undef)
+	{
+		$echo_real = $koha::params::echo
+	}
+	else
+	{
+		$echo_real = $echo
+	}
+
+	if ($mysql == undef)
+	{
+		$mysql_real = $koha::params::mysql
+	}
+	else
+	{
+		$mysql_real = $mysql
+	}
+
+	if ($mysql_adminuser == undef)
+	{
+		$mysql_adminuser_real = $koha::params::mysql_adminuser
+	}
+	else
+	{
+		$mysql_adminuser_real = $mysql_adminuser
+	}
 
 	if ($mysql_db == undef)
 	{
@@ -98,7 +125,7 @@ define koha::mysql::site
 
 	exec
 	{ "koha::mysql::site::mysql_change_default_password":
-		command	=> "$echo 'USE \`$mysql_db_real\`; UPDATE borrowers SET password = '$staff_digest' WHERE borrowernumber = $mysql_adminuser;' | $mysql --host='localhost' --user='$mysql_user_real' --password='$mysql_password'",
+		command	=> "$echo_real \"USE \`$mysql_db_real\`; UPDATE borrowers SET password = '$staff_digest' WHERE borrowernumber = $mysql_adminuser_real;\" | $mysql_real --host='localhost' --user='$mysql_user_real' --password='$mysql_password'",
 	}
 
 	# TODO: Upgrade the database schema, just in case the dump was from an old version.
