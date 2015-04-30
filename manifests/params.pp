@@ -41,6 +41,7 @@ class koha::params
 			# Executable files.
 			$a2dismod				= "/usr/sbin/a2dismod"
 			$a2enmod				= "/usr/sbin/a2enmod"
+			$echo					= "/bin/echo"
 			$grep					= "/bin/grep"
 			$koha_create				= "/usr/sbin/koha-create"
 			$koha_translate				= "/usr/sbin/koha-translate"
