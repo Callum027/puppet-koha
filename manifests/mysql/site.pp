@@ -59,10 +59,18 @@ define koha::mysql::site
 	{
 		$mysql_db = "koha_$site_name"
 	}
+	else
+	{
+		$mysql_db_real = $mysql_db
+	}
 
 	if ($mysql_user == undef)
 	{
-		$mysql_user = $mysql_db
+		$mysql_user_real = $mysql_db_real
+	}
+	else
+	{
+		$mysql_user_real = $mysql_user
 	}
 
 	# Set up MySQL database for this instance.
@@ -90,7 +98,7 @@ define koha::mysql::site
 
 	exec
 	{ "koha::mysql::site::mysql_change_default_password":
-		command	=> "$echo 'USE \`$mysql_db\`; UPDATE borrowers SET password = '$staff_digest' WHERE borrowernumber = $mysql_admin_user;' | $mysql --host='localhost' --user='$mysql_user' --password='$mysql_password'",
+		command	=> "$echo 'USE \`$mysql_db_real\`; UPDATE borrowers SET password = '$staff_digest' WHERE borrowernumber = $mysql_adminuser;' | $mysql --host='localhost' --user='$mysql_user_real' --password='$mysql_password'",
 	}
 
 	# TODO: Upgrade the database schema, just in case the dump was from an old version.
