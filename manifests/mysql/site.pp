@@ -124,11 +124,12 @@ define koha::mysql::site
 	# Change the default user's password.
 	$staff_digest = md5($staff_password)
 
-	exec
-	{ "koha::mysql::site::mysql_change_default_password":
-		command	=> "$echo_real \"USE \`$mysql_db_real\`; UPDATE borrowers SET password = '$staff_digest' WHERE borrowernumber = $mysql_adminuser_real;\" | $mysql_real --host='localhost' --user='$mysql_user_real' --password='$mysql_password'",
-		require	=> [ Class["koha::mysql::install"], Mysql::db[$mysql_db_real] ],
-	}
+	# TODO: Only do this if the database gets filled with default content!
+	# exec
+	# { "koha::mysql::site::mysql_change_default_password":
+	# 	command	=> "$echo_real \"USE \`$mysql_db_real\`; UPDATE borrowers SET password = '$staff_digest' WHERE borrowernumber = $mysql_adminuser_real;\" | $mysql_real --host='localhost' --user='$mysql_user_real' --password='$mysql_password'",
+	# 	require	=> [ Class["koha::mysql::install"], Mysql::Db[$mysql_db_real] ],
+	# }
 
 	# TODO: Upgrade the database schema, just in case the dump was from an old version.
 }
