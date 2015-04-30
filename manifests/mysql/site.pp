@@ -46,14 +46,24 @@ define koha::mysql::site
 
 	$mysql_adminuser	= $koha::params::mysql_adminuser,
 
-	$mysql_db		= "koha_$site_name",
-	$mysql_user		= $mysql_db,
+	$mysql_db		= undef,
+	$mysql_user		= undef,
 
 	$mysql_password,
 	$staff_password
 )
 {
 	require koha::params
+
+	if ($mysql_db == undef)
+	{
+		$mysql_db = "koha_$site_name"
+	}
+
+	if ($mysql_user == undef)
+	{
+		$mysql_user = $mysql_db
+	}
 
 	# Set up MySQL database for this instance.
 	mysql::db
