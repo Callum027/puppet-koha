@@ -35,6 +35,7 @@
 #
 # Copyright 2015 Callum Dickinson.
 #
-class koha::mysql($password = undef) inherits koha::params
+class koha::mysql
 {
+	include koha::mysql::install
 }

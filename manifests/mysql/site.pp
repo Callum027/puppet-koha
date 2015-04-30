@@ -107,6 +107,7 @@ define koha::mysql::site
 		password	=> $mysql_password,
 		host		=> 'localhost',
 		grant		=> 'ALL',
+		require		=> Class["koha::mysql::install"],
 	}
 
 	# Re-fetch the passwords from the config we've generated, allows it
@@ -126,6 +127,7 @@ define koha::mysql::site
 	exec
 	{ "koha::mysql::site::mysql_change_default_password":
 		command	=> "$echo_real \"USE \`$mysql_db_real\`; UPDATE borrowers SET password = '$staff_digest' WHERE borrowernumber = $mysql_adminuser_real;\" | $mysql_real --host='localhost' --user='$mysql_user_real' --password='$mysql_password'",
+		require	=> Class["koha::mysql::install"], Mysql::db[$mysql_db_real],
 	}
 
 	# TODO: Upgrade the database schema, just in case the dump was from an old version.
