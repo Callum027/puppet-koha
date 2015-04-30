@@ -57,7 +57,7 @@ define koha::mysql::site
 
 	if ($mysql_db == undef)
 	{
-		$mysql_db = "koha_$site_name"
+		$mysql_db_real = "koha_$site_name"
 	}
 	else
 	{
