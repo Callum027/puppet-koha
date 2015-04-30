@@ -39,6 +39,9 @@ define koha::mysql::site
 (
 	$ensure			= present,
 
+	$echo			= $koha::params::echo,
+	$mysql			= $koha::params::mysql,
+
 	$site_name		= $name,
 
 	$mysql_adminuser	= $koha::params::mysql_adminuser,
