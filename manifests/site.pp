@@ -139,12 +139,12 @@ define koha::site
 
 	if ($error_log_file == undef)
 	{
-		$error_log_file = "$koha_log_dir/$site_name/intranet-error.log",
+		$error_log_file = "$koha_log_dir/$site_name/intranet-error.log"
 	}
 
 	if ($setenv == undef)
 	{
-		$setenv = [ "KOHA_CONF \"$koha_site_dir/$site_name/koha-conf.xml\"", "MEMCACHED_NAMESPACE \"$memcached_namespace\"" ],
+		$setenv = [ "KOHA_CONF \"$koha_site_dir/$site_name/koha-conf.xml\"", "MEMCACHED_NAMESPACE \"$memcached_namespace\"" ]
 	}
 
 	# Install the Koha configuration file for this site.
