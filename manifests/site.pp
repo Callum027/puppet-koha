@@ -39,12 +39,13 @@ define koha::site
 (
 	$ensure					= "present",
 
+	$koha_config_dir			= undef,
 	$koha_site_dir				= undef,
 	$koha_site_opac_port			= undef,
 	$koha_site_intra_port			= undef,
 
 	$koha_log_dir				= undef,
-	$koha_plugins_dir			= "/var/lib/koha/$site_name/plugins",
+	$koha_plugins_dir			= undef,
 
 	$koha_indexing_mode			= undef,
 
@@ -52,11 +53,10 @@ define koha::site
 	$koha_zebra_authorities_config		= undef,
 
 	$koha_zebra_biblios_indexing_mode	= undef,
-	$koha_zebra_authorities_indexing_mode	= undef,
 
 	$koha_zebra_marc_format			= undef,
 
-	$koha_zebra_sru_host			= undef,
+	$koha_zebra_sru_hostname		= undef,
 	$koha_zebra_sru_biblios_port		= undef,
 
 	$site_name				= $name,
@@ -81,7 +81,7 @@ define koha::site
 
 	$setenv					= undef,
 	$error_log_file				= undef
-) inherits koha::params
+)
 {
 	# Define default parameters, if they haven't been defined by the user.
 	if ($koha_config_dir == undef)
@@ -111,7 +111,7 @@ define koha::site
 
 	if ($koha_plugins_dir == undef)
 	{
-		$koha_plugins_dir = $koha::params::koha_plugins_dir
+		$koha_plugins_dir = "/var/lib/koha/$site_name/plugins"
 	}
 
 	if ($koha_indexing_mode == undef)
