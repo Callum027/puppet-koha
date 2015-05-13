@@ -40,9 +40,7 @@ define koha::translate
 	$language_code = $name,
 
 	$grep = undef,
-	$koha_translate = undef,
-
-	$koha_packages = undef
+	$koha_translate = undef
 )
 {
 	require koha::params
@@ -50,23 +48,18 @@ define koha::translate
 
 	if ($grep == undef)
 	{
-		$grep = $koha::params::grep
+		$grep_real = $koha::params::grep
 	}
 
-	if ($koha_translate == undef)
+	if ($koha_translate_real == undef)
 	{
-		$koha_translate = $koha::params::koha_translate
-	}
-
-	if ($koha_packages == undef)
-	{
-		$koha_packages = $koha::params::koha_packages
+		$koha_translate_real = $koha::params::koha_translate
 	}
 
 	# This will fail if the given language code is not available.
 	exec
-	{ "$koha_translate --install $language_code":
-		require	=> Package[$koha_packages],
-		onlyif	=> "$koha_translate --list --available | $grep -v $language_code",
+	{ "$koha_translate_real --install $language_code_real":
+		require	=> Class["koha::install"],
+		onlyif	=> "$koha_translate_real --list --available | $grep -v $language_code_real",
 	}
 }
