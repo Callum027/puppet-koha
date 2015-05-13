@@ -35,7 +35,7 @@
     <config>/etc/koha/sites/<%= @site_name %>/<%= @koha_zebra_biblios_config_real %></config>
     <cql2rpn>/etc/koha/zebradb/pqf.properties</cql2rpn>
 
-<% if @koha_zebra_biblios_indexing_mode == "dom" >
+<% if @koha_zebra_biblios_indexing_mode == "dom" %>
     <xi:include href="/etc/koha/<%= @koha_zebra_marc_format_real %>-retrieval-info-bib-dom.xml"
                 xmlns:xi="http://www.w3.org/2001/XInclude">
      <xi:fallback>
@@ -89,7 +89,7 @@
            <xslt stylesheet="/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/xslt/MARC21slimUtils.xsl"/>
          </backend>
        </retrieval>
-<% if @koha_zebra_biblios_indexing_mode == "dom" >
+<% if @koha_zebra_biblios_indexing_mode == "dom" %>
       </retrievalinfo>
      </xi:fallback>
     </xi:include>
@@ -128,7 +128,7 @@
     <config>/etc/koha/sites/<%= @site_name %>/<%= @koha_zebra_authorities_config_real %></config>
     <cql2rpn>/etc/koha/zebradb/pqf.properties</cql2rpn>
 
-<% if @koha_zebra_authorities_indexing_mode_real == "dom" >
+<% if @koha_zebra_authorities_indexing_mode_real == "dom" %>
     <xi:include href="/etc/koha/<%= @koha_zebra_marc_format_real %>-retrieval-info-auth-dom.xml"
                 xmlns:xi="http://www.w3.org/2001/XInclude">
      <xi:fallback>
@@ -173,7 +173,7 @@
            <xslt stylesheet="/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/xslt/MARC21slimUtils.xsl"/>
          </backend>
        </retrieval>
-<% if @koha_zebra_authorities_indexing_mode_real == "dom" >
+<% if @koha_zebra_authorities_indexing_mode_real == "dom" %>
       </retrievalinfo>
      </xi:fallback>
     </xi:include>
@@ -216,7 +216,7 @@
     <config>/etc/koha/sites/<%= @site_name %>/<%= @koha_zebra_biblios_config_real %></config>
     <cql2rpn>/etc/koha/zebradb/pqf.properties</cql2rpn>
 
-<% if @koha_zebra_biblios_indexing_mode == "dom" >
+<% if @koha_zebra_biblios_indexing_mode == "dom" %>
     <xi:include href="/etc/koha/<%= @koha_zebra_marc_format_real %>-retrieval-info-bib-dom.xml"
                 xmlns:xi="http://www.w3.org/2001/XInclude">
      <xi:fallback>
@@ -270,7 +270,7 @@
            <xslt stylesheet="/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/xslt/MARC21slimUtils.xsl"/>
          </backend>
        </retrieval>
-<% if @koha_zebra_biblios_indexing_mode == "dom" >
+<% if @koha_zebra_biblios_indexing_mode == "dom" %>
       </retrievalinfo>
      </xi:fallback>
     </xi:include>
