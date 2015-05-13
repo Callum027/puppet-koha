@@ -50,8 +50,11 @@ class koha::install
 	# install properly with that MPM enabled. This will work around that problem.
 	if ($ensure == "present")
 	{
-		include apache
-		include apache::mod::itk
+		class
+		{ "apache":
+			mpm_module	=> "itk",
+		}
+
 		include apache::mod::cgi
 		include apache::mod::rewrite
 	}
