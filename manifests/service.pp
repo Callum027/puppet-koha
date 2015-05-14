@@ -42,6 +42,11 @@ class koha::service
 	$koha_services		= $koha::params::koha_services
 ) inherits koha::params
 {
+	unless (defined("koha::install"))
+	{
+		fail("You must include the koha::install class before including koha::service")
+	}
+
 	# Ensure the Koha service is up and running.
 	if ($ensure == "present")
 	{

@@ -45,7 +45,7 @@ class koha::install
 ) inherits koha::params
 {
 	# Install the Koha repository.
-	unless ((defined(Class["koha::repo"])))
+	unless ((defined("koha::repo")))
 	{
 		class
 		{ "koha::repo":

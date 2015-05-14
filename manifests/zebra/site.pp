@@ -57,8 +57,12 @@ define koha::zebra::site
 {
 	require koha::params
 
-	# Parameters from koha::params.
+	unless (defined("koha::zebra::install"))
+	{
+		fail("You must include the koha::zebra::install class before setting up a Koha Zebra site")
+	}
 
+	# Parameters from koha::params.
 	if ($koha_user == undef)
 	{
 		$koha_user_real = "$site_name-koha"

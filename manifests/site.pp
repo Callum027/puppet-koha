@@ -84,7 +84,11 @@ define koha::site
 )
 {
 	require koha::params
-	require koha::install
+
+	unless (defined("koha::install"))
+	{
+		fail("You must include the koha::install class before setting up a Koha site")
+	}
 
 	# Define default parameters, if they haven't been defined by the user.
 	if ($koha_config_dir == undef)

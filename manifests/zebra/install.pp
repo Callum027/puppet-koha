@@ -41,7 +41,7 @@ class koha::zebra::install
 	$koha_zebra_services	= $koha::params::koha_service
 ) inherits koha::params
 {
-	unless (defined(Class["koha::repo"]))
+	unless (defined("koha::repo"))
 	{
 		class
 		{ "koha::repo":
@@ -51,9 +51,8 @@ class koha::zebra::install
 
 	# This is a temporary requirement, while Zebra is still bound with Koha.
 	# TODO: When they are separate packages, they will be able to be installed independently.
-	unless (defined(Class["koha::install"]))
+	unless (defined("koha::install"))
 	{
-
 		if ($ensure == "present")
 		{
 			package
