@@ -349,7 +349,7 @@ define koha::site
 		#  TransferLog /var/log/koha/$site_name/opac-access.log
 		#  RewriteLog  /var/log/koha/$site_name/opac-rewrite.log
 
-		require 		=> Class["koha::install"],
+		require 		=> Class["apache"],
 	}
 
 	apache::vhost
@@ -379,7 +379,7 @@ define koha::site
 		#  TransferLog /var/log/koha/$site_name/intranet-access.log
 		#  RewriteLog  /var/log/koha/$site_name/intranet-rewrite.log
 
-		require 		=> Class["koha::install"],
+		require 		=> Class["apache"],
 	}
 
 	if ($ensure != "present" and $ensure != "absent")
