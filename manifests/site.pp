@@ -343,6 +343,8 @@ define koha::site
 		# These Apache configuration options are not available in puppetlabs/apache:
 		#  TransferLog /var/log/koha/$site_name/opac-access.log
 		#  RewriteLog  /var/log/koha/$site_name/opac-rewrite.log
+
+		require			=> Class["koha::install"],
 	}
 
 	apache::vhost
@@ -371,6 +373,8 @@ define koha::site
 		# These Apache configuration options are not available in puppetlabs/apache:
 		#  TransferLog /var/log/koha/$site_name/intranet-access.log
 		#  RewriteLog  /var/log/koha/$site_name/intranet-rewrite.log
+
+		require			=> Class["koha::install"],
 	}
 
 	if ($ensure != "present" and $ensure != "absent")
