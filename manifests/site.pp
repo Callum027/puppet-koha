@@ -322,6 +322,9 @@ define koha::site
 	{ $opac_server_name_real:
 		ensure			=> $ensure,
 
+		docroot			=> undef,
+		manage_docroot		=> false,
+
 		additional_includes	=>
 		[
    			"$koha_config_dir_real/apache-shared.conf",
@@ -346,6 +349,9 @@ define koha::site
 	apache::vhost
 	{ $intra_server_name_real:
 		ensure			=> $ensure,
+
+		docroot			=> undef,
+		manage_docroot		=> false,
 
 		additional_includes	=>
 		[
