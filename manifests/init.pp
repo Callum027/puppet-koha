@@ -22,12 +22,12 @@
 #
 class koha
 {
-	if (Class["koha::install"] != undef)
+	unless ((defined(Class["koha::install"])))
 	{	
 		require koha::install
 	}
 
-	if (Class["koha::service"] != undef)
+	unless ((defined(Class["koha::service"])))
 	{
 		require koha::service
 	}

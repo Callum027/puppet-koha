@@ -44,12 +44,12 @@ class koha::zebra
 	$authorities_config	= $koha::params::zebra_authorities_config
 ) inherits koha::params
 {
-	if (Class["koha::zebra::install"] == undef)
+	unless ((defined(Class["koha::zebra::install"])))
 	{
 		require koha::zebra::install
 	}
 
-	if (Class["koha::zebra::service"] == undef)
+	unless ((defined(Class["koha::zebra::service"])))
 	{
 		require koha::zebra::service
 	}

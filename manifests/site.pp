@@ -84,7 +84,6 @@ define koha::site
 )
 {
 	require koha::params
-	require koha::install
 
 	# Define default parameters, if they haven't been defined by the user.
 	if ($koha_config_dir == undef)
