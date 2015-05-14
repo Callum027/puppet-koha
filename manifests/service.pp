@@ -1,6 +1,6 @@
-# == Class: koha::repo
+# == Class: koha::service
 #
-# Set up the Koha APT repository.
+# Set up the Koha service.
 #
 # === Parameters
 #
@@ -35,37 +35,32 @@
 #
 # Copyright 2015 Callum Dickinson.
 #
-class koha::repo
+class koha::service
 (
 	$ensure			= "present",
-	$koha_repo_release	= $koha::params::koha_repo_release
+
+	$koha_services		= $koha::params::koha_services
 ) inherits koha::params
 {
-	# Prepare the package manager with the Koha repository.
-	case $::osfamily
+	# Ensure the Koha service is up and running.
+	if ($ensure == "present")
 	{
-		'Debian':
-		{
-			apt::source
-			{ 'koha':
-				ensure		=> $ensure,
-				location	=> "http://debian.koha-community.org/koha",
-				release		=> $koha_repo_release,
-				repos		=> "main",
-				key		=> "A2E41F10",
-				key_source	=> "http://debian.koha-community.org/koha/gpg.asc",
-			}
-		}
-
-		# RedHat support will come at a later time!
-
-		default:
-		{
-			fail("Sorry, but the koha module does not support the $::osfamily OS family at this time")
+		service
+		{ $koha_services:
+			ensure		=> "running",
+			enable		=> true,
+			require		=> Class["koha::install"],
 		}
 	}
-
-	if ($ensure != "present" and $ensure != "absent")
+	elsif ($ensure == "absent")
+	{
+		service
+		{ $koha_services:
+			ensure		=> "stopped",
+			enable		=> false,
+		}
+	}
+	else
 	{
 		fail("invalid value for ensure: $ensure")
 	}

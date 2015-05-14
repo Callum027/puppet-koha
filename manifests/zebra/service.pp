@@ -1,6 +1,6 @@
-# == Class: koha::repo
+# == Class: koha::zebra::install
 #
-# Set up the Koha APT repository.
+# Set up the Koha Zebra indexer service..
 #
 # === Parameters
 #
@@ -35,38 +35,37 @@
 #
 # Copyright 2015 Callum Dickinson.
 #
-class koha::repo
+class koha::zebra::service
 (
 	$ensure			= "present",
-	$koha_repo_release	= $koha::params::koha_repo_release
+	$koha_zebra_services	= $koha::params::koha_service
 ) inherits koha::params
 {
-	# Prepare the package manager with the Koha repository.
-	case $::osfamily
+	# This is a temporary requirement, while Zebra is still bound with Koha.
+	# TODO: When they are separate packages, they will be able to be installed independently.
+	if (Class["koha::service"] == undef)
 	{
-		'Debian':
+		# Refresh the Apache Service.
+		if ($ensure == "present")
 		{
-			apt::source
-			{ 'koha':
-				ensure		=> $ensure,
-				location	=> "http://debian.koha-community.org/koha",
-				release		=> $koha_repo_release,
-				repos		=> "main",
-				key		=> "A2E41F10",
-				key_source	=> "http://debian.koha-community.org/koha/gpg.asc",
+			service
+			{ $koha_zebra_services:
+				ensure	=> "running",
+				enable	=> true,
+				require	=> Class["koha::zebra::install"],
 			}
 		}
-
-		# RedHat support will come at a later time!
-
-		default:
+		elsif ($ensure == "absent")
 		{
-			fail("Sorry, but the koha module does not support the $::osfamily OS family at this time")
+			service
+			{ $koha_zebra_services:
+				ensure	=> "stopped",
+				enable	=> false,
+			}
 		}
-	}
-
-	if ($ensure != "present" and $ensure != "absent")
-	{
-		fail("invalid value for ensure: $ensure")
+		else
+		{
+			fail("invalid value for ensure: $ensure")
+		}
 	}
 }

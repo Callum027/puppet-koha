@@ -41,10 +41,18 @@ class koha::install
 (
 	$ensure			= "present",
 
-	$koha_packages		= $koha::params::koha_packages,
-	$koha_service		= $koha::params::koha_service
+	$koha_packages		= $koha::params::koha_packages
 ) inherits koha::params
 {
+	# Install the Koha repository.
+	if (Class["koha::repo"] == undef)
+	{
+		class
+		{ "koha::repo":
+			ensure	=> $ensure,
+		}
+	}
+
 	# Install Apache first, before installing Koha, so we can disable the event MPM.
 	# Koha uses the ITK MPM, and the libapache2-mod-itk package for Ubuntu does not always
 	# install properly with that MPM enabled. This will work around that problem.
@@ -59,6 +67,7 @@ class koha::install
 		include apache::mod::rewrite
 	}
 
+	# Do the job!
 	if ($ensure == "present")
 	{
 		package
@@ -75,28 +84,8 @@ class koha::install
 			require	=> [ Class["koha::repo"] ],
 		}
 	}
-
-	# Install the Koha packages, with the Debian repository.
-	class
-	{ "koha::repo":
-		ensure	=> $ensure,
-	}
-
-	# Ensure the Koha service is up and running.
-	if ($ensure == "present")
+	else
 	{
-		service
-		{ $koha_services:
-			ensure		=> "running",
-			enable		=> true,
-		}
-	}
-	elsif ($ensure == "absent")
-	{
-		service
-		{ $koha_services:
-			ensure		=> "stopped",
-			enable		=> false,
-		}
+		fail("invalid value for ensure: $ensure")
 	}
 }

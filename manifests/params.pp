@@ -46,6 +46,7 @@ class koha::params
 			$koha_create				= "/usr/sbin/koha-create"
 			$koha_translate				= "/usr/sbin/koha-translate"
 			$mysql					= "/usr/bin/mysql"
+			$nologin				= "/usr/sbin/nologin"
 			$pwgen					= "/usr/bin/pwgen"
 			$sed					= "/bin/sed"
 			$test					= "/usr/bin/test"
@@ -57,6 +58,7 @@ class koha::params
 
 			$koha_language				= "en"
 			$koha_config_dir			= "/etc/koha"
+			$koha_lib_dir				= "/var/lib/koha"
 			$koha_log_dir				= "/var/log/koha"
 			$koha_site_dir				= "/etc/koha/sites"
 			

@@ -37,28 +37,40 @@
 #
 class koha::zebra::install
 (
-
-
-	$koha_zebra_packages	= $koha::params::koha_packages,
-	$koha_zebra_services	= $koha::params::koha_service,
+	$ensure			= "present",
+	$koha_zebra_services	= $koha::params::koha_service
 ) inherits koha::params
 {
-	require koha::repo
+	if (Class["koha::repo"] == undef)
+	{
+		class
+		{ "koha::repo":
+			ensure	=> $ensure,
+		}
+	}
 
 	# This is a temporary requirement, while Zebra is still bound with Koha.
-	# When they are separate packages, they will be able to be installed independently.
+	# TODO: When they are separate packages, they will be able to be installed independently.
 	if (Class["koha::install"] == undef)
 	{
-		package
-		{ $koha_zebra_packages:
-			ensure	=> installed,
-		}
 
-		# Refresh the Apache Service.
-		service
-		{ $koha_zebra_services:
-			ensure	=> running,
-			require	=> Package[$koha_zebra_packages],
+		if ($ensure == "present")
+		{
+			package
+			{ $koha_zebra_packages:
+				ensure	=> "installed",
+			}
+		}
+		elsif ($ensure == "absent")
+		{
+			package
+			{ $koha_zebra_packages:
+				ensure	=> "purged",
+			}
+		}
+		else
+		{
+			fail("invalid value for ensure: $ensure")
 		}
 	}
 }

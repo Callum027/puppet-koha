@@ -37,9 +37,10 @@
 #
 define koha::translate
 (
-	$language_code = $name,
+	$ensure		= "present",
+	$language_code	= $name,
 
-	$grep = undef,
+	$grep		= undef,
 	$koha_translate = undef
 )
 {
@@ -57,9 +58,25 @@ define koha::translate
 	}
 
 	# This will fail if the given language code is not available.
-	exec
-	{ "$koha_translate_real --install $language_code_real":
-		require	=> Class["koha::install"],
-		onlyif	=> "$koha_translate_real --list --available | $grep -v $language_code_real",
+	if ($ensure == "present")
+	{
+		exec
+		{ "$koha_translate_real --install $language_code_real":
+			require	=> Class["koha::install"],
+			onlyif	=> "$koha_translate_real --list --available | $grep_real -v $language_code_real",
+		}
+	}
+	elsif ($ensure == "absent")
+	{
+		exec
+		{ "$koha_translate_real --remove $language_code_real":
+			require	=> Class["koha::install"],
+			onlyif	=> "$koha_translate_real --list --available | $grep_real $language_code_real",
+		}
+	}
+
+	if ($ensure != "present" and $ensure != "absent")
+	{
+		fail("invalid value for ensure: $ensure")
 	}
 }

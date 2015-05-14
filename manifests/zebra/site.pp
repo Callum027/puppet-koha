@@ -41,7 +41,7 @@ define koha::zebra::site
 
 	$site_name			= $name,
 
-	$koha_user			= "$site_name-koha",
+	$koha_user			= undef,
 	$zebra_password,
 
 	$koha_site_dir			= undef,
@@ -49,8 +49,6 @@ define koha::zebra::site
 	$koha_marc_format		= undef,
 	$koha_zebra_biblios_config	= undef,
 	$koha_zebra_authorities_config	= undef,
-
-	$koha_zebra_services		= undef,
 
 	$pwgen				= undef,
 	$sed				= undef,
@@ -60,41 +58,95 @@ define koha::zebra::site
 	require koha::params
 
 	# Parameters from koha::params.
+
+	if ($koha_user == undef)
+	{
+		$koha_user_real = "$site_name-koha"
+	}
+	else
+	{
+		$koha_user_real = $koha_user
+	}
+
 	if ($koha_site_dir == undef)
 	{
-		$koha_site_dir = $koha::params::koha_site_dir
+		$koha_site_dir_real = $koha::params::koha_site_dir
 	}
+	else
+	{
+		$koha_site_dir_real = $koha_site_dir
+	}
+
 	if ($koha_language == undef)
 	{
-		$koha_language = $koha::params::koha_language
+		$koha_language_real = $koha::params::koha_language
 	}
+	else
+	{
+		$koha_language_real = $koha_language
+	}
+
 	if ($koha_marc_format == undef)
 	{
-		$koha_marc_format = $koha::params::koha_marc_format
+		$koha_marc_format_real = $koha::params::koha_marc_format
 	}
+	else
+	{
+		$koha_marc_format_real = $koha_marc_format
+	}
+
 	if ($koha_zebra_biblios_config == undef)
 	{
-		$koha_zebra_biblios_config = $koha::params::koha_zebra_biblios_config
+		$koha_zebra_biblios_config_real = $koha::params::koha_zebra_biblios_config
 	}
+	else
+	{
+		$koha_zebra_biblios_config_real = $koha_zebra_biblios_config
+	}
+
 	if ($koha_zebra_authorities_config == undef)
 	{
-		$koha_zebra_authorities_config = $koha::params::koha_zebra_authorities_config
+		$koha_zebra_authorities_config_real = $koha::params::koha_zebra_authorities_config
 	}
+	else
+	{
+		$koha_zebra_authorities_config_real = $koha_zebra_authorities_config
+	}
+
 	if ($koha_zebra_services == undef)
 	{
-		$koha_zebra_services = $koha::params::koha_zebra_services
+		$koha_zebra_services_real = $koha::params::koha_zebra_services
 	}
+	else
+	{
+	$koha_zebra_services_real = $koha_zebra_services
+	}
+
 	if ($pwgen == undef)
 	{
-		$pwgen = $koha::params::pwgen
+		$pwgen_real = $koha::params::pwgen
 	}
+	else
+	{
+		$pwgen_real = $pwgen
+	}
+
 	if ($sed == undef)
 	{
-		$sed = $koha::params::sed
+		$sed_real = $koha::params::sed
 	}
+	else
+	{
+		$sed_real = $sed
+	}
+
 	if ($test == undef)
 	{
-		$test = $koha::params::test
+		$test_real = $koha::params::test
+	}
+	else
+	{
+		$test_real = $test
 	}
 
 	# Generate and install Zebra config files.
@@ -102,49 +154,53 @@ define koha::zebra::site
 	{ "$koha_site_dir/$site_name/zebra-biblios.cfg":
 		ensure	=> $ensure,
 		owner	=> root,
-		group	=> $koha_user,
+		group	=> $koha_user_real,
 		mode	=> 640,
 		content	=> template("koha/zebra-biblios.cfg.erb"),
-		notify	=> Service[$koha_zebra_services],
+		notify	=> Class["koha::zebra::service"],
 	}
 
 	file
 	{ "$koha_site_dir/$site_name/zebra-biblios-dom-site.cfg":
 		ensure	=> $ensure,
 		owner	=> root,
-		group	=> $koha_user,
+		group	=> $koha_user_real,
 		mode	=> 640,
 		content	=> template("koha/zebra-biblios-dom-site.cfg.erb"),
-		notify	=> Service[$koha_zebra_services],
+		notify	=> Class["koha::zebra::service"],
 	}
 
 	file
 	{ "$koha_site_dir/$site_name/zebra-authorities-site.cfg":
 		ensure	=> $ensure,
 		owner	=> root,
-		group	=> $koha_user,
+		group	=> $koha_user_real,
 		mode	=> 640,
 		content	=> template("koha/zebra-authorities-site.cfg.erb"),
-		notify	=> Service[$koha_zebra_services],
+		notify	=> Class["koha::zebra::service"],
 	}
 
 	file
 	{ "$koha_site_dir/$site_name/zebra-authorities-dom-site.cfg":
 		ensure	=> $ensure,
 		owner	=> root,
-		group	=> $koha_user,
+		group	=> $koha_user_real,
 		mode	=> 640,
 		content	=> template("koha/zebra-authorities-dom-site.cfg.erb"),
-		notify	=> Service[$koha_zebra_services],
+		notify	=> Class["koha::zebra::service"],
 	}
 
 	file
 	{ "$koha_site_dir/$site_name/zebra.passwd":
 		ensure	=> $ensure,
 		owner	=> root,
-		group	=> $koha_user,
+		group	=> $koha_user_real,
 		mode	=> 640,
 		content	=> template("koha/zebra.passwd.erb"),
-		notify	=> Service[$koha_zebra_services],
+		notify	=> Class["koha::zebra::service"],
 	}
+
+	# Start the Koha zebra service, if it hasn't been already.
+	# $ koha-start-zebra "$name"
+	# $ koha-indexer --start "$name"
 }

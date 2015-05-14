@@ -26,4 +26,9 @@ class koha
 	{	
 		require koha::install
 	}
+
+	if (Class["koha::service"] != undef)
+	{
+		require koha::service
+	}
 }

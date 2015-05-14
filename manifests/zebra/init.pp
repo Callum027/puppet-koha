@@ -44,7 +44,13 @@ class koha::zebra
 	$authorities_config	= $koha::params::zebra_authorities_config
 ) inherits koha::params
 {
-	# Start the Koha zebra service, if it hasn't been already.
-	# $ koha-start-zebra "$name"
-	# $ koha-indexer --start "$name"
+	if (Class["koha::zebra::install"] == undef)
+	{
+		require koha::zebra::install
+	}
+
+	if (Class["koha::zebra::service"] == undef)
+	{
+		require koha::zebra::service
+	}
 }

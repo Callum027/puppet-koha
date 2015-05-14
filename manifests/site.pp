@@ -39,13 +39,12 @@ define koha::site
 (
 	$ensure					= "present",
 
-	$koha_services				= undef,
-
 	$koha_config_dir			= undef,
 	$koha_site_dir				= undef,
 	$koha_site_opac_port			= undef,
 	$koha_site_intra_port			= undef,
 
+	$koha_lib_dir				= undef,
 	$koha_log_dir				= undef,
 	$koha_plugins_dir			= undef,
 
@@ -61,24 +60,24 @@ define koha::site
 	$koha_zebra_sru_biblios_port		= undef,
 
 	$site_name				= $name,
-	$site_intra				= "$site_name-intra",
-	$site_user				= "$site_name-koha",
-	$site_group				= "$site_name-koha",
+	$site_intra				= undef,
+	$site_user				= undef,
+	$site_group				= undef,
 
-	$koha_user				= "$site_name-koha",
+	$koha_user				= undef,
 	$zebra_password,
 
-	$mysql_db				= "koha_$site_name",
+	$mysql_db				= undef,
 	$mysql_hostname				= "localhost",
 	$mysql_port				= "3306",
-	$mysql_user				= $mysql_db,
+	$mysql_user				= undef,
 	$mysql_password,
 
 	$memcached_servers			= [],
-	$memcached_namespace			= "koha_$site_name",
+	$memcached_namespace			= undef,
 
-	$opac_server_name			= "$site_name.$fqdn",
-	$intra_server_name			= "$site_intra.$fqdn",
+	$opac_server_name			= undef,
+	$intra_server_name			= undef,
 
 	$setenv					= undef,
 	$error_log_file				= undef
@@ -88,15 +87,6 @@ define koha::site
 	require koha::install
 
 	# Define default parameters, if they haven't been defined by the user.
-	if ($koha_services == undef)
-	{
-		$koha_services_real = $koha::params::koha_services
-	}
-	else
-	{
-		$koha_services_real = $koha_services
-	}
-
 	if ($koha_config_dir == undef)
 	{
 		$koha_config_dir_real = $koha::params::koha_config_dir
@@ -133,6 +123,15 @@ define koha::site
 		$koha_site_intra_port_real = $koha_site_intra_port
 	}
 
+	if ($koha_lib_dir == undef)
+	{
+		$koha_lib_dir_real = $koha::params::koha_lib_dir
+	}
+	else
+	{
+		$koha_lib_dir_real = $koha_lib_dir
+	}
+
 	if ($koha_log_dir == undef)
 	{
 		$koha_log_dir_real = $koha::params::koha_log_dir
@@ -144,7 +143,11 @@ define koha::site
 
 	if ($koha_plugins_dir == undef)
 	{
-		$koha_plugins_dir_real = "/var/lib/koha/$site_name/plugins"
+		$koha_plugins_dir_real = "$koha_lib_dir_real/$site_name/plugins"
+	}
+	else
+	{
+		$koha_plugins_dir_real = $koha_plugins_dir
 	}
 
 	if ($koha_zebra_biblios_config == undef)
@@ -191,14 +194,104 @@ define koha::site
 		}
 	}
 
+	if ($site_intra == undef)
+	{
+		$site_intra_real = "$site_name-intra"
+	}
+	else
+	{
+		$site_intra_real = $site_intra
+	}
+
+	if ($site_user == undef)
+	{
+		$site_user_real = "$site_name-koha"
+	}
+	else
+	{
+		$site_user_real = $site_user
+	}
+
+	if ($site_group == undef)
+	{
+		$site_group_real = "$site_name-koha"
+	}
+	else
+	{
+		$site_group_real = $site_group
+	}
+
+	if ($koha_user == undef)
+	{
+		$koha_user_real = "$site_name-koha"
+	}
+	else
+	{
+		$koha_user_real = $koha_user
+	}
+
+	if ($mysql_db == undef)
+	{
+		$mysql_db_real = "koha_$site_name"
+	}
+	else
+	{
+		$mysql_db_real = $mysql_db
+	}
+
+	if ($mysql_user == undef)
+	{
+		$mysql_user_real = $mysql_db
+	}
+	else
+	{
+		$mysql_user_real = $mysql_user
+	}
+
+	if ($memcached_namespace == undef)
+	{
+		$memcached_namespace_real = "koha_$site_name"
+	}
+	else
+	{
+		$memcached_namespace_real = $memcached_namespace
+	}
+
+	if ($opac_server_name == undef)
+	{
+		$opac_server_name_real = "$site_name.$fqdn"
+	}
+	else
+	{
+		$opac_server_name_real = $opac_server_name
+	}
+
+	if ($intra_server_name == undef)
+	{
+		$intra_server_name_real = "$site_intra.$fqdn"
+	}
+	else
+	{
+		$intra_server_name_real = $opac_server_name
+	}
+
 	if ($error_log_file == undef)
 	{
 		$error_log_file_real = "$koha_log_dir_real/$site_name/intranet-error.log"
 	}
+	else
+	{
+		$error_log_file_real = $error_log_file
+	}
+
 
 	if ($setenv == undef)
 	{
 		$setenv_real = [ "KOHA_CONF \"$koha_site_dir_real/$site_name/koha-conf.xml\"", "MEMCACHED_NAMESPACE \"$memcached_namespace\"" ]
+	}
+	else
+	{
+		$setenv_real = $setenv
 	}
 
 	# Install the Koha configuration file for this site.
@@ -206,10 +299,10 @@ define koha::site
 	{ "$koha_config_dir_real/koha-conf.xml":
 		ensure	=> $ensure,
 		owner	=> "root",
-		group	=> $koha_user,
+		group	=> $koha_user_real,
 		mode	=> 640,
 		content	=> template("koha/koha-conf-site.xml.erb"),
-		notify	=> Service[$koha_services_real],
+		notify	=> Class["koha::service"],
 	}
 
 	# Generate Apache vhosts for the OPAC and Intranet servers for this Koha site.
@@ -263,5 +356,10 @@ define koha::site
 		# These Apache configuration options are not available in puppetlabs/apache:
 		#  TransferLog /var/log/koha/$site_name/intranet-access.log
 		#  RewriteLog  /var/log/koha/$site_name/intranet-rewrite.log
+	}
+
+	if ($ensure != "present" and $ensure != "absent")
+	{
+		fail("invalid value for ensure: $ensure")
 	}
 }
