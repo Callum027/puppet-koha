@@ -84,6 +84,7 @@ define koha::site
 )
 {
 	require koha::params
+	require koha::install
 
 	# Define default parameters, if they haven't been defined by the user.
 	if ($koha_config_dir == undef)
@@ -317,9 +318,6 @@ define koha::site
 	}
 
 	# Generate Apache vhosts for the OPAC and Intranet servers for this Koha site.
-	Class["koha::install"] -> Apache::Vhost[$opac_server_name_real]
-	Class["koha::install"] -> Apache::Vhost[$intra_server_name_real]
-
 	apache::vhost
 	{ $opac_server_name_real:
 		ensure			=> $ensure,

@@ -73,7 +73,7 @@ class koha::install
 		package
 		{ $koha_packages:
 			ensure	=> "installed",
-			require	=> [ Class["koha::repo"], Class["apache"], Class["apache::mod::itk"] ],
+			require	=> [ Class["koha::repo"], Class["apache"] ],
 		}
 	}
 	elsif ($ensure == "absent")
