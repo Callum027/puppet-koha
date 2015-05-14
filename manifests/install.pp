@@ -63,7 +63,7 @@ class koha::install
 			mpm_module	=> "itk",
 		}
 
-		include apache::mod::cgi
+		apache::mod { "cgi": }
 		include apache::mod::rewrite
 	}
 
