@@ -317,6 +317,9 @@ define koha::site
 	}
 
 	# Generate Apache vhosts for the OPAC and Intranet servers for this Koha site.
+	Class["koha::install"] -> Apache::Vhost[$opac_server_name_real]
+	Class["koha::install"] -> Apache::Vhost[$intra_server_name_real]
+
 	apache::vhost
 	{ $opac_server_name_real:
 		ensure			=> $ensure,
@@ -343,8 +346,6 @@ define koha::site
 		# These Apache configuration options are not available in puppetlabs/apache:
 		#  TransferLog /var/log/koha/$site_name/opac-access.log
 		#  RewriteLog  /var/log/koha/$site_name/opac-rewrite.log
-
-		require			=> Class["koha::install"],
 	}
 
 	apache::vhost
@@ -373,8 +374,6 @@ define koha::site
 		# These Apache configuration options are not available in puppetlabs/apache:
 		#  TransferLog /var/log/koha/$site_name/intranet-access.log
 		#  RewriteLog  /var/log/koha/$site_name/intranet-rewrite.log
-
-		require			=> Class["koha::install"],
 	}
 
 	if ($ensure != "present" and $ensure != "absent")
