@@ -307,7 +307,7 @@ define koha::site
 
 	# Generate Apache vhosts for the OPAC and Intranet servers for this Koha site.
 	apache::vhost
-	{ $opac_server_name:
+	{ $opac_server_name_real:
 		ensure			=> $ensure,
 
 		additional_includes	=>
@@ -322,8 +322,8 @@ define koha::site
 
 		itk			=>
 		{
-			user	=> $site_user,
-			group	=> $site_group,
+			user	=> $site_user_real,
+			group	=> $site_group_real,
 		},
 
 		error_log_file		=> $error_log_file_real,
@@ -333,7 +333,7 @@ define koha::site
 	}
 
 	apache::vhost
-	{ $intra_server_name:
+	{ $intra_server_name_real:
 		ensure			=> $ensure,
 
 		additional_includes	=>
@@ -348,8 +348,8 @@ define koha::site
 
 		itk			=>
 		{
-			user	=> $site_user,
-			group	=> $site_group,
+			user	=> $site_user_real,
+			group	=> $site_group_real,
 		},
 
 		error_log_file		=> $error_log_file_real,

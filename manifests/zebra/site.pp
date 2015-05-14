@@ -119,7 +119,7 @@ define koha::zebra::site
 	}
 	else
 	{
-	$koha_zebra_services_real = $koha_zebra_services
+		$koha_zebra_services_real = $koha_zebra_services
 	}
 
 	if ($pwgen == undef)
