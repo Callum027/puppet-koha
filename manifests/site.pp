@@ -73,7 +73,7 @@ define koha::site
 	$mysql_user				= undef,
 	$mysql_password,
 
-	$memcached_servers			= [],
+	$memcached_servers			= undef,
 	$memcached_namespace			= undef,
 
 	$opac_server_name			= undef,
@@ -248,6 +248,19 @@ define koha::site
 		$mysql_user_real = $mysql_user
 	}
 
+	if (is_array($memcached_servers))
+	{
+		$memcached_servers_real = join($memcached_servers, ",")
+	}
+	elsif (is_string($memcached_servers))
+	{
+		$memcached_servers_real = $memcached_servers
+	}
+	else
+	{
+		$memcached_servers_real = ""
+	}
+
 	if ($memcached_namespace == undef)
 	{
 		$memcached_namespace_real = "koha_$site_name"
@@ -284,10 +297,9 @@ define koha::site
 		$error_log_file_real = $error_log_file
 	}
 
-
 	if ($setenv == undef)
 	{
-		$setenv_real = [ "KOHA_CONF \"$koha_site_dir_real/$site_name/koha-conf.xml\"", "MEMCACHED_NAMESPACE \"$memcached_namespace\"" ]
+		$setenv_real = [ "KOHA_CONF \"$koha_site_dir_real/$site_name/koha-conf.xml\"", "MEMCACHED_SERVERS \"$memcached_servers_real\"", "MEMCACHED_NAMESPACE \"$memcached_namespace_real\"" ]
 	}
 	else
 	{
@@ -318,7 +330,6 @@ define koha::site
 		],
 
 		setenv			=> $setenv_real,
-		memcache_servers	=> $memcached_servers,
 
 		itk			=>
 		{
@@ -344,7 +355,6 @@ define koha::site
 		],
 
 		setenv			=> $setenv_real,
-		memcache_servers	=> $memcached_servers,
 
 		itk			=>
 		{
