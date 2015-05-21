@@ -44,10 +44,10 @@ class koha::repo
 	# Prepare the package manager with the Koha repository.
 	case $::osfamily
 	{
-		'Debian':
+		"Debian":
 		{
 			::apt::source
-			{ 'koha':
+			{ "koha":
 				ensure		=> $ensure,
 				location	=> "http://debian.koha-community.org/koha",
 				release		=> $koha_repo_release,

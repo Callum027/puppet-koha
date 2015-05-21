@@ -45,11 +45,11 @@ class koha::zebra::install
 	unless (defined(Class["::koha::repo"]))
 	{
 		class
-		{ "koha::repo":
+		{ "::koha::repo":
 			ensure	=> $ensure,
 		}
 
-		contain "koha::repo"
+		contain "::koha::repo"
 	}
 
 	# This is a temporary requirement, while Zebra is still bound with Koha.

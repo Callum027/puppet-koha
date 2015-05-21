@@ -49,8 +49,8 @@ define koha::mysql::site
 	$mysql_db		= undef,
 	$mysql_user		= undef,
 
-	$mysql_password,
-	$staff_password
+	$mysql_password
+	#$staff_password
 )
 {
 	# TODO: Proper dependency ordering for koha::params, to get rid of this $x_real BS.
@@ -102,13 +102,13 @@ define koha::mysql::site
 	}
 
 	# Set up MySQL database for this instance.
-	mysql::db
+	::mysql::db
 	{ $mysql_db_real:
 		user		=> $mysql_user_real,
 		password	=> $mysql_password,
 		host		=> 'localhost',
 		grant		=> 'ALL',
-		require		=> Class["koha::mysql"],
+		require		=> Class["::koha::mysql"],
 	}
 
 	# Re-fetch the passwords from the config we've generated, allows it
@@ -123,7 +123,7 @@ define koha::mysql::site
 	# TODO: Populate the database with default content.
 
 	# Change the default user's password.
-	$staff_digest = md5($staff_password)
+	# $staff_digest = md5($staff_password)
 
 	# TODO: Only do this if the database gets filled with default content!
 	# exec

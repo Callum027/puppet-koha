@@ -326,7 +326,7 @@ define koha::site
 	}
 
 	# Generate Apache vhosts for the OPAC and Intranet servers for this Koha site.
-	apache::vhost
+	::apache::vhost
 	{ $opac_server_name_real:
 		ensure			=> $ensure,
 
@@ -357,7 +357,7 @@ define koha::site
 		notify			=> Class["::koha::service"],
 	}
 
-	apache::vhost
+	::apache::vhost
 	{ $intra_server_name_real:
 		ensure			=> $ensure,
 
