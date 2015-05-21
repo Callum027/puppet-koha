@@ -63,7 +63,6 @@ class koha::install
 		class
 		{ "apache":
 			mpm_module	=> "itk",
-			
 		}
 
 		contain "apache"
