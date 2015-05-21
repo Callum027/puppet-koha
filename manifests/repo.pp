@@ -46,14 +46,25 @@ class koha::repo
 	{
 		"Debian":
 		{
+			::apt::key
+			{ "robin":
+				id	=> "59576D238B16EFABFEF8717514D36485A99CEB6D",
+				server	=> "gpg.mit.edu",
+			}
+
+			::apt::key
+			{ "koha-devel":
+				id	=> "3EA44636DBCE457DA2CF8D823C9356BBA2E41F10",
+				server	=> "gpg.mit.edu",
+			}
+
 			::apt::source
 			{ "koha":
 				ensure		=> $ensure,
 				location	=> "http://debian.koha-community.org/koha",
 				release		=> $koha_repo_release,
 				repos		=> "main",
-				key		=> "3EA44636DBCE457DA2CF8D823C9356BBA2E41F10",
-				key_source	=> "http://debian.koha-community.org/koha/gpg.asc",
+				require		=> ::Apt::Key[["robin", "koha-devel"]],
 			}
 		}
 
