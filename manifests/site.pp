@@ -80,7 +80,12 @@ define koha::site
 	$intra_server_name			= undef, # Defined in resource body
 
 	$setenv					= undef, # Defined in resource body
-	$error_log_file				= undef  # Defined in resource body
+
+	$opac_access_log_file			= undef, # Defined in resource body
+	$opac_error_log_file			= undef, # Defined in resource body
+
+	$intranet_acess_log_file		= undef, # Defined in resource body
+	$intranet_error_log_file		= undef  # Defined in resource body
 )
 {
 	unless (defined(Class["::koha"]))
@@ -204,13 +209,41 @@ define koha::site
 		$intra_server_name_ = $intra_server_name
 	}
 
-	if ($error_log_file == undef)
+	# Apache log files.
+	if ($opac_access_log_file == undef)
 	{
-		$error_log_file_ = "$koha_log_dir/$site_name/intranet-error.log"
+		$opac_access_log_file_ = "koha/$site_name/opac-access.log"
 	}
 	else
 	{
-		$error_log_file_ = $error_log_file
+		$opac_access_log_file_ = $opac_access_log_file
+	}
+
+	if ($intranet_error_log_file == undef)
+	{
+		$opac_error_log_file_ = "koha/$site_name/opac-error.log"
+	}
+	else
+	{
+		$opac_error_log_file_ = $opac_error_log_file
+	}
+
+	if ($intranet_access_log_file == undef)
+	{
+		$intranet_access_log_file_ = "koha/$site_name/intranet-access.log"
+	}
+	else
+	{
+		$intranet_access_log_file_ = $intranet_access_log_file
+	}
+
+	if ($intranet_error_log_file == undef)
+	{
+		$intranet_error_log_file_ = "koha/$site_name/intranet-error.log"
+	}
+	else
+	{
+		$intranet_error_log_file_ = $intranet_error_log_file
 	}
 
 	if ($setenv == undef)
@@ -222,7 +255,28 @@ define koha::site
 		$setenv_ = $setenv
 	}
 
+	# Generate the Koha user.
+	::koha::user { $koha_user_: }
+
 	# Install the Koha configuration file for this site.
+	if ($ensure == "present")
+	{
+		$directory_ensure = "directory"
+	}
+	else
+	{
+		$directory_ensure = $ensure
+	}
+
+	file
+	{ "$koha_site_dir/$site_name":
+		ensure	=> $directory_ensure,
+		owner	=> $koha_user_,
+		group	=> $koha_user_,
+		mode	=> 755,
+		require	=> Class["::koha"],
+	}
+
 	file
 	{ "$koha_site_dir/$site_name/koha-conf.xml":
 		ensure	=> $ensure,
@@ -230,7 +284,7 @@ define koha::site
 		group	=> $koha_user_,
 		mode	=> 640,
 		content	=> template("koha/koha-conf-site.xml.erb"),
-		require	=> Class["::koha"],
+		require	=> [ Class["::koha"], File["$koha_site_dir/$site_name"] ],
 		notify	=> Class["::koha::service"],
 	}
 
@@ -257,10 +311,10 @@ define koha::site
 			group	=> $site_group_,
 		},
 
+		access_log_file		=> $access_log_file_,
 		error_log_file		=> $error_log_file_,
-		# These Apache configuration options are not available in puppetlabs/apache:
-		#  TransferLog $koha_log_dir/$site_name/opac-access.log
-		#  RewriteLog  $koha_log_dir/$site_name/opac-rewrite.log
+		# This Apache configuration option is not available in puppetlabs/apache:
+		#  RewriteLog  koha/$site_name/intranet-rewrite.log
 
 		require			=> Class["::koha"],
 		notify			=> Class["::koha::service"],
@@ -288,10 +342,10 @@ define koha::site
 			group	=> $site_group_,
 		},
 
-		error_log_file		=> $error_log_file_,
-		# These Apache configuration options are not available in puppetlabs/apache:
-		#  TransferLog $koha_log_dir/$site_name/intranet-access.log
-		#  RewriteLog  $koha_log_dir/$site_name/intranet-rewrite.log
+		access_log_file		=> $intranet_access_log_file_,
+		error_log_file		=> $intranet_error_log_file_,
+		# This Apache configuration option is not available in puppetlabs/apache:
+		#  RewriteLog  koha/$site_name/intranet-rewrite.log
 
 		require			=> Class["::koha"],
 		notify			=> Class["::koha::service"],

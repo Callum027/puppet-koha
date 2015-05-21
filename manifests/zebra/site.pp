@@ -37,7 +37,7 @@
 #
 define koha::zebra::site
 (
-	$ensure				= present,
+	$ensure				= "present",
 
 	$site_name			= $name,
 
@@ -156,7 +156,34 @@ define koha::zebra::site
 		$test_real = $test
 	}
 
+	# Generate the Koha user, if it hasn't been made already.
+	unless (defined(::Koha::User[$koha_user_real]))
+	{
+		::koha::user { $koha_user_real: }
+	}
+
 	# Generate and install Zebra config files.
+	unless (defined(File["$koha_site_dir/$site_name"]))
+	{
+		if ($ensure == "present")
+		{
+			$directory_ensure = "directory"
+		}
+		else
+		{
+			$directory_ensure = $ensure
+		}
+
+		file
+		{ "$koha_site_dir/$site_name":
+			ensure	=> $directory_ensure,
+			owner	=> $koha_user_real,
+			group	=> $koha_user_real,
+			mode	=> 755,
+			require	=> Class["::koha::zebra"],
+		}
+	}
+
 	file
 	{ "$koha_site_dir/$site_name/zebra-biblios.cfg":
 		ensure	=> $ensure,
