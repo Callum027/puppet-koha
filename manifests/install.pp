@@ -41,24 +41,24 @@ class koha::install
 (
 	$ensure			= "present",
 
-	$koha_packages		= $koha::params::koha_packages
+	$koha_packages		= $::koha::params::koha_packages
 ) inherits koha::params
 {
 	# Install the Koha repository.
-	unless (defined(Class["koha::repo"]))
+	unless (defined(Class["::koha::repo"]))
 	{
 		class
 		{ "koha::repo":
 			ensure	=> $ensure,
 		}
 
-		contain "koha::repo"
+		contain "::koha::repo"
 	}
 
 	# A MySQL client is required for Koha to access the library databases.
-	unless ($ensure != "present" or defined(Class["mysql::client"]))
+	unless ($ensure != "present" or defined(Class["::mysql::client"]))
 	{
-		contain mysql::client
+		contain ::mysql::client
 	}
 
 	# Install Apache first, before installing Koha, so we can disable the event MPM.
@@ -67,14 +67,14 @@ class koha::install
 	if ($ensure == "present")
 	{
 		class
-		{ "apache":
+		{ "::apache":
 			mpm_module	=> "itk",
 		}
 
-		contain "apache"
+		contain "::apache"
 
-		apache::mod { "cgi": }
-		contain apache::mod::rewrite
+		::apache::mod { "cgi": }
+		contain ::apache::mod::rewrite
 	}
 
 	# Do the job!
@@ -83,7 +83,7 @@ class koha::install
 		package
 		{ $koha_packages:
 			ensure	=> "installed",
-			require	=> Class[[ "koha::repo", "apache" ]],
+			require	=> Class[[ "::koha::repo", "::apache" ]],
 		}
 	}
 	elsif ($ensure == "absent")
@@ -91,7 +91,7 @@ class koha::install
 		package
 		{ $koha_packages:
 			ensure	=> "purged",
-			require	=> Class["koha::repo"],
+			require	=> Class["::koha::repo"],
 		}
 	}
 	else

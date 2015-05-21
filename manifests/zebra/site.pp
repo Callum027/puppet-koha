@@ -55,15 +55,15 @@ define koha::zebra::site
 	$test				= undef
 )
 {
-	unless (defined("koha::zebra"))
+	unless (defined("::koha::zebra"))
 	{
-		fail("You must include the koha::zebra base class before setting up a Koha Zebra site index")
+		fail("You must include the Koha Zebra base class before setting up a Koha Zebra site index")
 	}
 
 	# Require the params class, and set up the Koha Zebra service if it hasn't already.
 	# TODO: Proper dependency ordering for koha::params, to get rid of this $x_real BS.
-	require koha::params
-	include koha::zebra::service
+	require ::koha::params
+	include ::koha::zebra::service
 
 	# Parameters from koha::params.
 	if ($koha_user == undef)
@@ -77,7 +77,7 @@ define koha::zebra::site
 
 	if ($koha_site_dir == undef)
 	{
-		$koha_site_dir_real = $koha::params::koha_site_dir
+		$koha_site_dir_real = $::koha::params::koha_site_dir
 	}
 	else
 	{
@@ -86,7 +86,7 @@ define koha::zebra::site
 
 	if ($koha_language == undef)
 	{
-		$koha_language_real = $koha::params::koha_language
+		$koha_language_real = $::koha::params::koha_language
 	}
 	else
 	{
@@ -95,7 +95,7 @@ define koha::zebra::site
 
 	if ($koha_marc_format == undef)
 	{
-		$koha_marc_format_real = $koha::params::koha_marc_format
+		$koha_marc_format_real = $::koha::params::koha_marc_format
 	}
 	else
 	{
@@ -104,7 +104,7 @@ define koha::zebra::site
 
 	if ($koha_zebra_biblios_config == undef)
 	{
-		$koha_zebra_biblios_config_real = $koha::params::koha_zebra_biblios_config
+		$koha_zebra_biblios_config_real = $::koha::params::koha_zebra_biblios_config
 	}
 	else
 	{
@@ -113,7 +113,7 @@ define koha::zebra::site
 
 	if ($koha_zebra_authorities_config == undef)
 	{
-		$koha_zebra_authorities_config_real = $koha::params::koha_zebra_authorities_config
+		$koha_zebra_authorities_config_real = $::koha::params::koha_zebra_authorities_config
 	}
 	else
 	{
@@ -122,7 +122,7 @@ define koha::zebra::site
 
 	if ($koha_zebra_services == undef)
 	{
-		$koha_zebra_services_real = $koha::params::koha_zebra_services
+		$koha_zebra_services_real = $::koha::params::koha_zebra_services
 	}
 	else
 	{
@@ -131,7 +131,7 @@ define koha::zebra::site
 
 	if ($pwgen == undef)
 	{
-		$pwgen_real = $koha::params::pwgen
+		$pwgen_real = $::koha::params::pwgen
 	}
 	else
 	{
@@ -140,7 +140,7 @@ define koha::zebra::site
 
 	if ($sed == undef)
 	{
-		$sed_real = $koha::params::sed
+		$sed_real = $::koha::params::sed
 	}
 	else
 	{
@@ -149,7 +149,7 @@ define koha::zebra::site
 
 	if ($test == undef)
 	{
-		$test_real = $koha::params::test
+		$test_real = $::koha::params::test
 	}
 	else
 	{
@@ -164,8 +164,8 @@ define koha::zebra::site
 		group	=> $koha_user_real,
 		mode	=> 640,
 		content	=> template("koha/zebra-biblios.cfg.erb"),
-		require	=> Class["koha::zebra"],
-		notify	=> Class["koha::zebra::service"],
+		require	=> Class["::koha::zebra"],
+		notify	=> Class["::koha::zebra::service"],
 	}
 
 	file
@@ -175,8 +175,8 @@ define koha::zebra::site
 		group	=> $koha_user_real,
 		mode	=> 640,
 		content	=> template("koha/zebra-biblios-dom-site.cfg.erb"),
-		require	=> Class["koha::zebra"],
-		notify	=> Class["koha::zebra::service"],
+		require	=> Class["::koha::zebra"],
+		notify	=> Class["::koha::zebra::service"],
 	}
 
 	file
@@ -186,8 +186,8 @@ define koha::zebra::site
 		group	=> $koha_user_real,
 		mode	=> 640,
 		content	=> template("koha/zebra-authorities-site.cfg.erb"),
-		require	=> Class["koha::zebra"],
-		notify	=> Class["koha::zebra::service"],
+		require	=> Class["::koha::zebra"],
+		notify	=> Class["::koha::zebra::service"],
 	}
 
 	file
@@ -197,8 +197,8 @@ define koha::zebra::site
 		group	=> $koha_user_real,
 		mode	=> 640,
 		content	=> template("koha/zebra-authorities-dom-site.cfg.erb"),
-		require	=> Class["koha::zebra"],
-		notify	=> Class["koha::zebra::service"],
+		require	=> Class["::koha::zebra"],
+		notify	=> Class["::koha::zebra::service"],
 	}
 
 	file
@@ -208,8 +208,8 @@ define koha::zebra::site
 		group	=> $koha_user_real,
 		mode	=> 640,
 		content	=> template("koha/zebra.passwd.erb"),
-		require	=> Class["koha::zebra"],
-		notify	=> Class["koha::zebra::service"],
+		require	=> Class["::koha::zebra"],
+		notify	=> Class["::koha::zebra::service"],
 	}
 
 	# Start the Koha zebra service, if it hasn't been already.

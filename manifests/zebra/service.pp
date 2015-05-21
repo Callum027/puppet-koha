@@ -38,16 +38,16 @@
 class koha::zebra::service
 (
 	$ensure			= "present",
-	$koha_zebra_services	= $koha::params::koha_service
+	$koha_zebra_services	= $::koha::params::koha_service
 ) inherits koha::params
 {
 	# This is a temporary requirement, while Zebra is still bound with Koha.
 	# TODO: When they are separate packages, they will be able to be installed independently.
-	unless (defined(Class["koha::service"]))
+	unless (defined(Class["::koha::service"]))
 	{
-		unless (defined(Class["koha::zebra::install"]))
+		unless (defined(Class["::koha::zebra"]))
 		{
-			fail("You must include the koha::zebra::install class before including koha::zebra::service")
+			fail("You must include the Koha Zebra base class before setting up the Koha Zebra services")
 		}
 
 		# Refresh the Apache Service.
@@ -57,7 +57,7 @@ class koha::zebra::service
 			{ $koha_zebra_services:
 				ensure	=> "running",
 				enable	=> true,
-				require	=> Class["koha::zebra::install"],
+				require	=> Class["::koha::zebra"],
 			}
 		}
 		elsif ($ensure == "absent")

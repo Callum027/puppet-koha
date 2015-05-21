@@ -37,13 +37,13 @@
 #
 class koha::zebra($ensure = "present")
 {
-	unless (defined(Class["koha::zebra::install"]))
+	unless (defined(Class["::koha::zebra::install"]))
 	{
 		class
-		{ "koha::zebra::install":
+		{ "::koha::zebra::install":
 			ensure	=> $ensure,
 		}
 
-		contain "koha::zebra::install"
+		contain "::koha::zebra::install"
 	}
 }

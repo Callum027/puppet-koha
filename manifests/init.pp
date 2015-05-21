@@ -22,15 +22,15 @@
 #
 class koha($ensure = "present")
 {
-	require koha::params
+	require ::koha::params
 
-	unless (defined(Class["koha::install"]))
+	unless (defined(Class["::koha::install"]))
 	{	
 		class
-		{ "koha::install":
+		{ "::koha::install":
 			ensure	=> $ensure,
 		}
 
-		contain "koha::install"
+		contain "::koha::install"
 	}
 }

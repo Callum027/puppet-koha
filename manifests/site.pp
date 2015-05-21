@@ -83,20 +83,20 @@ define koha::site
 	$error_log_file				= undef
 )
 {
-	unless (defined(Class["koha"]))
+	unless (defined(Class["::koha"]))
 	{
-		fail("You must define the koha base class before using setting up a Koha site")
+		fail("You must define the Koha base class before using setting up a Koha site")
 	}
 
 	# Require the params class, and set up the Koha service if it hasn't already.
 	# TODO: Proper dependency ordering for koha::params, to get rid of this $x_real BS.
-	require koha::params
-	include koha::service
+	require ::koha::params
+	include ::koha::service
 
 	# Define default parameters, if they haven't been defined by the user.
 	if ($koha_config_dir == undef)
 	{
-		$koha_config_dir_real = $koha::params::koha_config_dir
+		$koha_config_dir_real = $::koha::params::koha_config_dir
 	}
 	else
 	{
@@ -105,7 +105,7 @@ define koha::site
 
 	if ($koha_site_dir == undef)
 	{
-		$koha_site_dir_real = $koha::params::koha_site_dir
+		$koha_site_dir_real = $::koha::params::koha_site_dir
 	}
 	else
 	{
@@ -114,7 +114,7 @@ define koha::site
 
 	if ($koha_site_opac_port == undef)
 	{
-		$koha_site_opac_port_real = $koha::params::koha_site_opac_port
+		$koha_site_opac_port_real = $::koha::params::koha_site_opac_port
 	}
 	else
 	{
@@ -123,7 +123,7 @@ define koha::site
 
 	if ($koha_site_intra_port == undef)
 	{
-		$koha_site_intra_port_real = $koha::params::koha_site_intra_port
+		$koha_site_intra_port_real = $::koha::params::koha_site_intra_port
 	}
 	else
 	{
@@ -132,7 +132,7 @@ define koha::site
 
 	if ($koha_lib_dir == undef)
 	{
-		$koha_lib_dir_real = $koha::params::koha_lib_dir
+		$koha_lib_dir_real = $::koha::params::koha_lib_dir
 	}
 	else
 	{
@@ -141,7 +141,7 @@ define koha::site
 
 	if ($koha_log_dir == undef)
 	{
-		$koha_log_dir_real = $koha::params::koha_log_dir
+		$koha_log_dir_real = $::koha::params::koha_log_dir
 	}
 	else
 	{
@@ -159,7 +159,7 @@ define koha::site
 
 	if ($koha_zebra_biblios_config == undef)
 	{
-		$koha_zebra_biblios_config_real = $koha::params::koha_zebra_biblios_config
+		$koha_zebra_biblios_config_real = $::koha::params::koha_zebra_biblios_config
 	}
 	else
 	{
@@ -168,7 +168,7 @@ define koha::site
 
 	if ($koha_zebra_biblios_indexing_mode == undef)
 	{
-		$koha_zebra_biblios_indexing_mode_real = $koha::params::koha_zebra_biblios_indexing_mode
+		$koha_zebra_biblios_indexing_mode_real = $::koha::params::koha_zebra_biblios_indexing_mode
 	}
 	else
 	{
@@ -177,7 +177,7 @@ define koha::site
 
 	if ($koha_zebra_authorities_indexing_mode == undef)
 	{
-		$koha_zebra_authorities_indexing_mode_real = $koha::params::koha_zebra_authorities_indexing_mode
+		$koha_zebra_authorities_indexing_mode_real = $::koha::params::koha_zebra_authorities_indexing_mode
 	}
 	else
 	{
@@ -186,7 +186,7 @@ define koha::site
 
 	if ($koha_zebra_marc_format == undef)
 	{
-		$koha_zebra_marc_format_real = $koha::params::koha_zebra_marc_format
+		$koha_zebra_marc_format_real = $::koha::params::koha_zebra_marc_format
 	}
 	else
 	{
@@ -321,8 +321,8 @@ define koha::site
 		group	=> $koha_user_real,
 		mode	=> 640,
 		content	=> template("koha/koha-conf-site.xml.erb"),
-		require	=> Class["koha"],
-		notify	=> Class["koha::service"],
+		require	=> Class["::koha"],
+		notify	=> Class["::koha::service"],
 	}
 
 	# Generate Apache vhosts for the OPAC and Intranet servers for this Koha site.
@@ -353,8 +353,8 @@ define koha::site
 		#  TransferLog /var/log/koha/$site_name/opac-access.log
 		#  RewriteLog  /var/log/koha/$site_name/opac-rewrite.log
 
-		require			=> Class["koha"],
-		notify			=> Class["koha::service"],
+		require			=> Class["::koha"],
+		notify			=> Class["::koha::service"],
 	}
 
 	apache::vhost
@@ -384,8 +384,8 @@ define koha::site
 		#  TransferLog /var/log/koha/$site_name/intranet-access.log
 		#  RewriteLog  /var/log/koha/$site_name/intranet-rewrite.log
 
-		require			=> Class["koha"],
-		notify			=> Class["koha::service"],
+		require			=> Class["::koha"],
+		notify			=> Class["::koha::service"],
 	}
 
 	if ($ensure != "present" and $ensure != "absent")

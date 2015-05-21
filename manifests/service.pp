@@ -42,9 +42,9 @@ class koha::service
 	$koha_services		= $koha::params::koha_services
 ) inherits koha::params
 {
-	unless (defined("koha::install"))
+	unless (defined("::koha"))
 	{
-		fail("You must include the koha::install class before including koha::service")
+		fail("You must include the Koha base class before setting up the Koha services")
 	}
 
 	# Ensure the Koha service is up and running.
@@ -54,7 +54,7 @@ class koha::service
 		{ $koha_services:
 			ensure		=> "running",
 			enable		=> true,
-			require		=> Class["koha::install"],
+			require		=> Class["koha"],
 		}
 	}
 	elsif ($ensure == "absent")

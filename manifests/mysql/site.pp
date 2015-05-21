@@ -54,11 +54,11 @@ define koha::mysql::site
 )
 {
 	# TODO: Proper dependency ordering for koha::params, to get rid of this $x_real BS.
-	require koha::params
+	require ::koha::params
 
 	if ($echo == undef)
 	{
-		$echo_real = $koha::params::echo
+		$echo_real = $::koha::params::echo
 	}
 	else
 	{
@@ -67,7 +67,7 @@ define koha::mysql::site
 
 	if ($mysql == undef)
 	{
-		$mysql_real = $koha::params::mysql
+		$mysql_real = $::koha::params::mysql
 	}
 	else
 	{
@@ -76,7 +76,7 @@ define koha::mysql::site
 
 	if ($mysql_adminuser == undef)
 	{
-		$mysql_adminuser_real = $koha::params::mysql_adminuser
+		$mysql_adminuser_real = $::koha::params::mysql_adminuser
 	}
 	else
 	{

@@ -49,7 +49,7 @@ define koha::user
 )
 {
 	# TODO: Proper dependency ordering for koha::params, to get rid of this $x_real BS.
-	require koha::params
+	require ::koha::params
 
 	if ($username == undef)
 	{
@@ -71,7 +71,7 @@ define koha::user
 
 	if ($koha_lib_dir == undef)
 	{
-		$koha_lib_dir_real = $koha::params::koha_lib_dir
+		$koha_lib_dir_real = $::koha::params::koha_lib_dir
 	}
 	else
 	{
@@ -89,7 +89,7 @@ define koha::user
 
 	if ($nologin == undef)
 	{
-		$nologin_real = $koha::params::nologin
+		$nologin_real = $::koha::params::nologin
 	}
 	else
 	{

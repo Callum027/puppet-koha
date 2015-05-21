@@ -37,8 +37,8 @@
 #
 class koha::mysql::install($ensure = "present")
 {
-	unless ($ensure != "present" or defined(Class["mysql::server"]))
+	unless ($ensure != "present" or defined(Class["::mysql::server"]))
 	{
-		contain mysql::server
+		contain ::mysql::server
 	}
 }
