@@ -20,15 +20,25 @@
 #
 # Copyright 2015 Callum Dickinson.
 #
-class koha
+class koha($ensure = "present")
 {
 	unless (defined("koha::install"))
 	{	
-		require koha::install
+		class
+		{ "koha::install":
+			ensure	=> $ensure,
+		}
+
+		contain "koha::install"
 	}
 
 	unless (defined("koha::service"))
-	{
-		require koha::service
+	{	
+		class
+		{ "koha::service":
+			ensure	=> $ensure,
+		}
+
+		contain "koha::service"
 	}
 }

@@ -35,22 +35,25 @@
 #
 # Copyright 2015 Callum Dickinson.
 #
-class koha::zebra
-(
-	$lang			= $koha::params::zebra_lang,
-	$marc_format		= $koha::params::zebra_marc_format,
-	$password		= undef,
-	$biblios_config		= $koha::params::zebra_biblios_config,
-	$authorities_config	= $koha::params::zebra_authorities_config
-) inherits koha::params
+class koha::zebra($ensure = "present")
 {
 	unless (defined("koha::zebra::install"))
 	{
-		require koha::zebra::install
+		class
+		{ "koha::zebra::install":
+			ensure	=> $ensure,
+		}
+
+		contain "koha::zebra::install"
 	}
 
 	unless (defined("koha::zebra::service"))
 	{
-		require koha::zebra::service
+		class
+		{ "koha::zebra::service":
+			ensure	=> $ensure,
+		}
+
+		contain "koha::zebra::service"
 	}
 }

@@ -35,7 +35,15 @@
 #
 # Copyright 2015 Callum Dickinson.
 #
-class koha::mysql
+class koha::mysql($ensure = "present")
 {
-	include koha::mysql::install
+	unless (defined("koha::mysql::install"))
+	{
+		class
+		{ "koha::mysql::install":
+			ensure	=> $ensure,
+		}
+
+		contain "koha::mysql::install"
+	}
 }

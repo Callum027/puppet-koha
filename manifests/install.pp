@@ -51,6 +51,8 @@ class koha::install
 		{ "koha::repo":
 			ensure	=> $ensure,
 		}
+
+		contain "koha::repo"
 	}
 
 	# Install Apache first, before installing Koha, so we can disable the event MPM.
@@ -63,8 +65,10 @@ class koha::install
 			mpm_module	=> "itk",
 		}
 
+		contain "apache"
+
 		apache::mod { "cgi": }
-		include apache::mod::rewrite
+		contain apache::mod::rewrite
 	}
 
 	# Do the job!

@@ -161,6 +161,7 @@ define koha::zebra::site
 		group	=> $koha_user_real,
 		mode	=> 640,
 		content	=> template("koha/zebra-biblios.cfg.erb"),
+		require	=> Class["koha::zebra::install"],
 		notify	=> Class["koha::zebra::service"],
 	}
 
@@ -171,6 +172,7 @@ define koha::zebra::site
 		group	=> $koha_user_real,
 		mode	=> 640,
 		content	=> template("koha/zebra-biblios-dom-site.cfg.erb"),
+		require	=> Class["koha::zebra::install"],
 		notify	=> Class["koha::zebra::service"],
 	}
 
@@ -181,6 +183,7 @@ define koha::zebra::site
 		group	=> $koha_user_real,
 		mode	=> 640,
 		content	=> template("koha/zebra-authorities-site.cfg.erb"),
+		require	=> Class["koha::zebra::install"],
 		notify	=> Class["koha::zebra::service"],
 	}
 
@@ -191,6 +194,7 @@ define koha::zebra::site
 		group	=> $koha_user_real,
 		mode	=> 640,
 		content	=> template("koha/zebra-authorities-dom-site.cfg.erb"),
+		require	=> Class["koha::zebra::install"],
 		notify	=> Class["koha::zebra::service"],
 	}
 
@@ -201,6 +205,7 @@ define koha::zebra::site
 		group	=> $koha_user_real,
 		mode	=> 640,
 		content	=> template("koha/zebra.passwd.erb"),
+		require	=> Class["koha::zebra::install"],
 		notify	=> Class["koha::zebra::service"],
 	}
 

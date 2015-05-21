@@ -35,7 +35,10 @@
 #
 # Copyright 2015 Callum Dickinson.
 #
-class koha::mysql::install
+class koha::mysql::install($ensure = "present")
 {
-	include mysql::server
+	unless ($ensure != "present" or defined("mysql::server"))
+	{
+		contain mysql::server
+	}
 }

@@ -45,7 +45,6 @@ define koha::translate
 )
 {
 	require koha::params
-	require koha::install
 
 	if ($grep == undef)
 	{

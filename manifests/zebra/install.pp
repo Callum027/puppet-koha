@@ -41,12 +41,15 @@ class koha::zebra::install
 	$koha_zebra_services	= $koha::params::koha_service
 ) inherits koha::params
 {
+	# Install the Koha repository.
 	unless (defined("koha::repo"))
 	{
 		class
 		{ "koha::repo":
 			ensure	=> $ensure,
 		}
+
+		contain "koha::repo"
 	}
 
 	# This is a temporary requirement, while Zebra is still bound with Koha.
