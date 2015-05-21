@@ -55,11 +55,16 @@ class koha::install
 		contain "koha::repo"
 	}
 
+	# A MySQL client is required for Koha to access the library databases.
+	contain mysql::client
+
 	# Install Apache first, before installing Koha, so we can disable the event MPM.
 	# Koha uses the ITK MPM, and the libapache2-mod-itk package for Ubuntu does not always
 	# install properly with that MPM enabled. This will work around that problem.
 	if ($ensure == "present")
 	{
+		notify{ "apache base class defined": }
+
 		class
 		{ "apache":
 			mpm_module	=> "itk",
