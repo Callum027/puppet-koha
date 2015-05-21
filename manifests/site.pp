@@ -274,7 +274,7 @@ define koha::site
 		owner	=> $koha_user_,
 		group	=> $koha_user_,
 		mode	=> 755,
-		require	=> Class["::koha"],
+		require	=> [ Class["::koha"], ::Koha::User[$koha_user_] ],
 	}
 
 	file
@@ -284,7 +284,7 @@ define koha::site
 		group	=> $koha_user_,
 		mode	=> 640,
 		content	=> template("koha/koha-conf-site.xml.erb"),
-		require	=> [ Class["::koha"], File["$koha_site_dir/$site_name"] ],
+		require	=> [ Class["::koha"], File["$koha_site_dir/$site_name"], ::Koha::User[$koha_user_] ],
 		notify	=> Class["::koha::service"],
 	}
 
@@ -311,8 +311,8 @@ define koha::site
 			group	=> $site_group_,
 		},
 
-		access_log_file		=> $access_log_file_,
-		error_log_file		=> $error_log_file_,
+		access_log_file		=> $opac_access_log_file_,
+		error_log_file		=> $opac_error_log_file_,
 		# This Apache configuration option is not available in puppetlabs/apache:
 		#  RewriteLog  koha/$site_name/intranet-rewrite.log
 
