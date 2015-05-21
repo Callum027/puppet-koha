@@ -46,14 +46,4 @@ class koha::zebra($ensure = "present")
 
 		contain "koha::zebra::install"
 	}
-
-	unless (defined(Class["koha::zebra::service"]))
-	{
-		class
-		{ "koha::zebra::service":
-			ensure	=> $ensure,
-		}
-
-		contain "koha::zebra::service"
-	}
 }

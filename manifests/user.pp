@@ -48,6 +48,7 @@ define koha::user
 	$nologin = undef
 )
 {
+	# TODO: Proper dependency ordering for koha::params, to get rid of this $x_real BS.
 	require koha::params
 
 	if ($username == undef)

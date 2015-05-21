@@ -53,6 +53,7 @@ define koha::mysql::site
 	$staff_password
 )
 {
+	# TODO: Proper dependency ordering for koha::params, to get rid of this $x_real BS.
 	require koha::params
 
 	if ($echo == undef)
@@ -107,7 +108,7 @@ define koha::mysql::site
 		password	=> $mysql_password,
 		host		=> 'localhost',
 		grant		=> 'ALL',
-		require		=> Class["koha::mysql::install"],
+		require		=> Class["koha::mysql"],
 	}
 
 	# Re-fetch the passwords from the config we've generated, allows it

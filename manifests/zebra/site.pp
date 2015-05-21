@@ -55,12 +55,15 @@ define koha::zebra::site
 	$test				= undef
 )
 {
-	require koha::params
-
-	unless (defined("koha::zebra::install"))
+	unless (defined("koha::zebra"))
 	{
-		fail("You must include the koha::zebra::install class before setting up a Koha Zebra site")
+		fail("You must include the koha::zebra base class before setting up a Koha Zebra site index")
 	}
+
+	# Require the params class, and set up the Koha Zebra service if it hasn't already.
+	# TODO: Proper dependency ordering for koha::params, to get rid of this $x_real BS.
+	require koha::params
+	include koha::zebra::service
 
 	# Parameters from koha::params.
 	if ($koha_user == undef)
@@ -161,7 +164,7 @@ define koha::zebra::site
 		group	=> $koha_user_real,
 		mode	=> 640,
 		content	=> template("koha/zebra-biblios.cfg.erb"),
-		require	=> Class["koha::zebra::install"],
+		require	=> Class["koha::zebra"],
 		notify	=> Class["koha::zebra::service"],
 	}
 
@@ -172,7 +175,7 @@ define koha::zebra::site
 		group	=> $koha_user_real,
 		mode	=> 640,
 		content	=> template("koha/zebra-biblios-dom-site.cfg.erb"),
-		require	=> Class["koha::zebra::install"],
+		require	=> Class["koha::zebra"],
 		notify	=> Class["koha::zebra::service"],
 	}
 
@@ -183,7 +186,7 @@ define koha::zebra::site
 		group	=> $koha_user_real,
 		mode	=> 640,
 		content	=> template("koha/zebra-authorities-site.cfg.erb"),
-		require	=> Class["koha::zebra::install"],
+		require	=> Class["koha::zebra"],
 		notify	=> Class["koha::zebra::service"],
 	}
 
@@ -194,7 +197,7 @@ define koha::zebra::site
 		group	=> $koha_user_real,
 		mode	=> 640,
 		content	=> template("koha/zebra-authorities-dom-site.cfg.erb"),
-		require	=> Class["koha::zebra::install"],
+		require	=> Class["koha::zebra"],
 		notify	=> Class["koha::zebra::service"],
 	}
 
@@ -205,7 +208,7 @@ define koha::zebra::site
 		group	=> $koha_user_real,
 		mode	=> 640,
 		content	=> template("koha/zebra.passwd.erb"),
-		require	=> Class["koha::zebra::install"],
+		require	=> Class["koha::zebra"],
 		notify	=> Class["koha::zebra::service"],
 	}
 

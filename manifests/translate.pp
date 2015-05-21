@@ -44,6 +44,7 @@ define koha::translate
 	$koha_translate = undef
 )
 {
+	# TODO: Proper dependency ordering for koha::params, to get rid of this $x_real BS.
 	require koha::params
 
 	if ($grep == undef)
@@ -61,7 +62,7 @@ define koha::translate
 	{
 		exec
 		{ "$koha_translate_real --install $language_code_real":
-			require	=> Class["koha::install"],
+			require	=> Class["koha"],
 			onlyif	=> "$koha_translate_real --list --available | $grep_real -v $language_code_real",
 		}
 	}
@@ -69,7 +70,7 @@ define koha::translate
 	{
 		exec
 		{ "$koha_translate_real --remove $language_code_real":
-			require	=> Class["koha::install"],
+			require	=> Class["koha"],
 			onlyif	=> "$koha_translate_real --list --available | $grep_real $language_code_real",
 		}
 	}

@@ -83,12 +83,15 @@ define koha::site
 	$error_log_file				= undef
 )
 {
-	require koha::params
-
-	unless (defined(Class["koha::install"]))
+	unless (defined(Class["koha"]))
 	{
-		fail("You must include the koha::install class before setting up a Koha site")
+		fail("You must define the koha base class before using setting up a Koha site")
 	}
+
+	# Require the params class, and set up the Koha service if it hasn't already.
+	# TODO: Proper dependency ordering for koha::params, to get rid of this $x_real BS.
+	require koha::params
+	include koha::service
 
 	# Define default parameters, if they haven't been defined by the user.
 	if ($koha_config_dir == undef)
@@ -318,7 +321,7 @@ define koha::site
 		group	=> $koha_user_real,
 		mode	=> 640,
 		content	=> template("koha/koha-conf-site.xml.erb"),
-		require	=> Class["koha::install"],
+		require	=> Class["koha"],
 		notify	=> Class["koha::service"],
 	}
 
@@ -349,6 +352,9 @@ define koha::site
 		# These Apache configuration options are not available in puppetlabs/apache:
 		#  TransferLog /var/log/koha/$site_name/opac-access.log
 		#  RewriteLog  /var/log/koha/$site_name/opac-rewrite.log
+
+		require			=> Class["koha"],
+		notify			=> Class["koha::service"],
 	}
 
 	apache::vhost
@@ -377,10 +383,10 @@ define koha::site
 		# These Apache configuration options are not available in puppetlabs/apache:
 		#  TransferLog /var/log/koha/$site_name/intranet-access.log
 		#  RewriteLog  /var/log/koha/$site_name/intranet-rewrite.log
-	}
 
-	Class["koha::install"] -> Apache::Vhost[$opac_server_name_real]
-	Class["koha::install"] -> Apache::Vhost[$intra_server_name_real]
+		require			=> Class["koha"],
+		notify			=> Class["koha::service"],
+	}
 
 	if ($ensure != "present" and $ensure != "absent")
 	{

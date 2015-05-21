@@ -22,6 +22,8 @@
 #
 class koha($ensure = "present")
 {
+	require koha::params
+
 	unless (defined(Class["koha::install"]))
 	{	
 		class
@@ -30,15 +32,5 @@ class koha($ensure = "present")
 		}
 
 		contain "koha::install"
-	}
-
-	unless (defined(Class["koha::service"]))
-	{	
-		class
-		{ "koha::service":
-			ensure	=> $ensure,
-		}
-
-		contain "koha::service"
 	}
 }
