@@ -85,7 +85,7 @@ define koha::site
 {
 	require koha::params
 
-	unless (defined("koha::install"))
+	unless (defined(Class["koha::install"]))
 	{
 		fail("You must include the koha::install class before setting up a Koha site")
 	}
@@ -318,6 +318,7 @@ define koha::site
 		group	=> $koha_user_real,
 		mode	=> 640,
 		content	=> template("koha/koha-conf-site.xml.erb"),
+		require	=> Class["koha::install"],
 		notify	=> Class["koha::service"],
 	}
 

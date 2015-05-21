@@ -45,7 +45,7 @@ class koha::install
 ) inherits koha::params
 {
 	# Install the Koha repository.
-	unless (defined("koha::repo"))
+	unless (defined(Class["koha::repo"]))
 	{
 		class
 		{ "koha::repo":
@@ -56,15 +56,16 @@ class koha::install
 	}
 
 	# A MySQL client is required for Koha to access the library databases.
-	contain mysql::client
+	unless ($ensure != "present" or defined(Class["mysql::client"]))
+	{
+		contain mysql::client
+	}
 
 	# Install Apache first, before installing Koha, so we can disable the event MPM.
 	# Koha uses the ITK MPM, and the libapache2-mod-itk package for Ubuntu does not always
 	# install properly with that MPM enabled. This will work around that problem.
 	if ($ensure == "present")
 	{
-		notify{ "apache base class defined": }
-
 		class
 		{ "apache":
 			mpm_module	=> "itk",
@@ -82,7 +83,7 @@ class koha::install
 		package
 		{ $koha_packages:
 			ensure	=> "installed",
-			require	=> [ Class["koha::repo"], Class["apache"] ],
+			require	=> Class[[ "koha::repo", "apache" ]],
 		}
 	}
 	elsif ($ensure == "absent")
@@ -90,7 +91,7 @@ class koha::install
 		package
 		{ $koha_packages:
 			ensure	=> "purged",
-			require	=> [ Class["koha::repo"] ],
+			require	=> Class["koha::repo"],
 		}
 	}
 	else

@@ -37,7 +37,7 @@
 #
 class koha::mysql($ensure = "present")
 {
-	unless (defined("koha::mysql::install"))
+	unless (defined(Class["koha::mysql::install"]))
 	{
 		class
 		{ "koha::mysql::install":

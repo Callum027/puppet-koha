@@ -42,7 +42,7 @@ class koha::zebra::install
 ) inherits koha::params
 {
 	# Install the Koha repository.
-	unless (defined("koha::repo"))
+	unless (defined(Class["koha::repo"]))
 	{
 		class
 		{ "koha::repo":
@@ -54,7 +54,7 @@ class koha::zebra::install
 
 	# This is a temporary requirement, while Zebra is still bound with Koha.
 	# TODO: When they are separate packages, they will be able to be installed independently.
-	unless (defined("koha::install"))
+	unless (defined(Class["koha::install"]))
 	{
 		if ($ensure == "present")
 		{

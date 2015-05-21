@@ -37,7 +37,7 @@
 #
 class koha::zebra($ensure = "present")
 {
-	unless (defined("koha::zebra::install"))
+	unless (defined(Class["koha::zebra::install"]))
 	{
 		class
 		{ "koha::zebra::install":
@@ -47,7 +47,7 @@ class koha::zebra($ensure = "present")
 		contain "koha::zebra::install"
 	}
 
-	unless (defined("koha::zebra::service"))
+	unless (defined(Class["koha::zebra::service"]))
 	{
 		class
 		{ "koha::zebra::service":

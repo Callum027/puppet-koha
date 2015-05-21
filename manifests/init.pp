@@ -22,7 +22,7 @@
 #
 class koha($ensure = "present")
 {
-	unless (defined("koha::install"))
+	unless (defined(Class["koha::install"]))
 	{	
 		class
 		{ "koha::install":
@@ -32,7 +32,7 @@ class koha($ensure = "present")
 		contain "koha::install"
 	}
 
-	unless (defined("koha::service"))
+	unless (defined(Class["koha::service"]))
 	{	
 		class
 		{ "koha::service":
