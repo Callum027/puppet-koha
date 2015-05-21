@@ -45,7 +45,7 @@ class koha::install
 ) inherits koha::params
 {
 	# Install the Koha repository.
-	unless ((defined("koha::repo")))
+	unless (defined("koha::repo"))
 	{
 		class
 		{ "koha::repo":
@@ -63,6 +63,7 @@ class koha::install
 		class
 		{ "apache":
 			mpm_module	=> "itk",
+			
 		}
 
 		contain "apache"
