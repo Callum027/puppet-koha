@@ -197,11 +197,11 @@ define koha::site
 
 	if ($intra_server_name == undef)
 	{
-		$intra_server_name_ = "$site_intra.$::domain"
+		$intra_server_name_ = "$site_intra_.$::domain"
 	}
 	else
 	{
-		$intra_server_name_ = $opac_server_name
+		$intra_server_name_ = $intra_server_name
 	}
 
 	if ($error_log_file == undef)
