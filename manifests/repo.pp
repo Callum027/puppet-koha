@@ -49,13 +49,13 @@ class koha::repo
 			::apt::key
 			{ "robin":
 				key		=> "59576D238B16EFABFEF8717514D36485A99CEB6D",
-				key_server	=> "gpg.mit.edu",
+				key_server	=> "pgp.mit.edu",
 			}
 
 			::apt::key
 			{ "koha-devel":
 				key		=> "3EA44636DBCE457DA2CF8D823C9356BBA2E41F10",
-				key_server	=> "gpg.mit.edu",
+				key_server	=> "pgp.mit.edu",
 			}
 
 			::apt::source
