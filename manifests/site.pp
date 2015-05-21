@@ -39,48 +39,48 @@ define koha::site
 (
 	$ensure					= "present",
 
-	$koha_config_dir			= undef,
-	$koha_site_dir				= undef,
-	$koha_site_opac_port			= undef,
-	$koha_site_intra_port			= undef,
+	$koha_config_dir			= $::koha::params::koha_config_dir,
+	$koha_site_dir				= $::koha::params::koha_site_dir,
+	$koha_site_opac_port			= $::koha::params::koha_site_opac_port,
+	$koha_site_intra_port			= $::koha::params::koha_site_intra_port,
 
-	$koha_lib_dir				= undef,
-	$koha_log_dir				= undef,
-	$koha_plugins_dir			= undef,
+	$koha_lib_dir				= $::koha::params::koha_lib_dir,
+	$koha_log_dir				= $::koha::params::koha_log_dir,
+	$koha_plugins_dir			= undef, # Defined in resource body
 
-	$koha_zebra_biblios_config		= undef,
-	$koha_zebra_authorities_config		= undef,
+	$koha_zebra_biblios_config		= $::koha::params::koha_zebra_biblios_config,
+	$koha_zebra_authorities_config		= $::koha::params::koha_zebra_authorities_config,
 
-	$koha_zebra_biblios_indexing_mode	= undef,
-	$koha_zebra_authorities_indexing_mode	= undef,
+	$koha_zebra_biblios_indexing_mode	= $::koha::params::koha_zebra_biblios_indexing_mode,
+	$koha_zebra_authorities_indexing_mode	= $::koha::params::koha_zebra_authorities_indexing_mode,
 
-	$koha_zebra_marc_format			= undef,
+	$koha_zebra_marc_format			= $::koha::params::koha_zebra_marc_format,
 
 	$koha_zebra_sru_hostname		= undef,
 	$koha_zebra_sru_biblios_port		= undef,
 
 	$site_name				= $name,
-	$site_intra				= undef,
-	$site_user				= undef,
-	$site_group				= undef,
+	$site_intra				= undef, # Defined in resource body
+	$site_user				= undef, # Defined in resource body
+	$site_group				= undef, # Defined in resource body
 
-	$koha_user				= undef,
+	$koha_user				= undef, # Defined in resource body
 	$zebra_password,
 
-	$mysql_db				= undef,
+	$mysql_db				= undef, # Defined in resource body
 	$mysql_hostname				= "localhost",
 	$mysql_port				= "3306",
-	$mysql_user				= undef,
+	$mysql_user				= undef, # Defined in resource body
 	$mysql_password,
 
 	$memcached_servers			= undef,
 	$memcached_namespace			= undef,
 
-	$opac_server_name			= undef,
-	$intra_server_name			= undef,
+	$opac_server_name			= undef, # Defined in resource body
+	$intra_server_name			= undef, # Defined in resource body
 
-	$setenv					= undef,
-	$error_log_file				= undef
+	$setenv					= undef, # Defined in resource body
+	$error_log_file				= undef  # Defined in resource body
 )
 {
 	unless (defined(Class["::koha"]))
@@ -88,109 +88,18 @@ define koha::site
 		fail("You must define the Koha base class before using setting up a Koha site")
 	}
 
-	# Require the params class, and set up the Koha service if it hasn't already.
-	# TODO: Proper dependency ordering for koha::params, to get rid of this $x_real BS.
-	require ::koha::params
+	# Set up the Koha service if it hasn't already.
 	include ::koha::service
 
-	# Define default parameters, if they haven't been defined by the user.
-	if ($koha_config_dir == undef)
-	{
-		$koha_config_dir_real = $::koha::params::koha_config_dir
-	}
-	else
-	{
-		$koha_config_dir_real = $koha_config_dir
-	}
-
-	if ($koha_site_dir == undef)
-	{
-		$koha_site_dir_real = $::koha::params::koha_site_dir
-	}
-	else
-	{
-		$koha_site_dir_real = $koha_site_dir
-	}
-
-	if ($koha_site_opac_port == undef)
-	{
-		$koha_site_opac_port_real = $::koha::params::koha_site_opac_port
-	}
-	else
-	{
-		$koha_site_opac_port_real = $koha_site_opac_port
-	}
-
-	if ($koha_site_intra_port == undef)
-	{
-		$koha_site_intra_port_real = $::koha::params::koha_site_intra_port
-	}
-	else
-	{
-		$koha_site_intra_port_real = $koha_site_intra_port
-	}
-
-	if ($koha_lib_dir == undef)
-	{
-		$koha_lib_dir_real = $::koha::params::koha_lib_dir
-	}
-	else
-	{
-		$koha_lib_dir_real = $koha_lib_dir
-	}
-
-	if ($koha_log_dir == undef)
-	{
-		$koha_log_dir_real = $::koha::params::koha_log_dir
-	}
-	else
-	{
-		$koha_log_dir_real = $koha_log_dir
-	}
-
+	# Define default parameters that can't be defined in the resource parameter list,
+	# if they haven't been defined by the user.
 	if ($koha_plugins_dir == undef)
 	{
-		$koha_plugins_dir_real = "$koha_lib_dir_real/$site_name/plugins"
+		$koha_plugins_dir_ = "$koha_lib_dir/$site_name/plugins"
 	}
 	else
 	{
-		$koha_plugins_dir_real = $koha_plugins_dir
-	}
-
-	if ($koha_zebra_biblios_config == undef)
-	{
-		$koha_zebra_biblios_config_real = $::koha::params::koha_zebra_biblios_config
-	}
-	else
-	{
-		$koha_zebra_biblios_config_real = $koha_zebra_biblios_config
-	}
-
-	if ($koha_zebra_biblios_indexing_mode == undef)
-	{
-		$koha_zebra_biblios_indexing_mode_real = $::koha::params::koha_zebra_biblios_indexing_mode
-	}
-	else
-	{
-		$koha_zebra_biblios_indexing_mode_real = $koha_zebra_biblios_indexing_mode
-	}
-
-	if ($koha_zebra_authorities_indexing_mode == undef)
-	{
-		$koha_zebra_authorities_indexing_mode_real = $::koha::params::koha_zebra_authorities_indexing_mode
-	}
-	else
-	{
-		$koha_zebra_authorities_indexing_mode_real = $koha_zebra_authorities_indexing_mode
-	}
-
-	if ($koha_zebra_marc_format == undef)
-	{
-		$koha_zebra_marc_format_real = $::koha::params::koha_zebra_marc_format
-	}
-	else
-	{
-		$koha_zebra_marc_format_real = $koha_zebra_marc_format
+		$koha_plugins_dir_ = $koha_plugins_dir
 	}
 
 	if ($koha_zebra_sru_hostname != undef)
@@ -203,122 +112,122 @@ define koha::site
 
 	if ($site_intra == undef)
 	{
-		$site_intra_real = "$site_name-intra"
+		$site_intra_ = "$site_name-intra"
 	}
 	else
 	{
-		$site_intra_real = $site_intra
+		$site_intra_ = $site_intra
 	}
 
 	if ($site_user == undef)
 	{
-		$site_user_real = "$site_name-koha"
+		$site_user_ = "$site_name-koha"
 	}
 	else
 	{
-		$site_user_real = $site_user
+		$site_user_ = $site_user
 	}
 
 	if ($site_group == undef)
 	{
-		$site_group_real = "$site_name-koha"
+		$site_group_ = "$site_name-koha"
 	}
 	else
 	{
-		$site_group_real = $site_group
+		$site_group_ = $site_group
 	}
 
 	if ($koha_user == undef)
 	{
-		$koha_user_real = "$site_name-koha"
+		$koha_user_ = "$site_name-koha"
 	}
 	else
 	{
-		$koha_user_real = $koha_user
+		$koha_user_ = $koha_user
 	}
 
 	if ($mysql_db == undef)
 	{
-		$mysql_db_real = "koha_$site_name"
+		$mysql_db_ = "koha_$site_name"
 	}
 	else
 	{
-		$mysql_db_real = $mysql_db
+		$mysql_db_ = $mysql_db
 	}
 
 	if ($mysql_user == undef)
 	{
-		$mysql_user_real = $mysql_db
+		$mysql_user_ = $mysql_db
 	}
 	else
 	{
-		$mysql_user_real = $mysql_user
+		$mysql_user_ = $mysql_user
 	}
 
 	if (is_array($memcached_servers))
 	{
-		$memcached_servers_real = join($memcached_servers, ",")
+		$memcached_servers_ = join($memcached_servers, ",")
 	}
 	elsif (is_string($memcached_servers))
 	{
-		$memcached_servers_real = $memcached_servers
+		$memcached_servers_ = $memcached_servers
 	}
 	else
 	{
-		$memcached_servers_real = ""
+		$memcached_servers_ = ""
 	}
 
 	if ($memcached_namespace == undef)
 	{
-		$memcached_namespace_real = "koha_$site_name"
+		$memcached_namespace_ = "koha_$site_name"
 	}
 	else
 	{
-		$memcached_namespace_real = $memcached_namespace
+		$memcached_namespace_ = $memcached_namespace
 	}
 
 	if ($opac_server_name == undef)
 	{
-		$opac_server_name_real = "$site_name.$fqdn"
+		$opac_server_name_ = "$site_name.$::domain"
 	}
 	else
 	{
-		$opac_server_name_real = $opac_server_name
+		$opac_server_name_ = $opac_server_name
 	}
 
 	if ($intra_server_name == undef)
 	{
-		$intra_server_name_real = "$site_intra.$fqdn"
+		$intra_server_name_ = "$site_intra.$::domain"
 	}
 	else
 	{
-		$intra_server_name_real = $opac_server_name
+		$intra_server_name_ = $opac_server_name
 	}
 
 	if ($error_log_file == undef)
 	{
-		$error_log_file_real = "$koha_log_dir_real/$site_name/intranet-error.log"
+		$error_log_file_ = "$koha_log_dir/$site_name/intranet-error.log"
 	}
 	else
 	{
-		$error_log_file_real = $error_log_file
+		$error_log_file_ = $error_log_file
 	}
 
 	if ($setenv == undef)
 	{
-		$setenv_real = [ "KOHA_CONF \"$koha_site_dir_real/$site_name/koha-conf.xml\"", "MEMCACHED_SERVERS \"$memcached_servers_real\"", "MEMCACHED_NAMESPACE \"$memcached_namespace_real\"" ]
+		$setenv_ = [ "KOHA_CONF \"$koha_site_dir/$site_name/koha-conf.xml\"", "MEMCACHED_SERVERS \"$memcached_servers_\"", "MEMCACHED_NAMESPACE \"$memcached_namespace_\"" ]
 	}
 	else
 	{
-		$setenv_real = $setenv
+		$setenv_ = $setenv
 	}
 
 	# Install the Koha configuration file for this site.
 	file
-	{ "$koha_config_dir_real/koha-conf.xml":
+	{ "$koha_site_dir/$site_name/koha-conf.xml":
 		ensure	=> $ensure,
 		owner	=> "root",
-		group	=> $koha_user_real,
+		group	=> $koha_user_,
 		mode	=> 640,
 		content	=> template("koha/koha-conf-site.xml.erb"),
 		require	=> Class["::koha"],
@@ -327,7 +236,7 @@ define koha::site
 
 	# Generate Apache vhosts for the OPAC and Intranet servers for this Koha site.
 	::apache::vhost
-	{ $opac_server_name_real:
+	{ $opac_server_name_:
 		ensure			=> $ensure,
 
 		docroot			=> undef,
@@ -335,30 +244,30 @@ define koha::site
 
 		additional_includes	=>
 		[
-   			"$koha_config_dir_real/apache-shared.conf",
-			# "$koha_config_dir_real/apache-shared-disable.conf",
-   			"$koha_config_dir_real/apache-shared-opac.conf"
+   			"$koha_config_dir/apache-shared.conf",
+			# "$koha_config_dir/apache-shared-disable.conf",
+   			"$koha_config_dir/apache-shared-opac.conf"
 		],
 
-		setenv			=> $setenv_real,
+		setenv			=> $setenv_,
 
 		itk			=>
 		{
-			user	=> $site_user_real,
-			group	=> $site_group_real,
+			user	=> $site_user_,
+			group	=> $site_group_,
 		},
 
-		error_log_file		=> $error_log_file_real,
+		error_log_file		=> $error_log_file_,
 		# These Apache configuration options are not available in puppetlabs/apache:
-		#  TransferLog /var/log/koha/$site_name/opac-access.log
-		#  RewriteLog  /var/log/koha/$site_name/opac-rewrite.log
+		#  TransferLog $koha_log_dir/$site_name/opac-access.log
+		#  RewriteLog  $koha_log_dir/$site_name/opac-rewrite.log
 
 		require			=> Class["::koha"],
 		notify			=> Class["::koha::service"],
 	}
 
 	::apache::vhost
-	{ $intra_server_name_real:
+	{ $intra_server_name_:
 		ensure			=> $ensure,
 
 		docroot			=> undef,
@@ -371,18 +280,18 @@ define koha::site
    			"$koha_config_dir/apache-shared-intranet.conf"
 		],
 
-		setenv			=> $setenv_real,
+		setenv			=> $setenv_,
 
 		itk			=>
 		{
-			user	=> $site_user_real,
-			group	=> $site_group_real,
+			user	=> $site_user_,
+			group	=> $site_group_,
 		},
 
-		error_log_file		=> $error_log_file_real,
+		error_log_file		=> $error_log_file_,
 		# These Apache configuration options are not available in puppetlabs/apache:
-		#  TransferLog /var/log/koha/$site_name/intranet-access.log
-		#  RewriteLog  /var/log/koha/$site_name/intranet-rewrite.log
+		#  TransferLog $koha_log_dir/$site_name/intranet-access.log
+		#  RewriteLog  $koha_log_dir/$site_name/intranet-rewrite.log
 
 		require			=> Class["::koha"],
 		notify			=> Class["::koha::service"],

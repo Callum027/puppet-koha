@@ -24,7 +24,7 @@
 <listen id="mergeserver">tcp:@:__MERGE_SERVER_PORT__</listen>
 <server id="mergeserver"  listenref="mergeserver">
     <directory>/var/lib/koha/<%= @site_name %>/biblios</directory>
-    <config>/etc/koha/sites/<%= @site_name %>/<%= @koha_zebra_biblios_config_real %></config>
+    <config>/etc/koha/sites/<%= @site_name %>/<%= @koha_zebra_biblios_config %></config>
     <cql2rpn>/var/lib/koha/<%= @site_name %>/pqf.properties</cql2rpn>
 </server>
 -->
@@ -32,58 +32,58 @@
 <!-- BIBLIOGRAPHIC RECORDS -->
 <server id="biblioserver"  listenref="biblioserver">
     <directory>/var/lib/koha/<%= @site_name %>/biblios</directory>
-    <config>/etc/koha/sites/<%= @site_name %>/<%= @koha_zebra_biblios_config_real %></config>
+    <config>/etc/koha/sites/<%= @site_name %>/<%= @koha_zebra_biblios_config %></config>
     <cql2rpn>/etc/koha/zebradb/pqf.properties</cql2rpn>
 
 <% if @koha_zebra_biblios_indexing_mode == "dom" %>
-    <xi:include href="/etc/koha/<%= @koha_zebra_marc_format_real %>-retrieval-info-bib-dom.xml"
+    <xi:include href="/etc/koha/<%= @koha_zebra_marc_format %>-retrieval-info-bib-dom.xml"
                 xmlns:xi="http://www.w3.org/2001/XInclude">
      <xi:fallback>
       <retrievalinfo>
 <% elsif @koha_zebra_biblios_indexing_mode == "grs1" %>
     <retrievalinfo>
 <% end %>
-       <retrieval syntax="<%= @koha_zebra_marc_format_real %>" name="F"/>
-       <retrieval syntax="<%= @koha_zebra_marc_format_real %>" name="B"/>
+       <retrieval syntax="<%= @koha_zebra_marc_format %>" name="F"/>
+       <retrieval syntax="<%= @koha_zebra_marc_format %>" name="B"/>
        <retrieval syntax="xml" name="F"/>
        <retrieval syntax="xml" name="B"/>
        <retrieval syntax="xml" name="marcxml"
                   identifier="info:srw/schema/1/marcxml-v1.1">
-         <backend syntax="<%= @koha_zebra_marc_format_real %>" name="F">
+         <backend syntax="<%= @koha_zebra_marc_format %>" name="F">
            <marc inputformat="marc" outputformat="marcxml"
                  inputcharset="utf-8"/>
          </backend>
        </retrieval>
        <retrieval syntax="xml" name="dc">
-         <backend syntax="<%= @koha_zebra_marc_format_real %>" name="F">
+         <backend syntax="<%= @koha_zebra_marc_format %>" name="F">
            <marc inputformat="marc" outputformat="marcxml"
                  inputcharset="utf-8"/>
            <xslt stylesheet="/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/xslt/MARC21slim2DC.xsl"/>
          </backend>
        </retrieval>
        <retrieval syntax="xml" name="mods">
-         <backend syntax="<%= @koha_zebra_marc_format_real %>" name="F">
+         <backend syntax="<%= @koha_zebra_marc_format %>" name="F">
            <marc inputformat="marc" outputformat="marcxml"
                  inputcharset="utf-8"/>
            <xslt stylesheet="/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/xslt/MARC21slim2MODS.xsl"/>
          </backend>
        </retrieval>
        <retrieval syntax="xml" name="rdfdc">
-         <backend syntax="<%= @koha_zebra_marc_format_real %>" name="F">
+         <backend syntax="<%= @koha_zebra_marc_format %>" name="F">
            <marc inputformat="marc" outputformat="marcxml"
                  inputcharset="utf-8"/>
            <xslt stylesheet="/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/xslt/MARC21slim2RDFDC.xsl"/>
          </backend>
        </retrieval>
        <retrieval syntax="xml" name="rss2">
-         <backend syntax="<%= @koha_zebra_marc_format_real %>" name="F">
+         <backend syntax="<%= @koha_zebra_marc_format %>" name="F">
            <marc inputformat="marc" outputformat="marcxml"
                  inputcharset="utf-8"/>
            <xslt stylesheet="/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/xslt/MARC21slim2RSS2.xsl"/>
          </backend>
        </retrieval>
        <retrieval syntax="xml" name="utils">
-         <backend syntax="<%= @koha_zebra_marc_format_real %>" name="F">
+         <backend syntax="<%= @koha_zebra_marc_format %>" name="F">
            <marc inputformat="marc" outputformat="marcxml"
                  inputcharset="utf-8"/>
            <xslt stylesheet="/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/xslt/MARC21slimUtils.xsl"/>
@@ -100,7 +100,7 @@
 <% if @koha_zebra_sru_hostname %>
 <!--
 <% end %>
-    <xi:include href="<%= @koha_config_dir_real %>/zebradb/explain-biblios.xml"
+    <xi:include href="<%= @koha_config_dir %>/zebradb/explain-biblios.xml"
                 xmlns:xi="http://www.w3.org/2001/XInclude">
       <xi:fallback>
       <explain xmlns="http://explain.z3950.org/dtd/2.0/">
@@ -125,66 +125,66 @@
 <!-- AUTHORITY RECORDS -->
 <server id="authorityserver"  listenref="authorityserver" >
     <directory>/var/lib/koha/<%= @site_name %>/authorities</directory>
-    <config>/etc/koha/sites/<%= @site_name %>/<%= @koha_zebra_authorities_config_real %></config>
+    <config>/etc/koha/sites/<%= @site_name %>/<%= @koha_zebra_authorities_config %></config>
     <cql2rpn>/etc/koha/zebradb/pqf.properties</cql2rpn>
 
-<% if @koha_zebra_authorities_indexing_mode_real == "dom" %>
-    <xi:include href="/etc/koha/<%= @koha_zebra_marc_format_real %>-retrieval-info-auth-dom.xml"
+<% if @koha_zebra_authorities_indexing_mode == "dom" %>
+    <xi:include href="/etc/koha/<%= @koha_zebra_marc_format %>-retrieval-info-auth-dom.xml"
                 xmlns:xi="http://www.w3.org/2001/XInclude">
      <xi:fallback>
       <retrievalinfo>
-<% elsif @koha_zebra_authorities_indexing_mode_real == "grs1" %>
+<% elsif @koha_zebra_authorities_indexing_mode == "grs1" %>
     <retrievalinfo>
 <% end %>
-       <retrieval syntax="<%= @koha_zebra_marc_format_real %>" name="F"/>
-       <retrieval syntax="<%= @koha_zebra_marc_format_real %>" name="B"/>
+       <retrieval syntax="<%= @koha_zebra_marc_format %>" name="F"/>
+       <retrieval syntax="<%= @koha_zebra_marc_format %>" name="B"/>
        <retrieval syntax="xml" name="marcxml"
                   identifier="info:srw/schema/1/marcxml-v1.1">
-         <backend syntax="<%= @koha_zebra_marc_format_real %>" name="F">
+         <backend syntax="<%= @koha_zebra_marc_format %>" name="F">
            <marc inputformat="marc" outputformat="marcxml"
                  inputcharset="utf-8"/>
          </backend>
        </retrieval>
        <retrieval syntax="xml" name="dc">
-         <backend syntax="<%= @koha_zebra_marc_format_real %>" name="F">
+         <backend syntax="<%= @koha_zebra_marc_format %>" name="F">
            <marc inputformat="marc" outputformat="marcxml"
                  inputcharset="utf-8"/>
            <xslt stylesheet="/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/xslt/MARC21slim2DC.xsl"/>
          </backend>
        </retrieval>
        <retrieval syntax="xml" name="mods">
-         <backend syntax="<%= @koha_zebra_marc_format_real %>" name="F">
+         <backend syntax="<%= @koha_zebra_marc_format %>" name="F">
            <marc inputformat="marc" outputformat="marcxml"
                  inputcharset="utf-8"/>
            <xslt stylesheet="/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/xslt/MARC21slim2MODS.xsl"/>
          </backend>
        </retrieval>
        <retrieval syntax="xml" name="rdfdc">
-         <backend syntax="<%= @koha_zebra_marc_format_real %>" name="F">
+         <backend syntax="<%= @koha_zebra_marc_format %>" name="F">
            <marc inputformat="marc" outputformat="marcxml"
                  inputcharset="utf-8"/>
            <xslt stylesheet="/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/xslt/MARC21slim2RDFDC.xsl"/>
          </backend>
        </retrieval>
        <retrieval syntax="xml" name="utils">
-         <backend syntax="<%= @koha_zebra_marc_format_real %>" name="F">
+         <backend syntax="<%= @koha_zebra_marc_format %>" name="F">
            <marc inputformat="marc" outputformat="marcxml"
                  inputcharset="utf-8"/>
            <xslt stylesheet="/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/xslt/MARC21slimUtils.xsl"/>
          </backend>
        </retrieval>
-<% if @koha_zebra_authorities_indexing_mode_real == "dom" %>
+<% if @koha_zebra_authorities_indexing_mode == "dom" %>
       </retrievalinfo>
      </xi:fallback>
     </xi:include>
-<% elsif @koha_zebra_authorities_indexing_mode_real == "grs1" %>
+<% elsif @koha_zebra_authorities_indexing_mode == "grs1" %>
     </retrievalinfo>
 <% end %>
 
 <% if @koha_zebra_sru_hostname %>
 <!--
 <% end %>
-    <xi:include href="<%= @koha_config_dir_real %>/zebradb/explain-authorities.xml"
+    <xi:include href="<%= @koha_config_dir %>/zebradb/explain-authorities.xml"
                 xmlns:xi="http://www.w3.org/2001/XInclude">
     <xi:fallback>
       <explain xmlns="http://explain.z3950.org/dtd/2.0/">
@@ -213,58 +213,58 @@
 <% end %>
 <server id="publicserver"  listenref="publicserver">
     <directory>/var/lib/koha/<%= @site_name %>/biblios</directory>
-    <config>/etc/koha/sites/<%= @site_name %>/<%= @koha_zebra_biblios_config_real %></config>
+    <config>/etc/koha/sites/<%= @site_name %>/<%= @koha_zebra_biblios_config %></config>
     <cql2rpn>/etc/koha/zebradb/pqf.properties</cql2rpn>
 
 <% if @koha_zebra_biblios_indexing_mode == "dom" %>
-    <xi:include href="/etc/koha/<%= @koha_zebra_marc_format_real %>-retrieval-info-bib-dom.xml"
+    <xi:include href="/etc/koha/<%= @koha_zebra_marc_format %>-retrieval-info-bib-dom.xml"
                 xmlns:xi="http://www.w3.org/2001/XInclude">
      <xi:fallback>
       <retrievalinfo>
 <% elsif @koha_zebra_biblios_indexing_mode == "grs1" %>
     <retrievalinfo>
 <% end %>
-       <retrieval syntax="<%= @koha_zebra_marc_format_real %>" name="F"/>
-       <retrieval syntax="<%= @koha_zebra_marc_format_real %>" name="B"/>
+       <retrieval syntax="<%= @koha_zebra_marc_format %>" name="F"/>
+       <retrieval syntax="<%= @koha_zebra_marc_format %>" name="B"/>
        <retrieval syntax="xml" name="F"/>
        <retrieval syntax="xml" name="B"/>
        <retrieval syntax="xml" name="marcxml"
                   identifier="info:srw/schema/1/marcxml-v1.1">
-         <backend syntax="<%= @koha_zebra_marc_format_real %>" name="F">
+         <backend syntax="<%= @koha_zebra_marc_format %>" name="F">
            <marc inputformat="marc" outputformat="marcxml"
                  inputcharset="utf-8"/>
          </backend>
        </retrieval>
        <retrieval syntax="xml" name="dc">
-         <backend syntax="<%= @koha_zebra_marc_format_real %>" name="F">
+         <backend syntax="<%= @koha_zebra_marc_format %>" name="F">
            <marc inputformat="marc" outputformat="marcxml"
                  inputcharset="utf-8"/>
            <xslt stylesheet="/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/xslt/MARC21slim2DC.xsl"/>
          </backend>
        </retrieval>
        <retrieval syntax="xml" name="mods">
-         <backend syntax="<%= @koha_zebra_marc_format_real %>" name="F">
+         <backend syntax="<%= @koha_zebra_marc_format %>" name="F">
            <marc inputformat="marc" outputformat="marcxml"
                  inputcharset="utf-8"/>
            <xslt stylesheet="/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/xslt/MARC21slim2MODS.xsl"/>
          </backend>
        </retrieval>
        <retrieval syntax="xml" name="rdfdc">
-         <backend syntax="<%= @koha_zebra_marc_format_real %>" name="F">
+         <backend syntax="<%= @koha_zebra_marc_format %>" name="F">
            <marc inputformat="marc" outputformat="marcxml"
                  inputcharset="utf-8"/>
            <xslt stylesheet="/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/xslt/MARC21slim2RDFDC.xsl"/>
          </backend>
        </retrieval>
        <retrieval syntax="xml" name="rss2">
-         <backend syntax="<%= @koha_zebra_marc_format_real %>" name="F">
+         <backend syntax="<%= @koha_zebra_marc_format %>" name="F">
            <marc inputformat="marc" outputformat="marcxml"
                  inputcharset="utf-8"/>
            <xslt stylesheet="/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/xslt/MARC21slim2RSS2.xsl"/>
          </backend>
        </retrieval>
        <retrieval syntax="xml" name="utils">
-         <backend syntax="<%= @koha_zebra_marc_format_real %>" name="F">
+         <backend syntax="<%= @koha_zebra_marc_format %>" name="F">
            <marc inputformat="marc" outputformat="marcxml"
                  inputcharset="utf-8"/>
            <xslt stylesheet="/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/xslt/MARC21slimUtils.xsl"/>
@@ -278,7 +278,7 @@
     </retrievalinfo>
 <% end %>
 
-    <xi:include href="<%= @koha_config_dir_real %>/zebradb/explain-biblios.xml"
+    <xi:include href="<%= @koha_config_dir %>/zebradb/explain-biblios.xml"
                 xmlns:xi="http://www.w3.org/2001/XInclude">
       <xi:fallback>
       <explain xmlns="http://explain.z3950.org/dtd/2.0/">
@@ -302,16 +302,16 @@
 
 <config>
  <db_scheme>mysql</db_scheme>
- <database><%= @mysql_db %></database>
+ <database><%= @mysql_db_ %></database>
  <hostname><%= @mysql_hostname %></hostname>
  <port><%= @mysql_port %></port>
- <user><%= @mysql_user %></user>
+ <user><%= @mysql_user_ %></user>
  <pass><%= @mysql_password %></pass>
  <biblioserver>biblios</biblioserver>
  <biblioservershadow>1</biblioservershadow>
  <authorityserver>authorities</authorityserver>
  <authorityservershadow>1</authorityservershadow>
- <pluginsdir<%= @koha_plugins_dir_real %></pluginsdir>
+ <pluginsdir<%= @koha_plugins_dir_ %></pluginsdir>
  <enable_plugins>0</enable_plugins>
  <intranetdir>/usr/share/koha/intranet/cgi-bin</intranetdir>
  <opacdir>/usr/share/koha/opac/cgi-bin/opac</opacdir>
@@ -330,8 +330,8 @@
  <install_log>/usr/share/koha/misc/koha-install-log</install_log>
  <useldapserver>0</useldapserver><!-- see C4::Auth_with_ldap for extra configs you must add if you want to turn this on -->
  <useshibboleth>0</useshibboleth><!-- see C4::Auth_with_shibboleth for extra configs you must do to turn this on -->
- <zebra_bib_index_mode><%= @koha_zebra_biblios_indexing_mode_real %></zebra_bib_index_mode>
- <zebra_auth_index_mode><%= @koha_zebra_authorities_indexing_mode_real %></zebra_auth_index_mode>
+ <zebra_bib_index_mode><%= @koha_zebra_biblios_indexing_mode %></zebra_bib_index_mode>
+ <zebra_auth_index_mode><%= @koha_zebra_authorities_indexing_mode %></zebra_auth_index_mode>
  <zebra_lockdir>/var/lock/koha/<%= @site_name %></zebra_lockdir>
  <use_zebra_facets>1</use_zebra_facets>
  <queryparser_config>/etc/koha/searchengine/queryparser.yaml</queryparser_config>
