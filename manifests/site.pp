@@ -100,11 +100,11 @@ define koha::site
 	# if they haven't been defined by the user.
 	if ($koha_plugins_dir == undef)
 	{
-		$koha_plugins_dir_ = "$koha_lib_dir/$site_name/plugins"
+		$_koha_plugins_dir_ = "$koha_lib_dir/$site_name/plugins"
 	}
 	else
 	{
-		$koha_plugins_dir_ = $koha_plugins_dir
+		$_koha_plugins_dir_ = $koha_plugins_dir
 	}
 
 	if ($koha_zebra_sru_hostname != undef)
@@ -117,146 +117,146 @@ define koha::site
 
 	if ($site_intra == undef)
 	{
-		$site_intra_ = "$site_name-intra"
+		$_site_intra = "$site_name-intra"
 	}
 	else
 	{
-		$site_intra_ = $site_intra
+		$_site_intra = $site_intra
 	}
 
 	if ($site_user == undef)
 	{
-		$site_user_ = "$site_name-koha"
+		$_site_user = "$site_name-koha"
 	}
 	else
 	{
-		$site_user_ = $site_user
+		$_site_user = $site_user
 	}
 
 	if ($site_group == undef)
 	{
-		$site_group_ = "$site_name-koha"
+		$_site_group = "$site_name-koha"
 	}
 	else
 	{
-		$site_group_ = $site_group
+		$_site_group = $site_group
 	}
 
 	if ($koha_user == undef)
 	{
-		$koha_user_ = "$site_name-koha"
+		$_koha_user = "$site_name-koha"
 	}
 	else
 	{
-		$koha_user_ = $koha_user
+		$_koha_user = $koha_user
 	}
 
 	if ($mysql_db == undef)
 	{
-		$mysql_db_ = "koha_$site_name"
+		$_mysql_db = "koha_$site_name"
 	}
 	else
 	{
-		$mysql_db_ = $mysql_db
+		$_mysql_db = $mysql_db
 	}
 
 	if ($mysql_user == undef)
 	{
-		$mysql_user_ = $mysql_db
+		$_mysql_user = $mysql_db
 	}
 	else
 	{
-		$mysql_user_ = $mysql_user
+		$_mysql_user = $mysql_user
 	}
 
 	if (is_array($memcached_servers))
 	{
-		$memcached_servers_ = join($memcached_servers, ",")
+		$_memcached_servers = join($memcached_servers, ",")
 	}
 	elsif (is_string($memcached_servers))
 	{
-		$memcached_servers_ = $memcached_servers
+		$_memcached_servers = $memcached_servers
 	}
 	else
 	{
-		$memcached_servers_ = ""
+		$_memcached_servers = ""
 	}
 
 	if ($memcached_namespace == undef)
 	{
-		$memcached_namespace_ = "koha_$site_name"
+		$_memcached_namespace = "koha_$site_name"
 	}
 	else
 	{
-		$memcached_namespace_ = $memcached_namespace
+		$_memcached_namespace = $memcached_namespace
 	}
 
 	if ($opac_server_name == undef)
 	{
-		$opac_server_name_ = "$site_name.$::domain"
+		$_opac_server_name = "$site_name.$::domain"
 	}
 	else
 	{
-		$opac_server_name_ = $opac_server_name
+		$_opac_server_name = $opac_server_name
 	}
 
 	if ($intra_server_name == undef)
 	{
-		$intra_server_name_ = "$site_intra_.$::domain"
+		$_intra_server_name = "$site_intra_.$::domain"
 	}
 	else
 	{
-		$intra_server_name_ = $intra_server_name
+		$_intra_server_name = $intra_server_name
 	}
 
 	# Apache log files.
 	if ($opac_access_log_file == undef)
 	{
-		$opac_access_log_file_ = "koha/$site_name/opac-access.log"
+		$_opac_access_log_file = "koha/$site_name/opac-access.log"
 	}
 	else
 	{
-		$opac_access_log_file_ = $opac_access_log_file
+		$_opac_access_log_file = $opac_access_log_file
 	}
 
 	if ($intranet_error_log_file == undef)
 	{
-		$opac_error_log_file_ = "koha/$site_name/opac-error.log"
+		$_opac_error_log_file_ = "koha/$site_name/opac-error.log"
 	}
 	else
 	{
-		$opac_error_log_file_ = $opac_error_log_file
+		$_opac_error_log_file = $opac_error_log_file
 	}
 
 	if ($intranet_access_log_file == undef)
 	{
-		$intranet_access_log_file_ = "koha/$site_name/intranet-access.log"
+		$_intranet_access_log_file = "koha/$site_name/intranet-access.log"
 	}
 	else
 	{
-		$intranet_access_log_file_ = $intranet_access_log_file
+		$_intranet_access_log_file = $intranet_access_log_file
 	}
 
 	if ($intranet_error_log_file == undef)
 	{
-		$intranet_error_log_file_ = "koha/$site_name/intranet-error.log"
+		$_intranet_error_log_file = "koha/$site_name/intranet-error.log"
 	}
 	else
 	{
-		$intranet_error_log_file_ = $intranet_error_log_file
+		$_intranet_error_log_file = $intranet_error_log_file
 	}
 
 	if ($setenv == undef)
 	{
-		$setenv_ = [ "KOHA_CONF \"$koha_site_dir/$site_name/koha-conf.xml\"", "MEMCACHED_SERVERS \"$memcached_servers_\"", "MEMCACHED_NAMESPACE \"$memcached_namespace_\"" ]
+		$_setenv = [ "KOHA_CONF \"$koha_site_dir/$site_name/koha-conf.xml\"", "MEMCACHED_SERVERS \"$memcached_servers_\"", "MEMCACHED_NAMESPACE \"$memcached_namespace_\"" ]
 	}
 	else
 	{
-		$setenv_ = $setenv
+		$_setenv = $setenv
 	}
 
 	# Generate the Koha user.
-	::koha::user { $koha_user_: }
+	::koha::user { $_koha_user: }
 
 	# Install the Koha configuration file for this site.
 	if ($ensure == "present")
@@ -271,26 +271,26 @@ define koha::site
 	file
 	{ "$koha_site_dir/$site_name":
 		ensure	=> $directory_ensure,
-		owner	=> $koha_user_,
-		group	=> $koha_user_,
+		owner	=> $_koha_user,
+		group	=> $_koha_user,
 		mode	=> 755,
-		require	=> [ Class["::koha"], ::Koha::User[$koha_user_] ],
+		require	=> [ Class["::koha"], ::Koha::User[$_koha_user] ],
 	}
 
 	file
 	{ "$koha_site_dir/$site_name/koha-conf.xml":
 		ensure	=> $ensure,
 		owner	=> "root",
-		group	=> $koha_user_,
+		group	=> $_koha_user,
 		mode	=> 640,
 		content	=> template("koha/koha-conf-site.xml.erb"),
-		require	=> [ Class["::koha"], File["$koha_site_dir/$site_name"], ::Koha::User[$koha_user_] ],
+		require	=> [ Class["::koha"], File["$koha_site_dir/$site_name"], ::Koha::User[$_koha_user] ],
 		notify	=> Class["::koha::service"],
 	}
 
 	# Generate Apache vhosts for the OPAC and Intranet servers for this Koha site.
 	::apache::vhost
-	{ $opac_server_name_:
+	{ $_opac_server_name:
 		ensure			=> $ensure,
 
 		docroot			=> undef,
@@ -303,16 +303,16 @@ define koha::site
    			"$koha_config_dir/apache-shared-opac.conf"
 		],
 
-		setenv			=> $setenv_,
+		setenv			=> $_setenv,
 
 		itk			=>
 		{
-			user	=> $site_user_,
-			group	=> $site_group_,
+			user	=> $_site_user,
+			group	=> $_site_group,
 		},
 
-		access_log_file		=> $opac_access_log_file_,
-		error_log_file		=> $opac_error_log_file_,
+		access_log_file		=> $_opac_access_log_file,
+		error_log_file		=> $_opac_error_log_file,
 		# This Apache configuration option is not available in puppetlabs/apache:
 		#  RewriteLog  koha/$site_name/intranet-rewrite.log
 
@@ -321,7 +321,7 @@ define koha::site
 	}
 
 	::apache::vhost
-	{ $intra_server_name_:
+	{ $_intra_server_name:
 		ensure			=> $ensure,
 
 		docroot			=> undef,
@@ -334,16 +334,16 @@ define koha::site
    			"$koha_config_dir/apache-shared-intranet.conf"
 		],
 
-		setenv			=> $setenv_,
+		setenv			=> $_setenv,
 
 		itk			=>
 		{
-			user	=> $site_user_,
-			group	=> $site_group_,
+			user	=> $_site_user,
+			group	=> $_site_group,
 		},
 
-		access_log_file		=> $intranet_access_log_file_,
-		error_log_file		=> $intranet_error_log_file_,
+		access_log_file		=> $_intranet_access_log_file,
+		error_log_file		=> $_intranet_error_log_file,
 		# This Apache configuration option is not available in puppetlabs/apache:
 		#  RewriteLog  koha/$site_name/intranet-rewrite.log
 

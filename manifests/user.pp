@@ -37,73 +37,56 @@
 #
 define koha::user
 (
-	$ensure = "present",
+	$ensure		= "present",
 
-	$koha_lib_dir = undef,
+	$koha_lib_dir	= $::koha::params::koha_lib_dir,
+	$nologin	= $::koha::params::nologin,
 
-	$username = undef,
-	$full_name = undef,
-	$home = undef,
-
-	$nologin = undef
+	$username	= undef, # Defined in resource body
+	$full_name	= undef, # Defined in resource body
+	$home		= undef  # Defined in resource body
 )
 {
-	# TODO: Proper dependency ordering for koha::params, to get rid of this $x_real BS.
-	require ::koha::params
+	unless (defined(Class["::koha"]))
+	{
+		fail("You must define the Koha base class before setting up a Koha user")
+	}
 
 	if ($username == undef)
 	{
-		$username_real = "$name-koha"
+		$_username = "$name-koha"
 	}
 	else
 	{
-		$username_real = $username
+		$_username = $username
 	}
 
 	if ($full_name == undef)
 	{
-		$full_name_real = "Koha instance $username"
+		$_full_name = "Koha instance $_username"
 	}
 	else
 	{
-		$full_name_real = $full_name
-	}
-
-	if ($koha_lib_dir == undef)
-	{
-		$koha_lib_dir_real = $::koha::params::koha_lib_dir
-	}
-	else
-	{
-		$koha_lib_dir_real = $koha_lib_dir
+		$_full_name = $full_name
 	}
 
 	if ($home == undef)
 	{
-		$home_real = "$koha_lib_dir_real/$username_real"
+		$_home = "$koha_lib_dir/$_username"
 	}
 	else
 	{
-		$home_real = $home
-	}
-
-	if ($nologin == undef)
-	{
-		$nologin_real = $::koha::params::nologin
-	}
-	else
-	{
-		$nologin_real = $nologin
+		$_home = $home
 	}
 
 	user
-	{ $username:
+	{ $_username:
 		ensure		=> $ensure,
 
-		comment		=> $full_name_real,
+		comment		=> $_full_name,
 		password	=> "!",
 
-		home		=> $home_real,
-		shell		=> $nologin_real,
+		home		=> $_home,
+		shell		=> $nologin,
 	}
 }
