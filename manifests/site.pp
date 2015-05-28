@@ -312,7 +312,6 @@ define koha::site
 		owner	=> "root",
 		group	=> $_koha_user,
 		mode	=> 640,
-		content	=> template("koha/apache-site.conf.erb"),
 		require	=> [ Class["::koha"], File[["$koha_site_dir/$site_name", "$apache_sites_available_dir/$site_name.conf"]], ::Koha::User[$_koha_user] ],
 		notify	=> Class["::koha::service"],
 	}
