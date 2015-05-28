@@ -42,7 +42,7 @@ define koha::user
 	$koha_lib_dir	= $::koha::params::koha_lib_dir,
 	$nologin	= $::koha::params::nologin,
 
-	$username	= undef, # Defined in resource body
+	$user		= $name,
 	$full_name	= undef, # Defined in resource body
 	$home		= undef  # Defined in resource body
 )
@@ -52,18 +52,9 @@ define koha::user
 		fail("You must define the Koha base class before setting up a Koha user")
 	}
 
-	if ($username == undef)
-	{
-		$_username = "$name-koha"
-	}
-	else
-	{
-		$_username = $username
-	}
-
 	if ($full_name == undef)
 	{
-		$_full_name = "Koha instance $_username"
+		$_full_name = "Koha instance $user"
 	}
 	else
 	{
@@ -72,7 +63,7 @@ define koha::user
 
 	if ($home == undef)
 	{
-		$_home = "$koha_lib_dir/$_username"
+		$_home = "$koha_lib_dir/$user"
 	}
 	else
 	{
@@ -80,7 +71,7 @@ define koha::user
 	}
 
 	user
-	{ $_username:
+	{ $user:
 		ensure		=> $ensure,
 
 		comment		=> $_full_name,
