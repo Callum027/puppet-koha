@@ -80,29 +80,6 @@ class koha::install
 		contain ::apache::mod::rewrite
 	}
 
-	# Get around a bug in the Ubuntu Apache packages where the symbolic object
-	# for the ITK MPM module is named incorrectly, by making a symbolic link
-	# to mpm_itk.so from mod_mpm_itk.so.
-	if ($ensure == "present")
-	{
-		$link_ensure		= "link"
-	}
-	else
-	{
-		$link_ensure		= $ensure
-	}
-
-	file
-	{ "$apache_modules_dir/mod_mpm_itk.so":
-		ensure	=> $link_ensure,
-		target	=> "$apache_modules_dir/mpm_itk.so",
-		user	=> $apache_modules_user,
-		group	=> $apache_modules_group,
-		mode	=> $apache_modules_mode,
-		onlyif	=> "$test -f $apache_modules_dir/mpm_itk.so",
-		notify	=> Class["::apache"],
-	}
-
 	# Install packages.
 	if ($ensure == "present")
 	{
