@@ -165,7 +165,7 @@ define koha::site
 
 	if ($mysql_user == undef)
 	{
-		$_mysql_user = $mysql_db
+		$_mysql_user = $_mysql_db
 	}
 	else
 	{
@@ -247,15 +247,6 @@ define koha::site
 	else
 	{
 		$_intranet_error_log_file = $intranet_error_log_file
-	}
-
-	if ($setenv == undef)
-	{
-		$_setenv = [ "KOHA_CONF \"$koha_site_dir/$site_name/koha-conf.xml\"", "MEMCACHED_SERVERS \"$memcached_servers_\"", "MEMCACHED_NAMESPACE \"$memcached_namespace_\"" ]
-	}
-	else
-	{
-		$_setenv = $setenv
 	}
 
 	# Generate the Koha user.
