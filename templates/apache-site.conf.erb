@@ -4,7 +4,7 @@
 # Koha instance <%= @site_name %> Apache config.
 
 # OPAC
-<VirtualHost *:<%= @koha_site_opac_port>>
+<VirtualHost *:<%= @koha_site_opac_port %>>
    Include /etc/koha/apache-shared.conf
 #  Include /etc/koha/apache-shared-disable.conf
    Include /etc/koha/apache-shared-opac.conf
@@ -27,7 +27,7 @@
 </VirtualHost>
 
 # Intranet
-<VirtualHost *:<%= @koha_site_intra_port>>
+<VirtualHost *:<%= @koha_site_intra_port %>>
    Include /etc/koha/apache-shared.conf
 #  Include /etc/koha/apache-shared-disable.conf
    Include /etc/koha/apache-shared-intranet.conf
