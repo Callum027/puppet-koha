@@ -55,6 +55,11 @@ class koha::params
 			$apache_sites_available_dir		= "/etc/apache2/sites-available"
 			$apache_sites_enabled_dir		= "/etc/apache2/sites-enabled"
 
+			$apache_modules_dir			= "/usr/lib/apache2/modules"
+			$apache_modules_user			= "root"
+			$apache_modules_group			= "root"
+			$apache_modules_mode			= 644
+
 			# Koha configuration variables.
 			$koha_repo_release			= "stable"
 			$koha_packages				= [ "koha-common" ]
