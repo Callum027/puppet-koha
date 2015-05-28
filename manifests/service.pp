@@ -54,7 +54,7 @@ class koha::service
 		{ $koha_services:
 			ensure		=> "running",
 			enable		=> true,
-			require		=> Class["koha"],
+			require		=> Class["::koha"],
 		}
 	}
 	elsif ($ensure == "absent")

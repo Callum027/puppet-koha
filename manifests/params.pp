@@ -51,6 +51,10 @@ class koha::params
 			$sed					= "/bin/sed"
 			$test					= "/usr/bin/test"
 
+			# Apache configuration variables.
+			$apache_sites_available_dir		= "/etc/apache2/sites-available"
+			$apache_sites_enabled_dir		= "/etc/apache2/sites-enabled"
+
 			# Koha configuration variables.
 			$koha_repo_release			= "stable"
 			$koha_packages				= [ "koha-common" ]

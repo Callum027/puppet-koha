@@ -39,6 +39,9 @@ define koha::site
 (
 	$ensure					= "present",
 
+	$apache_sites_available_dir		= $::koha::params::apache_sites_available_dir,
+	$apache_sites_enabled_dir		= $::koha::params::apache_sites_enabled_dir,
+
 	$koha_config_dir			= $::koha::params::koha_config_dir,
 	$koha_site_dir				= $::koha::params::koha_site_dir,
 	$koha_site_opac_port			= $::koha::params::koha_site_opac_port,
@@ -261,11 +264,13 @@ define koha::site
 	# Install the Koha configuration file for this site.
 	if ($ensure == "present")
 	{
-		$directory_ensure = "directory"
+		$directory_ensure	= "directory"
+		$link_ensure		= "link"
 	}
 	else
 	{
-		$directory_ensure = $ensure
+		$directory_ensure	= $ensure
+		$link_ensure		= $ensure
 	}
 
 	file
@@ -289,67 +294,29 @@ define koha::site
 	}
 
 	# Generate Apache vhosts for the OPAC and Intranet servers for this Koha site.
-	::apache::vhost
-	{ $_opac_server_name:
-		ensure			=> $ensure,
-
-		docroot			=> undef,
-		manage_docroot		=> false,
-
-		additional_includes	=>
-		[
-   			"$koha_config_dir/apache-shared.conf",
-			# "$koha_config_dir/apache-shared-disable.conf",
-   			"$koha_config_dir/apache-shared-opac.conf"
-		],
-
-		setenv			=> $_setenv,
-
-		itk			=>
-		{
-			user	=> $_site_user,
-			group	=> $_site_group,
-		},
-
-		access_log_file		=> $_opac_access_log_file,
-		error_log_file		=> $_opac_error_log_file,
-		# This Apache configuration option is not available in puppetlabs/apache:
-		#  RewriteLog  koha/$site_name/intranet-rewrite.log
-
-		require			=> Class["::koha"],
-		notify			=> Class["::koha::service"],
+	file
+	{ "$apache_sites_available_dir/$site_name.conf":
+		ensure	=> $ensure,
+		owner	=> "root",
+		group	=> $_koha_user,
+		mode	=> 640,
+		content	=> template("koha/apache-site.conf.erb"),
+		require	=> [ Class["::koha"], File["$koha_site_dir/$site_name"], ::Koha::User[$_koha_user] ],
+		notify	=> Class["::koha::service"],
 	}
 
-	::apache::vhost
-	{ $_intra_server_name:
-		ensure			=> $ensure,
-
-		docroot			=> undef,
-		manage_docroot		=> false,
-
-		additional_includes	=>
-		[
-   			"$koha_config_dir/apache-shared.conf",
-			# "$koha_config_dir/apache-shared-disable.conf",
-   			"$koha_config_dir/apache-shared-intranet.conf"
-		],
-
-		setenv			=> $_setenv,
-
-		itk			=>
-		{
-			user	=> $_site_user,
-			group	=> $_site_group,
-		},
-
-		access_log_file		=> $_intranet_access_log_file,
-		error_log_file		=> $_intranet_error_log_file,
-		# This Apache configuration option is not available in puppetlabs/apache:
-		#  RewriteLog  koha/$site_name/intranet-rewrite.log
-
-		require			=> Class["::koha"],
-		notify			=> Class["::koha::service"],
+	file
+	{ "$apache_sites_enabled_dir/$site_name.conf":
+		ensure	=> $link_ensure,
+		target	=> "$apache_sites_available_dir/$site_name.conf",
+		owner	=> "root",
+		group	=> $_koha_user,
+		mode	=> 640,
+		content	=> template("koha/apache-site.conf.erb"),
+		require	=> [ Class["::koha"], File[["$koha_site_dir/$site_name", "$apache_sites_available_dir/$site_name.conf"]], ::Koha::User[$_koha_user] ],
+		notify	=> Class["::koha::service"],
 	}
+
 
 	if ($ensure != "present" and $ensure != "absent")
 	{

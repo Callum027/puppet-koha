@@ -1,0 +1,50 @@
+# This file is managed by Puppet.
+# Any local changes will be overwritten.
+
+# Koha instance <%= @site_name %> Apache config.
+
+# OPAC
+<VirtualHost *:<%= @koha_site_opac_port>>
+   Include /etc/koha/apache-shared.conf
+#  Include /etc/koha/apache-shared-disable.conf
+   Include /etc/koha/apache-shared-opac.conf
+
+   ServerName <%= @_opac_server_name %>
+   SetEnv KOHA_CONF "<%= @koha_site_dir %>/<%= @site_name %>/koha-conf.xml"
+   SetEnv MEMCACHED_SERVERS "<%= @_memcached_servers %>"
+   SetEnv MEMCACHED_NAMESPACE "<%= @_memcached_namespace %>"
+   AssignUserID <%= @site_user %> <%= @site_group %>
+
+<% if @_opac_error_log_file -%>
+   ErrorLog    <%= @_opac_error_log_file %>
+<% end -%>
+<% if @_opac_transfer_log_file -%>
+   TransferLog <%= @_opac_transfer_log_file %>
+<% end -%>
+<% if @_opac_rewrite_log_file -%>
+   RewriteLog  <%= @_opac_rewrite_log_file %>
+<% end -%>
+</VirtualHost>
+
+# Intranet
+<VirtualHost *:<%= @koha_site_intra_port>>
+   Include /etc/koha/apache-shared.conf
+#  Include /etc/koha/apache-shared-disable.conf
+   Include /etc/koha/apache-shared-intranet.conf
+   
+   ServerName <%= @_intra_server_name %>
+   SetEnv KOHA_CONF "<%= @koha_site_dir %>/<%= @site_name %>/koha-conf.xml"
+   SetEnv MEMCACHED_SERVERS "<%= @_memcached_servers %>"
+   SetEnv MEMCACHED_NAMESPACE "<%= @_memcached_namespace %>"
+   AssignUserID <%= @site_user %> <%= @site_group %>
+
+<% if @_intra_error_log_file -%>
+   ErrorLog    <%= @_intra_error_log_file %>
+<% end -%>
+<% if @_intra_transfer_log_file -%>
+   TransferLog <%= @_intra_transfer_log_file %>
+<% end -%>
+<% if @_intra_rewrite_log_file -%>
+   RewriteLog  <%= @_intra_rewrite_log_file %>
+<% end -%>
+</VirtualHost>
