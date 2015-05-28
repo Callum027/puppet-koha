@@ -202,7 +202,7 @@ define koha::site
 
 	if ($intra_server_name == undef)
 	{
-		$_intra_server_name = "$site_intra_.$::domain"
+		$_intra_server_name = "$_site_intra.$::domain"
 	}
 	else
 	{
