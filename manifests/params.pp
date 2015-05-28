@@ -65,6 +65,9 @@ class koha::params
 			$koha_lib_dir				= "/var/lib/koha"
 			$koha_log_dir				= "/var/log/koha"
 			$koha_site_dir				= "/etc/koha/sites"
+
+			$koha_site_opac_port			= "80"
+			$koha_site_intra_port			= "8080"
 			
 			# Koha Zebra configuration variables.
 			$koha_zebra_packages			= $koha_packages

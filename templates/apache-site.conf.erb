@@ -13,7 +13,7 @@
    SetEnv KOHA_CONF "<%= @koha_site_dir %>/<%= @site_name %>/koha-conf.xml"
    SetEnv MEMCACHED_SERVERS "<%= @_memcached_servers %>"
    SetEnv MEMCACHED_NAMESPACE "<%= @_memcached_namespace %>"
-   AssignUserID <%= @site_user %> <%= @site_group %>
+   AssignUserID <%= @_site_user %> <%= @_site_group %>
 
 <% if @_opac_error_log_file -%>
    ErrorLog    <%= @_opac_error_log_file %>
@@ -36,7 +36,7 @@
    SetEnv KOHA_CONF "<%= @koha_site_dir %>/<%= @site_name %>/koha-conf.xml"
    SetEnv MEMCACHED_SERVERS "<%= @_memcached_servers %>"
    SetEnv MEMCACHED_NAMESPACE "<%= @_memcached_namespace %>"
-   AssignUserID <%= @site_user %> <%= @site_group %>
+   AssignUserID <%= @_site_user %> <%= @_site_group %>
 
 <% if @_intra_error_log_file -%>
    ErrorLog    <%= @_intra_error_log_file %>
