@@ -42,7 +42,7 @@ class koha::service
 	$koha_services		= $koha::params::koha_services
 ) inherits koha::params
 {
-	unless (defined("::koha"))
+	unless (defined(Class["::koha"]))
 	{
 		fail("You must include the Koha base class before setting up the Koha services")
 	}

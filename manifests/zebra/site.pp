@@ -41,125 +41,46 @@ define koha::zebra::site
 
 	$site_name			= $name,
 
-	$koha_user			= undef,
+	$koha_user			= undef, # Defined in resource body
 	$zebra_password,
 
-	$koha_site_dir			= undef,
-	$koha_language			= undef,
-	$koha_marc_format		= undef,
-	$koha_zebra_biblios_config	= undef,
-	$koha_zebra_authorities_config	= undef,
+	$koha_site_dir			= $::koha::params::koha_site_dir,
+	$koha_language			= $::koha::params::koha_language,
+	$koha_marc_format		= $::koha::params::koha_marc_format,
 
-	$pwgen				= undef,
-	$sed				= undef,
-	$test				= undef
+	$koha_zebra_biblios_config	= $::koha::params::koha_zebra_biblios_config,
+	$koha_zebra_authorities_config	= $::koha::params::koha_zebra_authorities_config,
+
+	$pwgen				= $::koha::params::pwgen,
+	$sed				= $::koha::params::sed,
+	$test				= $::koha::params::test
 )
 {
-	unless (defined("::koha::zebra"))
+	unless (defined(Class["::koha::zebra"]))
 	{
 		fail("You must include the Koha Zebra base class before setting up a Koha Zebra site index")
 	}
 
-	# Require the params class, and set up the Koha Zebra service if it hasn't already.
-	# TODO: Proper dependency ordering for koha::params, to get rid of this $x_real BS.
-	require ::koha::params
-	include ::koha::zebra::service
+	# Set up the Koha Zebra service if it hasn't already.
+	unless (defined(Class["::koha::zebra::service"]))
+	{
+		include ::koha::zebra::service
+	}
 
-	# Parameters from koha::params.
+	# Set the default value for the Koha user account.
 	if ($koha_user == undef)
 	{
-		$koha_user_real = "$site_name-koha"
+		$_koha_user = "$site_name-koha"
 	}
 	else
 	{
-		$koha_user_real = $koha_user
-	}
-
-	if ($koha_site_dir == undef)
-	{
-		$koha_site_dir_real = $::koha::params::koha_site_dir
-	}
-	else
-	{
-		$koha_site_dir_real = $koha_site_dir
-	}
-
-	if ($koha_language == undef)
-	{
-		$koha_language_real = $::koha::params::koha_language
-	}
-	else
-	{
-		$koha_language_real = $koha_language
-	}
-
-	if ($koha_marc_format == undef)
-	{
-		$koha_marc_format_real = $::koha::params::koha_marc_format
-	}
-	else
-	{
-		$koha_marc_format_real = $koha_marc_format
-	}
-
-	if ($koha_zebra_biblios_config == undef)
-	{
-		$koha_zebra_biblios_config_real = $::koha::params::koha_zebra_biblios_config
-	}
-	else
-	{
-		$koha_zebra_biblios_config_real = $koha_zebra_biblios_config
-	}
-
-	if ($koha_zebra_authorities_config == undef)
-	{
-		$koha_zebra_authorities_config_real = $::koha::params::koha_zebra_authorities_config
-	}
-	else
-	{
-		$koha_zebra_authorities_config_real = $koha_zebra_authorities_config
-	}
-
-	if ($koha_zebra_services == undef)
-	{
-		$koha_zebra_services_real = $::koha::params::koha_zebra_services
-	}
-	else
-	{
-		$koha_zebra_services_real = $koha_zebra_services
-	}
-
-	if ($pwgen == undef)
-	{
-		$pwgen_real = $::koha::params::pwgen
-	}
-	else
-	{
-		$pwgen_real = $pwgen
-	}
-
-	if ($sed == undef)
-	{
-		$sed_real = $::koha::params::sed
-	}
-	else
-	{
-		$sed_real = $sed
-	}
-
-	if ($test == undef)
-	{
-		$test_real = $::koha::params::test
-	}
-	else
-	{
-		$test_real = $test
+		$_koha_user = $koha_user
 	}
 
 	# Generate the Koha user, if it hasn't been made already.
-	unless (defined(::Koha::User[$koha_user_real]))
+	unless (defined(::Koha::User[$_koha_user]))
 	{
-		::koha::user { $koha_user_real: }
+		::koha::user { $_koha_user: }
 	}
 
 	# Generate and install Zebra config files.

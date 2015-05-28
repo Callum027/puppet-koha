@@ -39,72 +39,47 @@ define koha::mysql::site
 (
 	$ensure			= present,
 
-	$echo			= undef,
-	$mysql			= undef,
+	$echo			= $::koha::params::echo,
+	$mysql			= $::koha::params::mysql,
 
 	$site_name		= $name,
 
-	$mysql_adminuser	= undef,
+	$mysql_adminuser	= $::koha::params::mysql_adminuser,
 
-	$mysql_db		= undef,
-	$mysql_user		= undef,
+	$mysql_db		= undef, # Defined in resource body
+	$mysql_user		= undef, # Defined in resource body
 
 	$mysql_password
 	#$staff_password
 )
 {
-	# TODO: Proper dependency ordering for koha::params, to get rid of this $x_real BS.
-	require ::koha::params
-
-	if ($echo == undef)
+	unless (defined(Class["::koha::mysql"]))
 	{
-		$echo_real = $::koha::params::echo
-	}
-	else
-	{
-		$echo_real = $echo
-	}
-
-	if ($mysql == undef)
-	{
-		$mysql_real = $::koha::params::mysql
-	}
-	else
-	{
-		$mysql_real = $mysql
-	}
-
-	if ($mysql_adminuser == undef)
-	{
-		$mysql_adminuser_real = $::koha::params::mysql_adminuser
-	}
-	else
-	{
-		$mysql_adminuser_real = $mysql_adminuser
+		fail("You must include the Koha MySQL base class before setting up a Koha MySQL database")
 	}
 
 	if ($mysql_db == undef)
 	{
-		$mysql_db_real = "koha_$site_name"
+		$_mysql_db = "koha_$site_name"
 	}
 	else
 	{
-		$mysql_db_real = $mysql_db
+		$_mysql_db = $mysql_db
 	}
 
 	if ($mysql_user == undef)
 	{
-		$mysql_user_real = $mysql_db_real
+		$_mysql_user = $_mysql_db
 	}
 	else
 	{
-		$mysql_user_real = $mysql_user
+		$_mysql_user = $mysql_user
 	}
 
 	# Set up MySQL database for this instance.
 	::mysql::db
-	{ $mysql_db_real:
-		user		=> $mysql_user_real,
+	{ $_mysql_db:
+		user		=> $_mysql_user,
 		password	=> $mysql_password,
 		host		=> 'localhost',
 		grant		=> 'ALL',
