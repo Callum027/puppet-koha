@@ -73,6 +73,11 @@ class koha::params
 			$koha_zebra_packages			= $koha_packages
 			$koha_zebra_services			= $koha_services
 
+			$koha_zebra_server_port			= "210"
+
+			$koha_zebra_biblioserver		= "biblios"
+			$koha_zebra_authorityserver		= "authority"
+
 			$koha_zebra_marc_format			= "marc21"
 
 			$koha_zebra_biblios_config		= "zebra-biblios.cfg"

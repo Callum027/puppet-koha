@@ -307,9 +307,9 @@
  <port><%= @mysql_port %></port>
  <user><%= @_mysql_user %></user>
  <pass><%= @mysql_password %></pass>
- <biblioserver>biblios</biblioserver>
+ <biblioserver><%= @_koha_zebra_biblioserver %></biblioserver>
  <biblioservershadow>1</biblioservershadow>
- <authorityserver>authorities</authorityserver>
+ <authorityserver><%= @_koha_zebra_authorityserver %></authorityserver>
  <authorityservershadow>1</authorityservershadow>
  <pluginsdir<%= @_koha_plugins_dir %></pluginsdir>
  <enable_plugins>0</enable_plugins>

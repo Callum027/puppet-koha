@@ -59,6 +59,15 @@ define koha::site
 
 	$koha_zebra_marc_format			= $::koha::params::koha_zebra_marc_format,
 
+	$koha_zebra_server			= undef,
+	$koha_zebra_server_port			= $::koha::params::koha_zebra_server_port,
+	$koha_zebra_server_local		= true,
+
+	$koha_zebra_password,
+
+	$koha_zebra_biblioserver		= $::koha::params::koha_zebra_biblioserver,
+	$koha_zebra_authorityserver		= $::koha::params::koha_zebra_authorityserver,
+
 	$koha_zebra_sru_hostname		= undef,
 	$koha_zebra_sru_biblios_port		= undef,
 
@@ -68,7 +77,6 @@ define koha::site
 	$site_group				= undef, # Defined in resource body
 
 	$koha_user				= undef, # Defined in resource body
-	$zebra_password,
 
 	$mysql_db				= undef, # Defined in resource body
 	$mysql_hostname				= "localhost",
@@ -108,6 +116,22 @@ define koha::site
 	else
 	{
 		$_koha_plugins_dir_ = $koha_plugins_dir
+	}
+
+	if ($koha_zebra_server_local != true)
+	{
+		if ($koha_zebra_server == undef)
+		{
+			fail("Remove Zebra server not defined, but non-local Zebra configuration loaded")
+		}
+
+		$_koha_zebra_biblioserver = "tcp:$koha_zebra_server:$koha_zebra_server_port/$koha_zebra_biblioserver"
+		$_koha_zebra_authorityserver = "tcp:$koha_zebra_server:$koha_zebra_server_port/$koha_zebra_biblioserver"
+	}
+	else
+	{
+		$_koha_zebra_biblioserver = $koha_zebra_biblioserver
+		$_koha_zebra_authorityserver = $koha_zebra_biblioserver
 	}
 
 	if ($koha_zebra_sru_hostname != undef)
@@ -312,4 +336,7 @@ define koha::site
 	{
 		fail("invalid value for ensure: $ensure")
 	}
+
+	tcp:/$/biblios
+	tcp://
 }

@@ -42,7 +42,7 @@ define koha::zebra::site
 	$site_name			= $name,
 
 	$koha_user			= undef, # Defined in resource body
-	$zebra_password,
+	$koha_zebra_password,
 
 	$koha_site_dir			= $::koha::params::koha_site_dir,
 	$koha_language			= $::koha::params::koha_language,
