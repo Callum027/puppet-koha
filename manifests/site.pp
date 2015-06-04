@@ -120,7 +120,7 @@ define koha::site
 	if ($koha_zebra_server != undef)
 	{
 		$_koha_zebra_biblioserver = "tcp:$koha_zebra_server:$koha_zebra_server_port/$koha_zebra_biblioserver"
-		$_koha_zebra_authorityserver = "tcp:$koha_zebra_server:$koha_zebra_server_port/$koha_zebra_biblioserver"
+		$_koha_zebra_authorityserver = "tcp:$koha_zebra_server:$koha_zebra_server_port/$koha_zebra_authorityserver"
 	}
 	else
 	{
