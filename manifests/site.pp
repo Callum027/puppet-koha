@@ -336,7 +336,4 @@ define koha::site
 	{
 		fail("invalid value for ensure: $ensure")
 	}
-
-	tcp:/$/biblios
-	tcp://
 }
