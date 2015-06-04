@@ -38,7 +38,7 @@
 class koha::zebra::service
 (
 	$ensure			= "present",
-	$koha_zebra_services	= $::koha::params::koha_service
+	$koha_zebra_services	= $::koha::params::koha_zebra_services
 ) inherits koha::params
 {
 	# This is a temporary requirement, while Zebra is still bound with Koha.
