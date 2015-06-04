@@ -69,11 +69,16 @@ class koha::zebra::install
 			# https://bugs.launchpad.net/ubuntu/+source/mpm-itk/+bug/1286882
 			if ($::operatingsystem == "Ubuntu" and $::operatingsystemrelease == "14.04")
 			{
-				include ::apache
+				class
+				{ "::apache":
+					mpm_module	=> "itk",
+				}
+
+				contain "::apache"
 
 				Package[$koha_zebra_packages]
 				{
-					require	=> Class[["::koha::repo", "::apache" ]],
+					require	=> Class[["::koha::repo", "::apache"]],
 				}
 			}
 			else
