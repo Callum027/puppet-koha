@@ -98,10 +98,10 @@ define koha::zebra::site
 		file
 		{ "$koha_site_dir/$site_name":
 			ensure	=> $directory_ensure,
-			owner	=> $koha_user_real,
-			group	=> $koha_user_real,
+			owner	=> $_koha_user,
+			group	=> $_koha_user,
 			mode	=> 755,
-			require	=> [ Class["::koha::zebra"], ::Koha::User[$koha_user_real] ],
+			require	=> [ Class["::koha::zebra"], ::Koha::User[$_koha_user] ],
 		}
 	}
 
@@ -109,10 +109,10 @@ define koha::zebra::site
 	{ "$koha_site_dir/$site_name/zebra-biblios.cfg":
 		ensure	=> $ensure,
 		owner	=> root,
-		group	=> $koha_user_real,
+		group	=> $_koha_user,
 		mode	=> 640,
 		content	=> template("koha/zebra-biblios-site.cfg.erb"),
-		require	=> [ Class["::koha::zebra"], ::Koha::User[$koha_user_real] ],
+		require	=> [ Class["::koha::zebra"], ::Koha::User[$_koha_user] ],
 		notify	=> Class["::koha::zebra::service"],
 	}
 
@@ -120,10 +120,10 @@ define koha::zebra::site
 	{ "$koha_site_dir/$site_name/zebra-biblios-dom.cfg":
 		ensure	=> $ensure,
 		owner	=> root,
-		group	=> $koha_user_real,
+		group	=> $_koha_user,
 		mode	=> 640,
 		content	=> template("koha/zebra-biblios-dom-site.cfg.erb"),
-		require	=> [ Class["::koha::zebra"], ::Koha::User[$koha_user_real] ],
+		require	=> [ Class["::koha::zebra"], ::Koha::User[$_koha_user] ],
 		notify	=> Class["::koha::zebra::service"],
 	}
 
@@ -131,10 +131,10 @@ define koha::zebra::site
 	{ "$koha_site_dir/$site_name/zebra-authorities.cfg":
 		ensure	=> $ensure,
 		owner	=> root,
-		group	=> $koha_user_real,
+		group	=> $_koha_user,
 		mode	=> 640,
 		content	=> template("koha/zebra-authorities-site.cfg.erb"),
-		require	=> [ Class["::koha::zebra"], ::Koha::User[$koha_user_real] ],
+		require	=> [ Class["::koha::zebra"], ::Koha::User[$_koha_user] ],
 		notify	=> Class["::koha::zebra::service"],
 	}
 
@@ -142,10 +142,10 @@ define koha::zebra::site
 	{ "$koha_site_dir/$site_name/zebra-authorities-dom.cfg":
 		ensure	=> $ensure,
 		owner	=> root,
-		group	=> $koha_user_real,
+		group	=> $_koha_user,
 		mode	=> 640,
 		content	=> template("koha/zebra-authorities-dom-site.cfg.erb"),
-		require	=> [ Class["::koha::zebra"], ::Koha::User[$koha_user_real] ],
+		require	=> [ Class["::koha::zebra"], ::Koha::User[$_koha_user] ],
 		notify	=> Class["::koha::zebra::service"],
 	}
 
@@ -153,10 +153,10 @@ define koha::zebra::site
 	{ "$koha_site_dir/$site_name/zebra.passwd":
 		ensure	=> $ensure,
 		owner	=> root,
-		group	=> $koha_user_real,
+		group	=> $_koha_user,
 		mode	=> 640,
 		content	=> template("koha/zebra.passwd.erb"),
-		require	=> [ Class["::koha::zebra"], ::Koha::User[$koha_user_real] ],
+		require	=> [ Class["::koha::zebra"], ::Koha::User[$_koha_user] ],
 		notify	=> Class["::koha::zebra::service"],
 	}
 
