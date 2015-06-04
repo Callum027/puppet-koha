@@ -61,6 +61,7 @@ class koha::zebra::install
 			package
 			{ $koha_zebra_packages:
 				ensure	=> "installed",
+				require	=> Class["::koha::repo"],				
 			}
 		}
 		elsif ($ensure == "absent")
@@ -68,6 +69,7 @@ class koha::zebra::install
 			package
 			{ $koha_zebra_packages:
 				ensure	=> "purged",
+				require	=> Class["::koha::repo"],
 			}
 		}
 		else
