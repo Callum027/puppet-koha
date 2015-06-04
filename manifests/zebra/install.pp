@@ -60,8 +60,7 @@ class koha::zebra::install
 		{
 			package
 			{ $koha_zebra_packages:
-				ensure	=> "installed",
-				require	=> Class["::koha::repo"],			
+				ensure	=> "installed",		
 			}
 
 			# TODO: Remove either when Koha Zebra packages are separated, or when
@@ -75,6 +74,13 @@ class koha::zebra::install
 				Package[$koha_zebra_packages]
 				{
 					require	=> Class[["::koha::repo", "::apache" ]],
+				}
+			}
+			else
+			{
+				Package[$koha_zebra_packages]
+				{
+					require	=> Class["::koha::repo"],
 				}
 			}
 		}
