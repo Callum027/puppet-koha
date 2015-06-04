@@ -61,7 +61,21 @@ class koha::zebra::install
 			package
 			{ $koha_zebra_packages:
 				ensure	=> "installed",
-				require	=> Class["::koha::repo"],				
+				require	=> Class["::koha::repo"],			
+			}
+
+			# TODO: Remove either when Koha Zebra packages are separated, or when
+			# the libapache2-mpm-itk Ubuntu 14.04 LTS package is fixed.
+			#
+			# https://bugs.launchpad.net/ubuntu/+source/mpm-itk/+bug/1286882
+			if ($::operatingsystem == "Ubuntu" and $::operatingsystemrelease == "14.04")
+			{
+				include ::apache
+
+				Package[$koha_zebra_packages]
+				{
+					require	=> Class[["::koha::repo", "::apache" ]],
+				}
 			}
 		}
 		elsif ($ensure == "absent")
