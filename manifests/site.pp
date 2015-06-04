@@ -61,7 +61,6 @@ define koha::site
 
 	$koha_zebra_server			= undef,
 	$koha_zebra_server_port			= $::koha::params::koha_zebra_server_port,
-	$koha_zebra_server_local		= true,
 
 	$koha_zebra_password,
 
@@ -118,13 +117,8 @@ define koha::site
 		$_koha_plugins_dir_ = $koha_plugins_dir
 	}
 
-	if ($koha_zebra_server_local != true)
+	if ($koha_zebra_server != undef)
 	{
-		if ($koha_zebra_server == undef)
-		{
-			fail("Remove Zebra server not defined, but non-local Zebra configuration loaded")
-		}
-
 		$_koha_zebra_biblioserver = "tcp:$koha_zebra_server:$koha_zebra_server_port/$koha_zebra_biblioserver"
 		$_koha_zebra_authorityserver = "tcp:$koha_zebra_server:$koha_zebra_server_port/$koha_zebra_biblioserver"
 	}
