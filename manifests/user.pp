@@ -47,9 +47,9 @@ define koha::user
 	$home		= undef  # Defined in resource body
 )
 {
-	unless (defined(Class["::koha"]))
+	unless (defined(Class["::koha::params"]))
 	{
-		fail("You must define the Koha base class before setting up a Koha user")
+		fail("You must define the koha::params class before setting up a Koha user")
 	}
 
 	if ($full_name == undef)

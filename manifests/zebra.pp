@@ -37,6 +37,8 @@
 #
 class koha::zebra($ensure = "present")
 {
+	require koha::params
+
 	unless (defined(Class["::koha::zebra::install"]))
 	{
 		class
