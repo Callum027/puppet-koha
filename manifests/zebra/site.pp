@@ -46,7 +46,7 @@ define koha::zebra::site
 
 	$koha_site_dir			= $::koha::params::koha_site_dir,
 	$koha_language			= $::koha::params::koha_language,
-	$koha_marc_format		= $::koha::params::koha_marc_format,
+	$koha_zebra_marc_format		= $::koha::params::koha_zebra_marc_format,
 
 	$koha_zebra_biblios_config	= $::koha::params::koha_zebra_biblios_config,
 	$koha_zebra_authorities_config	= $::koha::params::koha_zebra_authorities_config,
