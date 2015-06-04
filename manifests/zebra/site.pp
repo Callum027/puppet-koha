@@ -111,13 +111,13 @@ define koha::zebra::site
 		owner	=> root,
 		group	=> $koha_user_real,
 		mode	=> 640,
-		content	=> template("koha/zebra-biblios.cfg.erb"),
+		content	=> template("koha/zebra-biblios-site.cfg.erb"),
 		require	=> [ Class["::koha::zebra"], ::Koha::User[$koha_user_real] ],
 		notify	=> Class["::koha::zebra::service"],
 	}
 
 	file
-	{ "$koha_site_dir/$site_name/zebra-biblios-dom-site.cfg":
+	{ "$koha_site_dir/$site_name/zebra-biblios-dom.cfg":
 		ensure	=> $ensure,
 		owner	=> root,
 		group	=> $koha_user_real,
@@ -128,7 +128,7 @@ define koha::zebra::site
 	}
 
 	file
-	{ "$koha_site_dir/$site_name/zebra-authorities-site.cfg":
+	{ "$koha_site_dir/$site_name/zebra-authorities.cfg":
 		ensure	=> $ensure,
 		owner	=> root,
 		group	=> $koha_user_real,
@@ -139,7 +139,7 @@ define koha::zebra::site
 	}
 
 	file
-	{ "$koha_site_dir/$site_name/zebra-authorities-dom-site.cfg":
+	{ "$koha_site_dir/$site_name/zebra-authorities-dom.cfg":
 		ensure	=> $ensure,
 		owner	=> root,
 		group	=> $koha_user_real,
