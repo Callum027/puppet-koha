@@ -110,11 +110,11 @@ define koha::site
 	# if they haven't been defined by the user.
 	if ($koha_plugins_dir == undef)
 	{
-		$_koha_plugins_dir_ = "$koha_lib_dir/$site_name/plugins"
+		$_koha_plugins_dir = "$koha_lib_dir/$site_name/plugins"
 	}
 	else
 	{
-		$_koha_plugins_dir_ = $koha_plugins_dir
+		$_koha_plugins_dir = $koha_plugins_dir
 	}
 
 	if ($koha_zebra_server != undef)

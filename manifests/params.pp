@@ -80,8 +80,8 @@ class koha::params
 
 			$koha_zebra_marc_format			= "marc21"
 
-			$koha_zebra_biblios_config		= "zebra-biblios.cfg"
-			$koha_zebra_authorities_config		= "zebra_authorities.cfg"
+			$koha_zebra_biblios_config		= "zebra-biblios-dom.cfg"
+			$koha_zebra_authorities_config		= "zebra-authorities-dom.cfg"
 
 			$koha_zebra_biblios_indexing_mode	= "dom"
 			$koha_zebra_authorities_indexing_mode	= "dom"

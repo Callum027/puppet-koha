@@ -8,13 +8,13 @@
 <!-- Uncomment the following entry if you want to run the public Z39.50 server.
     Also uncomment the <server> and <serverinfo> sections for id 'publicserver'
     under PUBLICSERVER'S BIBLIOGRAPHIC RECORDS title-->
-<% if @koha_zebra_sru_hostname %>
+<% if @koha_zebra_sru_hostname -%>
 <!--
 <% end %>
 <listen id="publicserver" >tcp:@:<%= @koha_zebra_sru_biblios_port %></listen>
 <% if @koha_zebra_sru_hostname %>
 -->
-<% end %>
+<% end -%>
 
 <!-- Settings for special biblio server instance for PazPar2.
      Because PazPar2 only connects to a Z39.50 server using TCP/IP,
@@ -35,14 +35,14 @@
     <config>/etc/koha/sites/<%= @site_name %>/<%= @koha_zebra_biblios_config %></config>
     <cql2rpn>/etc/koha/zebradb/pqf.properties</cql2rpn>
 
-<% if @koha_zebra_biblios_indexing_mode == "dom" %>
+<% if @koha_zebra_biblios_indexing_mode == "dom" -%>
     <xi:include href="/etc/koha/<%= @koha_zebra_marc_format %>-retrieval-info-bib-dom.xml"
                 xmlns:xi="http://www.w3.org/2001/XInclude">
      <xi:fallback>
       <retrievalinfo>
-<% elsif @koha_zebra_biblios_indexing_mode == "grs1" %>
+<% elsif @koha_zebra_biblios_indexing_mode == "grs1" -%>
     <retrievalinfo>
-<% end %>
+<% end -%>
        <retrieval syntax="<%= @koha_zebra_marc_format %>" name="F"/>
        <retrieval syntax="<%= @koha_zebra_marc_format %>" name="B"/>
        <retrieval syntax="xml" name="F"/>
@@ -97,7 +97,7 @@
     </retrievalinfo>
 <% end %>
 
-<% if @koha_zebra_sru_hostname %>
+<% if @koha_zebra_sru_hostname.nil? -%>
 <!--
 <% end %>
     <xi:include href="<%= @koha_config_dir %>/zebradb/explain-biblios.xml"
@@ -112,14 +112,14 @@
         </explain>
       </xi:fallback>
     </xi:include>
-<% if @koha_zebra_sru_hostname %>
+<% if @koha_zebra_sru_hostname.nil? -%>
 -->
-<% end %>
+<% end -%>
 </server>
 <serverinfo id="biblioserver">
         <ccl2rpn>/etc/koha/zebradb/ccl.properties</ccl2rpn>
         <user>kohauser</user>
-        <password><%= @zebra_password %></password>
+        <password><%= @koha_zebra_password %></password>
 </serverinfo>
 
 <!-- AUTHORITY RECORDS -->
@@ -128,14 +128,14 @@
     <config>/etc/koha/sites/<%= @site_name %>/<%= @koha_zebra_authorities_config %></config>
     <cql2rpn>/etc/koha/zebradb/pqf.properties</cql2rpn>
 
-<% if @koha_zebra_authorities_indexing_mode == "dom" %>
+<% if @koha_zebra_authorities_indexing_mode == "dom" -%>
     <xi:include href="/etc/koha/<%= @koha_zebra_marc_format %>-retrieval-info-auth-dom.xml"
                 xmlns:xi="http://www.w3.org/2001/XInclude">
      <xi:fallback>
       <retrievalinfo>
-<% elsif @koha_zebra_authorities_indexing_mode == "grs1" %>
+<% elsif @koha_zebra_authorities_indexing_mode == "grs1" -%>
     <retrievalinfo>
-<% end %>
+<% end -%>
        <retrieval syntax="<%= @koha_zebra_marc_format %>" name="F"/>
        <retrieval syntax="<%= @koha_zebra_marc_format %>" name="B"/>
        <retrieval syntax="xml" name="marcxml"
@@ -173,17 +173,17 @@
            <xslt stylesheet="/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/xslt/MARC21slimUtils.xsl"/>
          </backend>
        </retrieval>
-<% if @koha_zebra_authorities_indexing_mode == "dom" %>
+<% if @koha_zebra_authorities_indexing_mode == "dom" -%>
       </retrievalinfo>
      </xi:fallback>
     </xi:include>
-<% elsif @koha_zebra_authorities_indexing_mode == "grs1" %>
+<% elsif @koha_zebra_authorities_indexing_mode == "grs1" -%>
     </retrievalinfo>
 <% end %>
 
-<% if @koha_zebra_sru_hostname %>
+<% if @koha_zebra_sru_hostname.nil? -%>
 <!--
-<% end %>
+<% end -%>
     <xi:include href="<%= @koha_config_dir %>/zebradb/explain-authorities.xml"
                 xmlns:xi="http://www.w3.org/2001/XInclude">
     <xi:fallback>
@@ -196,34 +196,34 @@
         </explain>
       </xi:fallback>
   </xi:include>
-<% if @koha_zebra_sru_hostname %>
+<% if @koha_zebra_sru_hostname.nil? -%>
 -->
-<% end %>
+<% end -%>
 </server>
 <serverinfo id="authorityserver">
     <ccl2rpn>/etc/koha/zebradb/ccl.properties</ccl2rpn>
     <user>kohauser</user>
-    <password><%= @zebra_password %></password>
+    <password><%= @koha_zebra_password %></password>
 </serverinfo>
 
 <!-- PUBLICSERVER'S BIBLIOGRAPHIC RECORDS -->
 <!-- This can be used to set up a public Z39.50/SRU server. -->
-<% if @koha_zebra_sru_hostname %>
+<% if @koha_zebra_sru_hostname.nil? -%>
 <!--
-<% end %>
+<% end -%>
 <server id="publicserver"  listenref="publicserver">
     <directory>/var/lib/koha/<%= @site_name %>/biblios</directory>
     <config>/etc/koha/sites/<%= @site_name %>/<%= @koha_zebra_biblios_config %></config>
     <cql2rpn>/etc/koha/zebradb/pqf.properties</cql2rpn>
 
-<% if @koha_zebra_biblios_indexing_mode == "dom" %>
+<% if @koha_zebra_biblios_indexing_mode == "dom" -%>
     <xi:include href="/etc/koha/<%= @koha_zebra_marc_format %>-retrieval-info-bib-dom.xml"
                 xmlns:xi="http://www.w3.org/2001/XInclude">
      <xi:fallback>
       <retrievalinfo>
-<% elsif @koha_zebra_biblios_indexing_mode == "grs1" %>
+<% elsif @koha_zebra_biblios_indexing_mode == "grs1" -%>
     <retrievalinfo>
-<% end %>
+<% end -%>
        <retrieval syntax="<%= @koha_zebra_marc_format %>" name="F"/>
        <retrieval syntax="<%= @koha_zebra_marc_format %>" name="B"/>
        <retrieval syntax="xml" name="F"/>
@@ -270,13 +270,13 @@
            <xslt stylesheet="/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/xslt/MARC21slimUtils.xsl"/>
          </backend>
        </retrieval>
-<% if @koha_zebra_biblios_indexing_mode == "dom" %>
+<% if @koha_zebra_biblios_indexing_mode == "dom" -%>
       </retrievalinfo>
      </xi:fallback>
     </xi:include>
-<% elsif @koha_zebra_bibliosindexing_mode == "grs1" %>
+<% elsif @koha_zebra_biblios_indexing_mode == "grs1" -%>
     </retrievalinfo>
-<% end %>
+<% end -%>
 
     <xi:include href="<%= @koha_config_dir %>/zebradb/explain-biblios.xml"
                 xmlns:xi="http://www.w3.org/2001/XInclude">
@@ -294,11 +294,11 @@
 <serverinfo id="publicserver">
         <ccl2rpn>/etc/koha/zebradb/ccl.properties</ccl2rpn>
         <user>kohauser</user>
-        <password><%= @zebra_password %></password>
+        <password><%= @koha_zebra_password %></password>
 </serverinfo>
-<% if @koha_zebra_sru_hostname %>
+<% if @koha_zebra_sru_hostname.nil? -%>
 -->
-<% end %>
+<% end -%>
 
 <config>
  <db_scheme>mysql</db_scheme>
@@ -311,7 +311,7 @@
  <biblioservershadow>1</biblioservershadow>
  <authorityserver><%= @_koha_zebra_authorityserver %></authorityserver>
  <authorityservershadow>1</authorityservershadow>
- <pluginsdir<%= @_koha_plugins_dir %></pluginsdir>
+ <pluginsdir><%= @_koha_plugins_dir %></pluginsdir>
  <enable_plugins>0</enable_plugins>
  <intranetdir>/usr/share/koha/intranet/cgi-bin</intranetdir>
  <opacdir>/usr/share/koha/opac/cgi-bin/opac</opacdir>
