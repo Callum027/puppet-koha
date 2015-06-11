@@ -94,7 +94,7 @@ define koha::site
 	$opac_access_log_file			= undef, # Defined in resource body
 	$opac_error_log_file			= undef, # Defined in resource body
 
-	$intranet_acess_log_file		= undef, # Defined in resource body
+	$intranet_access_log_file		= undef, # Defined in resource body
 	$intranet_error_log_file		= undef  # Defined in resource body
 )
 {
@@ -240,7 +240,7 @@ define koha::site
 		$_opac_access_log_file = $opac_access_log_file
 	}
 
-	if ($intranet_error_log_file == undef)
+	if ($opac_error_log_file == undef)
 	{
 		$_opac_error_log_file_ = "koha/$site_name/opac-error.log"
 	}

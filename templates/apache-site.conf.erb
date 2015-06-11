@@ -18,8 +18,8 @@
 <% if @_opac_error_log_file -%>
    ErrorLog    <%= @_opac_error_log_file %>
 <% end -%>
-<% if @_opac_transfer_log_file -%>
-   TransferLog <%= @_opac_transfer_log_file %>
+<% if @_opac_access_log_file -%>
+   TransferLog <%= @_opac_access_log_file %>
 <% end -%>
 <% if @_opac_rewrite_log_file -%>
    RewriteLog  <%= @_opac_rewrite_log_file %>
@@ -38,13 +38,13 @@
    SetEnv MEMCACHED_NAMESPACE "<%= @_memcached_namespace %>"
    AssignUserID <%= @_site_user %> <%= @_site_group %>
 
-<% if @_intra_error_log_file -%>
-   ErrorLog    <%= @_intra_error_log_file %>
+<% if @_intranet_error_log_file -%>
+   ErrorLog    <%= @_intranet_error_log_file %>
 <% end -%>
-<% if @_intra_transfer_log_file -%>
-   TransferLog <%= @_intra_transfer_log_file %>
+<% if @_intranet_access_log_file -%>
+   TransferLog <%= @_intranet_access_log_file %>
 <% end -%>
-<% if @_intra_rewrite_log_file -%>
-   RewriteLog  <%= @_intra_rewrite_log_file %>
+<% if @_intranet_rewrite_log_file -%>
+   RewriteLog  <%= @_intranet_rewrite_log_file %>
 <% end -%>
 </VirtualHost>
