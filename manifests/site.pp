@@ -233,7 +233,7 @@ define koha::site
 	# Apache log files.
 	if ($opac_access_log_file == undef)
 	{
-		$_opac_access_log_file = "koha/$site_name/opac-access.log"
+		$_opac_access_log_file = "$koha_log_dir/$site_name/opac-access.log"
 	}
 	else
 	{
@@ -242,7 +242,7 @@ define koha::site
 
 	if ($opac_error_log_file == undef)
 	{
-		$_opac_error_log_file = "koha/$site_name/opac-error.log"
+		$_opac_error_log_file = "$koha_log_dir/$site_name/opac-error.log"
 	}
 	else
 	{
@@ -251,7 +251,7 @@ define koha::site
 
 	if ($intranet_access_log_file == undef)
 	{
-		$_intranet_access_log_file = "koha/$site_name/intranet-access.log"
+		$_intranet_access_log_file = "$koha_log_dir/$site_name/intranet-access.log"
 	}
 	else
 	{
@@ -260,7 +260,7 @@ define koha::site
 
 	if ($intranet_error_log_file == undef)
 	{
-		$_intranet_error_log_file = "koha/$site_name/intranet-error.log"
+		$_intranet_error_log_file = "$koha_log_dir/$site_name/intranet-error.log"
 	}
 	else
 	{
@@ -283,7 +283,7 @@ define koha::site
 	}
 
 	file
-	{ "$koha_site_dir/$site_name":
+	{ [ "$koha_site_dir/$site_name", "$koha_log_dir/$site_name" ]:
 		ensure	=> $directory_ensure,
 		owner	=> $_koha_user,
 		group	=> $_koha_user,
