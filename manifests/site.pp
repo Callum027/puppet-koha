@@ -242,7 +242,7 @@ define koha::site
 
 	if ($opac_error_log_file == undef)
 	{
-		$_opac_error_log_file_ = "koha/$site_name/opac-error.log"
+		$_opac_error_log_file = "koha/$site_name/opac-error.log"
 	}
 	else
 	{
