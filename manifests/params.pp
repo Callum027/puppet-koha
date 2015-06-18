@@ -58,7 +58,7 @@ class koha::params
 			# Koha configuration variables.
 			$koha_repo_release			= "stable"
 			$koha_packages				= [ "koha-common" ]
-			$koha_services				= [ "koha-common" ]
+			$koha_services				= [ "apache2" ]
 
 			$koha_language				= "en"
 			$koha_config_dir			= "/etc/koha"
@@ -70,8 +70,8 @@ class koha::params
 			$koha_site_intra_port			= "8080"
 			
 			# Koha Zebra configuration variables.
-			$koha_zebra_packages			= $koha_packages
-			$koha_zebra_services			= $koha_services
+			$koha_zebra_packages			= [ "koha-common" ]
+			$koha_zebra_services			= [ "koha-common" ]
 
 			$koha_zebra_server_port			= "210"
 
