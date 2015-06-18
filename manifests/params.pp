@@ -58,7 +58,6 @@ class koha::params
 			# Koha configuration variables.
 			$koha_repo_release			= "stable"
 			$koha_packages				= [ "koha-common" ]
-			$koha_services				= [ "apache2" ]
 
 			$koha_language				= "en"
 			$koha_config_dir			= "/etc/koha"

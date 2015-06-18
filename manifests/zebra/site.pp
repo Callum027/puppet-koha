@@ -161,6 +161,5 @@ define koha::zebra::site
 	}
 
 	# Start the Koha zebra service, if it hasn't been already.
-	# $ koha-start-zebra "$name"
-	# $ koha-indexer --start "$name"
+	include koha::zebra::service
 }

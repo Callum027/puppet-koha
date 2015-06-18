@@ -103,9 +103,6 @@ define koha::site
 		fail("You must define the Koha base class before using setting up a Koha site")
 	}
 
-	# Set up the Koha service if it hasn't already.
-	include ::koha::service
-
 	# Define default parameters that can't be defined in the resource parameter list,
 	# if they haven't been defined by the user.
 	if ($koha_plugins_dir == undef)
