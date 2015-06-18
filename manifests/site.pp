@@ -286,6 +286,7 @@ define koha::site
 		group	=> $_koha_user,
 		mode	=> 755,
 		require	=> [ Class["::koha"], ::Koha::User[$_koha_user] ],
+		notify	=> Class["::apache::service"],
 	}
 
 	file
@@ -296,7 +297,7 @@ define koha::site
 		mode	=> 640,
 		content	=> template("koha/koha-conf-site.xml.erb"),
 		require	=> [ Class["::koha"], File["$koha_site_dir/$site_name"], ::Koha::User[$_koha_user] ],
-		notify	=> Class["::koha::service"],
+		notify	=> Class["::apache::service"],
 	}
 
 	# Generate Apache vhosts for the OPAC and Intranet servers for this Koha site.
@@ -308,7 +309,7 @@ define koha::site
 		mode	=> 640,
 		content	=> template("koha/apache-site.conf.erb"),
 		require	=> [ Class["::koha"], File["$koha_site_dir/$site_name"], ::Koha::User[$_koha_user] ],
-		notify	=> Class["::koha::service"],
+		notify	=> Class["::apache::service"],
 	}
 
 	file
@@ -319,7 +320,7 @@ define koha::site
 		group	=> $_koha_user,
 		mode	=> 640,
 		require	=> [ Class["::koha"], File[["$koha_site_dir/$site_name", "$apache_sites_available_dir/$site_name.conf"]], ::Koha::User[$_koha_user] ],
-		notify	=> Class["::koha::service"],
+		notify	=> Class["::apache::service"],
 	}
 
 
