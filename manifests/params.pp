@@ -56,6 +56,10 @@ class koha::params
 			$apache_sites_enabled_dir		= "/etc/apache2/sites-enabled"
 			$apache_sites_dir_conf_file_mode	= 640
 
+			# MySQL configuration variables.
+			$mysql_bind_address			= "0.0.0.0",
+			$mysql_port				= 3306,
+
 			# Koha configuration variables.
 			$koha_repo_release			= "stable"
 			$koha_packages				= [ "koha-common" ]

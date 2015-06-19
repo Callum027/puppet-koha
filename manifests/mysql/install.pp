@@ -35,10 +35,27 @@
 #
 # Copyright 2015 Callum Dickinson.
 #
-class koha::mysql::install($ensure = "present")
+class koha::mysql::install
+(
+	$ensure			= "present",
+	$mysql_bind_address	= $::koha::params::mysql_bind_address,
+	$mysql_port		= $::koha::params::mysql_port
+) inherits koha::params
 {
 	unless ($ensure != "present" or defined(Class["::mysql::server"]))
 	{
-		contain ::mysql::server
+		class
+		{ "::mysql::server":
+			override_options	=>
+			{
+				"mysqld"	=>
+				{
+					"bind-address"	=> $mysql_bind_address,
+					"port"		=> $mysql_port,
+				},
+			},
+		}
+
+		contain "::mysql::server"
 	}
 }
