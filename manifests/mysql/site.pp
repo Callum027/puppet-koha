@@ -81,7 +81,7 @@ define koha::mysql::site
 	{ $_mysql_db:
 		user		=> $_mysql_user,
 		password	=> $mysql_password,
-		host		=> 'localhost',
+		host		=> '%',
 		grant		=> 'ALL',
 		require		=> Class["::koha::mysql"],
 	}
