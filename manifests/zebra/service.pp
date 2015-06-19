@@ -43,7 +43,11 @@ class koha::zebra::service
 {
 	# This is a temporary requirement, while Zebra is still bound with Koha.
 	# TODO: When they are separate packages, they will be able to be started independently.
-	unless (defined(Class["::koha::service"]))
+	if (defined(Class["::koha::service"]))
+	{
+		Class["::koha::zebra::service"] ~> Class["::koha::service"]
+	}
+	else
 	{
 		# Refresh the Apache Service.
 		if ($ensure == "present")
