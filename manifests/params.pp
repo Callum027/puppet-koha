@@ -74,7 +74,7 @@ class koha::params
 			$koha_site_dir_passwd_file_mode		= 640
 
 			$koha_site_opac_port			= "80"
-			$koha_site_intra_port			= "8080"
+			$koha_site_intra_port			= "80"
 			
 			# Koha Zebra configuration variables.
 			$koha_zebra_packages			= [ "koha-common" ]
