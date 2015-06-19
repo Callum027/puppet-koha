@@ -98,6 +98,7 @@ define koha::zebra::site
 	{
 		::Koha::User[$_koha_user] ~> Class["::koha::zebra::service"]
 	}
+	else
 	{
 		::koha::user
 		{ $_koha_user:
@@ -117,7 +118,7 @@ define koha::zebra::site
 			owner	=> $_koha_user,
 			group	=> $_koha_user,
 			mode	=> $koha_log_dir_mode,
-			require	=> [ Class["::koha:zebra"], ::Koha::User[$_koha_user] ],
+			require	=> [ Class["::koha::zebra"], ::Koha::User[$_koha_user] ],
 			notify	=> Class["::koha::zebra::service"],
 		}
 	}
