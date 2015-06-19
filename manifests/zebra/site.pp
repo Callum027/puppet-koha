@@ -44,7 +44,13 @@ define koha::zebra::site
 	$koha_user			= undef, # Defined in resource body
 	$koha_zebra_password,
 
+	$koha_log_dir			= $::koha::params::koha_log_dir,
+	$koha_log_dir_mode		= $::koha::params::koha_log_dir_mode,
 	$koha_site_dir			= $::koha::params::koha_site_dir,
+	$koha_site_dir_mode		= $::koha::params::koha_site_dir_mode,
+	$koha_site_dir_conf_file_mode	= $::koha::params::koha_site_dir_conf_file_mode,
+	$koha_site_dir_passwd_file_mode	= $::koha::params::koha_site_dir_passwd_file_mode,
+
 	$koha_language			= $::koha::params::koha_language,
 	$koha_zebra_marc_format		= $::koha::params::koha_zebra_marc_format,
 
@@ -77,24 +83,52 @@ define koha::zebra::site
 		$_koha_user = $koha_user
 	}
 
-	# Generate the Koha user, if it hasn't been made already.
-	unless (defined(::Koha::User[$_koha_user]))
+	if ($ensure == "present")
 	{
-		::koha::user { $_koha_user: }
+		$directory_ensure = "directory"
+	}
+	else
+	{
+		$directory_ensure = $ensure
+	}
+
+	# Generate the Koha user, and the log directory. But only if they
+	# haven't been defined before. They also get defined in ::koha::site.
+	if (defined(::Koha::User[$_koha_user]))
+	{
+		::Koha::User[$_koha_user] ~> Class["::koha::zebra::service"]
+	}
+	{
+		::koha::user
+		{ $_koha_user:
+			notify	=> Class["::koha::zebra::service"],
+		}
+	}
+
+	if (defined(File["$koha_log_dir/$site_name"]))
+	{
+		Class["::koha::zebra"] -> File["$koha_log_dir/$site_name"] ~> Class["::koha::zebra::service"]
+	}
+	else
+	{
+		file
+		{ "$koha_log_dir/$site_name":
+			ensure	=> $directory_ensure,
+			owner	=> $_koha_user,
+			group	=> $_koha_user,
+			mode	=> $koha_log_dir_mode,
+			require	=> [ Class["::koha:zebra"], ::Koha::User[$_koha_user] ],
+			notify	=> Class["::koha::zebra::service"],
+		}
 	}
 
 	# Generate and install Zebra config files.
-	unless (defined(File["$koha_site_dir/$site_name"]))
+	if (defined(File["$koha_site_dir/$site_name"]))
 	{
-		if ($ensure == "present")
-		{
-			$directory_ensure = "directory"
-		}
-		else
-		{
-			$directory_ensure = $ensure
-		}
-
+		Class["::koha::zebra"] -> File["$koha_site_dir/$site_name"] ~> Class["::koha::zebra::service"]
+	}
+	else
+	{
 		file
 		{ "$koha_site_dir/$site_name":
 			ensure	=> $directory_ensure,
@@ -102,6 +136,7 @@ define koha::zebra::site
 			group	=> $_koha_user,
 			mode	=> 755,
 			require	=> [ Class["::koha::zebra"], ::Koha::User[$_koha_user] ],
+			notify	=> Class["::koha::zebra::service"],
 		}
 	}
 
@@ -110,7 +145,7 @@ define koha::zebra::site
 		ensure	=> $ensure,
 		owner	=> root,
 		group	=> $_koha_user,
-		mode	=> 640,
+		mode	=> $koha_site_dir_conf_file_mode,
 		content	=> template("koha/zebra-biblios-site.cfg.erb"),
 		require	=> [ Class["::koha::zebra"], ::Koha::User[$_koha_user] ],
 		notify	=> Class["::koha::zebra::service"],
@@ -121,7 +156,7 @@ define koha::zebra::site
 		ensure	=> $ensure,
 		owner	=> root,
 		group	=> $_koha_user,
-		mode	=> 640,
+		mode	=> $koha_site_dir_conf_file_mode,
 		content	=> template("koha/zebra-biblios-dom-site.cfg.erb"),
 		require	=> [ Class["::koha::zebra"], ::Koha::User[$_koha_user] ],
 		notify	=> Class["::koha::zebra::service"],
@@ -132,7 +167,7 @@ define koha::zebra::site
 		ensure	=> $ensure,
 		owner	=> root,
 		group	=> $_koha_user,
-		mode	=> 640,
+		mode	=> $koha_site_dir_conf_file_mode,
 		content	=> template("koha/zebra-authorities-site.cfg.erb"),
 		require	=> [ Class["::koha::zebra"], ::Koha::User[$_koha_user] ],
 		notify	=> Class["::koha::zebra::service"],
@@ -143,7 +178,7 @@ define koha::zebra::site
 		ensure	=> $ensure,
 		owner	=> root,
 		group	=> $_koha_user,
-		mode	=> 640,
+		mode	=> $koha_site_dir_conf_file_mode,
 		content	=> template("koha/zebra-authorities-dom-site.cfg.erb"),
 		require	=> [ Class["::koha::zebra"], ::Koha::User[$_koha_user] ],
 		notify	=> Class["::koha::zebra::service"],
@@ -154,7 +189,7 @@ define koha::zebra::site
 		ensure	=> $ensure,
 		owner	=> root,
 		group	=> $_koha_user,
-		mode	=> 640,
+		mode	=> $koha_site_dir_passwd_file_mode,
 		content	=> template("koha/zebra.passwd.erb"),
 		require	=> [ Class["::koha::zebra"], ::Koha::User[$_koha_user] ],
 		notify	=> Class["::koha::zebra::service"],

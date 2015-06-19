@@ -41,14 +41,18 @@ define koha::site
 
 	$apache_sites_available_dir		= $::koha::params::apache_sites_available_dir,
 	$apache_sites_enabled_dir		= $::koha::params::apache_sites_enabled_dir,
+	$apache_sites_dir_conf_file_mode	= $::koha::params::$apache_sites_dir_conf_file_mode,
 
 	$koha_config_dir			= $::koha::params::koha_config_dir,
 	$koha_site_dir				= $::koha::params::koha_site_dir,
+	$koha_site_dir_mode			= $::koha::params::koha_site_dir_mode,
+	$koha_site_dir_conf_file_mode		= $::koha::params::koha_site_dir_conf_file_mode,
 	$koha_site_opac_port			= $::koha::params::koha_site_opac_port,
 	$koha_site_intra_port			= $::koha::params::koha_site_intra_port,
 
 	$koha_lib_dir				= $::koha::params::koha_lib_dir,
 	$koha_log_dir				= $::koha::params::koha_log_dir,
+	$koha_log_dir_mode			= $::koha::params::koha_log_dir_mode,
 	$koha_plugins_dir			= undef, # Defined in resource body
 
 	$koha_zebra_biblios_config		= $::koha::params::koha_zebra_biblios_config,
@@ -264,10 +268,6 @@ define koha::site
 		$_intranet_error_log_file = $intranet_error_log_file
 	}
 
-	# Generate the Koha user.
-	::koha::user { $_koha_user: }
-
-	# Install the Koha configuration file for this site.
 	if ($ensure == "present")
 	{
 		$directory_ensure	= "directory"
@@ -279,12 +279,29 @@ define koha::site
 		$link_ensure		= $ensure
 	}
 
+	# Generate the Koha user, and the log directory.
+	::koha::user
+	{ $_koha_user:
+		notify	=> Class["::apache::service"],
+	}
+
 	file
-	{ [ "$koha_site_dir/$site_name", "$koha_log_dir/$site_name" ]:
+	{ "$koha_log_dir/$site_name":
 		ensure	=> $directory_ensure,
 		owner	=> $_koha_user,
 		group	=> $_koha_user,
-		mode	=> 755,
+		mode	=> $koha_log_dir_mode,
+		require	=> [ Class["::koha"], ::Koha::User[$_koha_user] ],
+		notify	=> Class["::apache::service"],
+	}
+
+	# Install the Koha configuration file for this site.
+	file
+	{ "$koha_site_dir/$site_name":
+		ensure	=> $directory_ensure,
+		owner	=> $_koha_user,
+		group	=> $_koha_user,
+		mode	=> $koha_site_dir_mode,
 		require	=> [ Class["::koha"], ::Koha::User[$_koha_user] ],
 		notify	=> Class["::apache::service"],
 	}
@@ -294,7 +311,7 @@ define koha::site
 		ensure	=> $ensure,
 		owner	=> "root",
 		group	=> $_koha_user,
-		mode	=> 640,
+		mode	=> $koha_site_dir_conf_file_mode,
 		content	=> template("koha/koha-conf-site.xml.erb"),
 		require	=> [ Class["::koha"], File["$koha_site_dir/$site_name"], ::Koha::User[$_koha_user] ],
 		notify	=> Class["::apache::service"],
@@ -306,7 +323,7 @@ define koha::site
 		ensure	=> $ensure,
 		owner	=> "root",
 		group	=> $_koha_user,
-		mode	=> 640,
+		mode	=> $apache_sites_dir_conf_file_mode,
 		content	=> template("koha/apache-site.conf.erb"),
 		require	=> [ Class["::koha"], File["$koha_site_dir/$site_name"], ::Koha::User[$_koha_user] ],
 		notify	=> Class["::apache::service"],

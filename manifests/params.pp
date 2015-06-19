@@ -54,6 +54,7 @@ class koha::params
 			# Apache configuration variables.
 			$apache_sites_available_dir		= "/etc/apache2/sites-available"
 			$apache_sites_enabled_dir		= "/etc/apache2/sites-enabled"
+			$apache_sites_dir_conf_file_mode	= 640
 
 			# Koha configuration variables.
 			$koha_repo_release			= "stable"
@@ -62,8 +63,14 @@ class koha::params
 			$koha_language				= "en"
 			$koha_config_dir			= "/etc/koha"
 			$koha_lib_dir				= "/var/lib/koha"
+
 			$koha_log_dir				= "/var/log/koha"
+			$koha_log_dir_mode			= 775
+
 			$koha_site_dir				= "/etc/koha/sites"
+			$koha_site_dir_mode			= 775
+			$koha_site_dir_conf_file_mode		= 640
+			$koha_site_dir_passwd_file_mode		= 640
 
 			$koha_site_opac_port			= "80"
 			$koha_site_intra_port			= "8080"
