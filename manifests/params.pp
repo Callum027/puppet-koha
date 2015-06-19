@@ -65,10 +65,10 @@ class koha::params
 			$koha_lib_dir				= "/var/lib/koha"
 
 			$koha_log_dir				= "/var/log/koha"
-			$koha_log_dir_mode			= 775
+			$koha_log_dir_mode			= 755
 
 			$koha_site_dir				= "/etc/koha/sites"
-			$koha_site_dir_mode			= 775
+			$koha_site_dir_mode			= 755
 			$koha_site_dir_conf_file_mode		= 640
 			$koha_site_dir_passwd_file_mode		= 640
 

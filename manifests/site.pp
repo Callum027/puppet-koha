@@ -41,7 +41,7 @@ define koha::site
 
 	$apache_sites_available_dir		= $::koha::params::apache_sites_available_dir,
 	$apache_sites_enabled_dir		= $::koha::params::apache_sites_enabled_dir,
-	$apache_sites_dir_conf_file_mode	= $::koha::params::$apache_sites_dir_conf_file_mode,
+	$apache_sites_dir_conf_file_mode	= $::koha::params::apache_sites_dir_conf_file_mode,
 
 	$koha_config_dir			= $::koha::params::koha_config_dir,
 	$koha_site_dir				= $::koha::params::koha_site_dir,
