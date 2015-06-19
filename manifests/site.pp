@@ -303,7 +303,8 @@ define koha::site
 		group	=> $_koha_user,
 		mode	=> $koha_site_dir_mode,
 		require	=> [ Class["::koha"], ::Koha::User[$_koha_user] ],
-		notify	=> Class["::apache::service"],
+		before	=> Class["::apache::service"],
+		notify	=> Class["::koha::service"],
 	}
 
 	file
@@ -314,7 +315,8 @@ define koha::site
 		mode	=> $koha_site_dir_conf_file_mode,
 		content	=> template("koha/koha-conf-site.xml.erb"),
 		require	=> [ Class["::koha"], File["$koha_site_dir/$site_name"], ::Koha::User[$_koha_user] ],
-		notify	=> Class["::apache::service"],
+		before	=> Class["::apache::service"],
+		notify	=> Class["::koha::service"],
 	}
 
 	# Generate Apache vhosts for the OPAC and Intranet servers for this Koha site.
@@ -326,6 +328,7 @@ define koha::site
 		mode	=> $apache_sites_dir_conf_file_mode,
 		content	=> template("koha/apache-site.conf.erb"),
 		require	=> [ Class["::koha"], File["$koha_site_dir/$site_name"], ::Koha::User[$_koha_user] ],
+		before	=> Class["::koha::service"],
 		notify	=> Class["::apache::service"],
 	}
 
@@ -337,12 +340,15 @@ define koha::site
 		group	=> $_koha_user,
 		mode	=> 640,
 		require	=> [ Class["::koha"], File[["$koha_site_dir/$site_name", "$apache_sites_available_dir/$site_name.conf"]], ::Koha::User[$_koha_user] ],
+		before	=> Class["::koha::service"],
 		notify	=> Class["::apache::service"],
 	}
-
 
 	if ($ensure != "present" and $ensure != "absent")
 	{
 		fail("invalid value for ensure: $ensure")
 	}
+
+	# Start the Koha service, if it hasn't been already.
+	include koha::service
 }
