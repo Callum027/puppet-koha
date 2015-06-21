@@ -72,6 +72,7 @@ class koha::install
 		class
 		{ "::apache":
 			mpm_module	=> "itk",
+			default_vhost	=> false,
 		}
 
 		contain "::apache"
