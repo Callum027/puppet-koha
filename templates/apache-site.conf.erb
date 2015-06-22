@@ -3,6 +3,11 @@
 
 # Koha instance <%= @site_name %> Apache config.
 
+Listen <%= @koha_site_opac_port %>
+<%- if @koha_site_opac_port != @koha_site_intra_port -%>
+Listen <%= @koha_site_intra_port %>
+<%- end -%>
+
 # OPAC
 <VirtualHost *:<%= @koha_site_opac_port %>>
    Include /etc/koha/apache-shared.conf
@@ -17,13 +22,13 @@
 
 <% if @_opac_error_log_file -%>
    ErrorLog    <%= @_opac_error_log_file %>
-<% end -%>
-<% if @_opac_access_log_file -%>
+<%- end -%>
+<%- if @_opac_access_log_file -%>
    TransferLog <%= @_opac_access_log_file %>
-<% end -%>
+<%- end -%>
 <% if @_opac_rewrite_log_file -%>
    RewriteLog  <%= @_opac_rewrite_log_file %>
-<% end -%>
+<%- end -%>
 </VirtualHost>
 
 # Intranet
@@ -40,11 +45,11 @@
 
 <% if @_intranet_error_log_file -%>
    ErrorLog    <%= @_intranet_error_log_file %>
-<% end -%>
-<% if @_intranet_access_log_file -%>
+<%- end -%>
+<%- if @_intranet_access_log_file -%>
    TransferLog <%= @_intranet_access_log_file %>
-<% end -%>
-<% if @_intranet_rewrite_log_file -%>
+<%- end -%>
+<%- if @_intranet_rewrite_log_file -%>
    RewriteLog  <%= @_intranet_rewrite_log_file %>
-<% end -%>
+<%- end -%>
 </VirtualHost>
