@@ -8,13 +8,13 @@
 <!-- Uncomment the following entry if you want to run the public Z39.50 server.
     Also uncomment the <server> and <serverinfo> sections for id 'publicserver'
     under PUBLICSERVER'S BIBLIOGRAPHIC RECORDS title-->
-<%- if @koha_zebra_sru_hostname.nil? -%>
+<%- if @public_z3950_server != true -%>
 <!--
 <%- end -%>
 <listen id="publicserver" >tcp:@:<%= @koha_zebra_sru_biblios_port %></listen>
-<%- if @koha_zebra_sru_hostname.nil? -%>
+<%- if @public_z3950_server != true -%>
 -->
-<%- end -%>
+<%- end %>
 
 <!-- Settings for special biblio server instance for PazPar2.
      Because PazPar2 only connects to a Z39.50 server using TCP/IP,
@@ -31,8 +31,8 @@
 
 <!-- BIBLIOGRAPHIC RECORDS -->
 <server id="biblioserver"  listenref="biblioserver">
-    <directory>/var/lib/koha/<%= @site_name %>/biblios</directory>
-    <config>/etc/koha/sites/<%= @site_name %>/<%= @koha_zebra_biblios_config %></config>
+    <directory><%= @koha_lib_dir %>/<%= @site_name %>/biblios</directory>
+    <config><%= @koha_site_dir %>/<%= @site_name %>/<%= @koha_zebra_biblios_config %></config>
     <cql2rpn>/etc/koha/zebradb/pqf.properties</cql2rpn>
 
 <%- if @koha_zebra_biblios_indexing_mode == "dom" -%>
@@ -97,7 +97,7 @@
     </retrievalinfo>
 <%- end %>
 
-<%- if @koha_zebra_sru_hostname.nil? -%>
+<%- if @public_z3950_server != true -%>
 <!--
 <%- end -%>
     <xi:include href="<%= @koha_config_dir %>/zebradb/explain-biblios.xml"
@@ -107,12 +107,12 @@
           <serverInfo>
             <host><%= @koha_zebra_sru_hostname %></host>
             <port><%= @koha_zebra_sru_biblios_port %></port>
-            <database>biblios</database>
+            <database><%= @koha_zebra_sru_biblios_database %></database>
           </serverInfo>
         </explain>
       </xi:fallback>
     </xi:include>
-<%- if @koha_zebra_sru_hostname.nil? -%>
+<%- if @public_z3950_server != true -%>
 -->
 <%- end -%>
 </server>
@@ -181,7 +181,7 @@
     </retrievalinfo>
 <%- end -%>
 
-<%- if @koha_zebra_sru_hostname.nil? -%>
+<%- if @public_z3950_server != true -%>
 <!--
 <%- end -%>
     <xi:include href="<%= @koha_config_dir %>/zebradb/explain-authorities.xml"
@@ -191,12 +191,12 @@
           <serverInfo>
             <host><%= @koha_zebra_sru_hostname %></host>
             <port><%= @koha_zebra_sru_authorities_port %></port>
-            <database><%= @_koha_zebra_biblioserver %></database>
+            <database><%= @koha_zebra_sru_authorities_database %></database>
           </serverInfo>
         </explain>
       </xi:fallback>
   </xi:include>
-<%- if @koha_zebra_sru_hostname.nil? -%>
+<%- if @public_z3950_server != true -%>
 -->
 <%- end -%>
 </server>
@@ -208,7 +208,7 @@
 
 <!-- PUBLICSERVER'S BIBLIOGRAPHIC RECORDS -->
 <!-- This can be used to set up a public Z39.50/SRU server. -->
-<%- if @koha_zebra_sru_hostname.nil? -%>
+<%- if @public_z3950_server != true -%>
 <!--
 <%- end -%>
 <server id="publicserver"  listenref="publicserver">
@@ -285,7 +285,7 @@
           <serverInfo>
             <host><%= @koha_zebra_sru_hostname %></host>
             <port><%= @koha_zebra_sru_biblios_port %></port>
-            <database><%= @_koha_zebra_biblioserver %></database>
+            <database><%= @koha_zebra_sru_biblios_database %></database>
           </serverInfo>
         </explain>
       </xi:fallback>
@@ -296,29 +296,29 @@
         <user>kohauser</user>
         <password><%= @koha_zebra_password %></password>
 </serverinfo>
-<%- if @koha_zebra_sru_hostname.nil? -%>
+<%- if @public_z3950_server != true -%>
 -->
 <%- end -%>
 
 <config>
  <db_scheme>mysql</db_scheme>
- <database><%= @_mysql_db %></database>
+ <database><%= @mysql_db %></database>
  <hostname><%= @mysql_hostname %></hostname>
  <port><%= @mysql_port %></port>
- <user><%= @_mysql_user %></user>
+ <user><%= @mysql_user %></user>
  <pass><%= @mysql_password %></pass>
  <biblioserver><%= @_koha_zebra_biblioserver %></biblioserver>
  <biblioservershadow>1</biblioservershadow>
  <authorityserver><%= @_koha_zebra_authorityserver %></authorityserver>
  <authorityservershadow>1</authorityservershadow>
- <pluginsdir><%= @_koha_plugins_dir %></pluginsdir>
+ <pluginsdir><%= @koha_lib_dir %>/<%= @site_name %>/plugins</pluginsdir>
  <enable_plugins>0</enable_plugins>
  <intranetdir>/usr/share/koha/intranet/cgi-bin</intranetdir>
  <opacdir>/usr/share/koha/opac/cgi-bin/opac</opacdir>
  <opachtdocs>/usr/share/koha/opac/htdocs/opac-tmpl</opachtdocs>
  <intrahtdocs>/usr/share/koha/intranet/htdocs/intranet-tmpl</intrahtdocs>
  <includes>/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/includes/</includes>
- <logdir>/var/log/koha/<%= @site_name %></logdir>
+ <logdir><%= @koha_log_dir %>/<%= @site_name %></logdir>
  <docdir>/usr/share/doc/koha-common</docdir>
  <backupdir>/var/spool/koha/<%= @site_name %></backupdir>
  <!-- Enable the two following to allow superlibrarians to download

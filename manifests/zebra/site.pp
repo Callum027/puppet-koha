@@ -37,29 +37,50 @@
 #
 define koha::zebra::site
 (
-	$ensure				= "present",
+	$ensure					= "present",
+	$site_name				= $name,
 
-	$site_name			= $name,
-
-	$koha_user			= undef, # Defined in resource body
+	# Global koha-conf.xml options.
+	$koha_user				= undef, # Defined in resource body
 	$koha_zebra_password,
 
-	$koha_log_dir			= $::koha::params::koha_log_dir,
-	$koha_log_dir_mode		= $::koha::params::koha_log_dir_mode,
-	$koha_site_dir			= $::koha::params::koha_site_dir,
-	$koha_site_dir_mode		= $::koha::params::koha_site_dir_mode,
-	$koha_site_dir_conf_file_mode	= $::koha::params::koha_site_dir_conf_file_mode,
-	$koha_site_dir_passwd_file_mode	= $::koha::params::koha_site_dir_passwd_file_mode,
+	$koha_config_dir			= $::koha::params::koha_config_dir,
+	$koha_site_dir				= $::koha::params::koha_site_dir,
+	$koha_site_dir_mode			= $::koha::params::koha_site_dir_mode,
+	$koha_site_dir_conf_file_mode		= $::koha::params::koha_site_dir_conf_file_mode,
+	$koha_site_opac_port			= $::koha::params::koha_site_opac_port,
+	$koha_site_intra_port			= $::koha::params::koha_site_intra_port,
 
-	$koha_language			= $::koha::params::koha_language,
-	$koha_zebra_marc_format		= $::koha::params::koha_zebra_marc_format,
+	$koha_lib_dir				= $::koha::params::koha_lib_dir,
+	$koha_log_dir				= $::koha::params::koha_log_dir,
+	$koha_log_dir_mode			= $::koha::params::koha_log_dir_mode,
 
-	$koha_zebra_biblios_config	= $::koha::params::koha_zebra_biblios_config,
-	$koha_zebra_authorities_config	= $::koha::params::koha_zebra_authorities_config,
+	$koha_zebra_biblios_config		= $::koha::params::koha_zebra_biblios_config,
+	$koha_zebra_authorities_config		= $::koha::params::koha_zebra_authorities_config,
 
-	$pwgen				= $::koha::params::pwgen,
-	$sed				= $::koha::params::sed,
-	$test				= $::koha::params::test
+	$koha_zebra_biblios_indexing_mode	= $::koha::params::koha_zebra_biblios_indexing_mode,
+	$koha_zebra_authorities_indexing_mode	= $::koha::params::koha_zebra_authorities_indexing_mode,
+
+	$koha_zebra_marc_format			= $::koha::params::koha_zebra_marc_format,
+
+	$koha_zebra_server_biblios_port		= $::koha::params::koha_zebra_sru_biblios_port,
+
+	$koha_zebra_server_authorities_port	= $::koha::params::koha_zebra_sru_authorities_port,
+
+	$koha_zebra_biblioserver		= $::koha::params::koha_zebra_biblioserver,
+	$koha_zebra_authorityserver		= $::koha::params::koha_zebra_authorityserver,
+
+	# Koha Zebra-specific koha-conf.xml configuration options.
+	$public_z3950_server			= false,
+	$koha_zebra_sru_hostname		= undef, # Defined in resource body
+
+	$koha_zebra_sru_biblios_port		= $::koha::params::koha_zebra_sru_biblios_port,
+
+	$koha_zebra_sru_authorities_port	= $::koha::params::koha_zebra_sru_authorities_port,
+
+	$koha_zebra_sru_biblios_database	= $::koha::params::koha_zebra_sru_biblios_database,
+
+	$koha_zebra_sru_authorities_database	= $::koha::params::koha_zebra_sru_authorities_database
 )
 {
 	unless (defined(Class["::koha::zebra"]))
@@ -81,6 +102,16 @@ define koha::zebra::site
 	else
 	{
 		$_koha_user = $koha_user
+	}
+
+	# Set the default value for the public Zebra Z39.50 server.
+	if ($koha_zebra_sru_hostname == undef)
+	{
+		$_koha_zebra_sru_hostname = "$site_name.$::domain"
+	}
+	else
+	{
+		$_koha_zebra_sru_hostname = $koha_zebra_sru_hostname
 	}
 
 	if ($ensure == "present")
@@ -141,6 +172,56 @@ define koha::zebra::site
 		}
 	}
 
+	# Add global configuration options to koha-conf.xml, if it has not been defined already.
+	unless (defined(::Koha::Files::Koha_conf_xml_site[$site_name]))
+	{
+		::koha::files::koha_conf_xml_site
+		{ $site_name:
+			# Global parameters.
+			koha_user				=> $_koha_user,
+			koha_zebra_password			=> $koha_zebra_password,
+
+			koha_config_dir				=> $koha_config_dir,
+			koha_site_dir				=> $koha_site_dir,
+			koha_site_dir_conf_file_mode		=> $koha_site_dir_conf_file_mode,
+			koha_lib_dir				=> $koha_lib_dir,
+			koha_log_dir				=> $koha_log_dir,
+			koha_log_dir_mode			=> $koha_log_dir_mode,
+
+			koha_zebra_biblios_config		=> $koha_zebra_biblios_config,
+			koha_zebra_authorities_config		=> $koha_zebra_authorities_config,
+
+			koha_zebra_biblios_indexing_mode	=>$koha_zebra_biblios_indexing_mode,
+			koha_zebra_authorities_indexing_mode	=>$koha_zebra_authorities_indexing_mode,
+
+			koha_zebra_marc_format			=> $koha_zebra_marc_format,
+
+			koha_zebra_server_biblios_port		=> $koha_zebra_server_biblios_port,
+			koha_zebra_server_authorities_port	=> $koha_zebra_server_authorities_port,
+
+			koha_zebra_biblioserver			=> $koha_zebra_biblioserver,
+			koha_zebra_authorityserver		=> $koha_zebra_authorityserver,
+		}
+	}
+
+	# Establish the relationship between the Zebra package installation, koha-conf.xml
+	# and the Zebra service.
+	Class["::koha::zebra"] -> ::Koha::Files::Koha_conf_xml_site[$site_name] ~> Class["::koha::zebra::service"]
+
+	# Parameters specific to koha::zebra::site.
+	::Koha::Files::Koha_conf_xml_site[$site_name]
+	{
+		public_z3950_server			=> $public_z3950_server,
+		koha_zebra_sru_hostname			=> $_koha_zebra_sru_hostname,
+
+		koha_zebra_sru_biblios_port		=> $koha_zebra_sru_biblios_port,
+		koha_zebra_sru_authorities_port		=> $koha_zebra_sru_authorities_port,
+
+		koha_zebra_sru_biblios_database		=> $koha_zebra_sru_biblios_database,
+		koha_zebra_sru_authorities_database	=> $koha_zebra_sru_authorities_database,
+	}
+
+	# Required configuration files for the Zebra index.
 	file
 	{ "$koha_site_dir/$site_name/zebra-biblios.cfg":
 		ensure	=> $ensure,

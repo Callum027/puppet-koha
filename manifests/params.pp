@@ -84,10 +84,14 @@ class koha::params
 			$koha_zebra_packages			= [ "koha-common" ]
 			$koha_zebra_services			= [ "koha-common" ]
 
-			$koha_zebra_server_port			= "210"
+			$koha_zebra_sru_biblios_port		= "9998"
+			$koha_zebra_sru_authorities_port	= "9999"
 
-			$koha_zebra_biblioserver		= "biblios"
-			$koha_zebra_authorityserver		= "authority"
+			$koha_zebra_sru_biblios_database	= "biblios"
+			$koha_zebra_sru_authorities_database	= "authority"
+
+			$koha_zebra_biblioserver		= $koha_zebra_sru_biblios_database
+			$koha_zebra_authorityserver		= $koha_zebra_sru_authorities_database
 
 			$koha_zebra_marc_format			= "marc21"
 
