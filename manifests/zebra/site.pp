@@ -77,12 +77,11 @@ define koha::zebra::site
 	$public_z3950_server			= false,
 	$koha_zebra_sru_hostname		= undef, # Defined in resource body
 
+	$koha_zebra_z3950_port			= $::koha::params::koha_zebra_z3950_port,
 	$koha_zebra_sru_biblios_port		= $::koha::params::koha_zebra_sru_biblios_port,
-
 	$koha_zebra_sru_authorities_port	= $::koha::params::koha_zebra_sru_authorities_port,
 
 	$koha_zebra_sru_biblios_database	= $::koha::params::koha_zebra_sru_biblios_database,
-
 	$koha_zebra_sru_authorities_database	= $::koha::params::koha_zebra_sru_authorities_database
 )
 {
@@ -217,6 +216,7 @@ define koha::zebra::site
 		public_z3950_server			=> $public_z3950_server,
 		koha_zebra_sru_hostname			=> $_koha_zebra_sru_hostname,
 
+		koha_zebra_z3950_port			=> $koha_zebra_z3950_port,
 		koha_zebra_sru_biblios_port		=> $koha_zebra_sru_biblios_port,
 		koha_zebra_sru_authorities_port		=> $koha_zebra_sru_authorities_port,
 

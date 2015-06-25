@@ -84,6 +84,7 @@ class koha::params
 			$koha_zebra_packages			= [ "koha-common" ]
 			$koha_zebra_services			= [ "koha-common" ]
 
+			$koha_zebra_z3950_port			= "210"
 			$koha_zebra_sru_biblios_port		= "9998"
 			$koha_zebra_sru_authorities_port	= "9999"
 

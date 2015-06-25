@@ -11,7 +11,7 @@
 <%- if @public_z3950_server != true -%>
 <!--
 <%- end -%>
-<listen id="publicserver" >tcp:@:<%= @koha_zebra_sru_biblios_port %></listen>
+<listen id="publicserver" >tcp:@:<%= @koha_zebra_z3950_port %></listen>
 <%- if @public_z3950_server != true -%>
 -->
 <%- end %>

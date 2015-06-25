@@ -81,6 +81,7 @@ define koha::files::koha_conf_xml_site
 	$public_z3950_server			= false,
 	$koha_zebra_sru_hostname		= undef,
 
+	$koha_zebra_z3950_port			= undef,
 	$koha_zebra_sru_biblios_port		= undef,
 	$koha_zebra_sru_authorities_port	= undef,
 
