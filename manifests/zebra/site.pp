@@ -40,6 +40,9 @@ define koha::zebra::site
 	$ensure					= "present",
 	$site_name				= $name,
 
+	# Zebra options.
+	$koha_language				= $::koha::params::koha_language,
+
 	# Global koha-conf.xml options.
 	$koha_user				= undef, # Defined in resource body
 	$koha_zebra_password,
@@ -209,7 +212,7 @@ define koha::zebra::site
 	Class["::koha::zebra"] -> ::Koha::Files::Koha_conf_xml_site[$site_name] ~> Class["::koha::zebra::service"]
 
 	# Parameters specific to koha::zebra::site.
-	::Koha::Files::Koha_conf_xml_site[$site_name]
+	::Koha::Files::Koha_conf_xml_site <| title == $site_name |>
 	{
 		public_z3950_server			=> $public_z3950_server,
 		koha_zebra_sru_hostname			=> $_koha_zebra_sru_hostname,

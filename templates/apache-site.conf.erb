@@ -18,7 +18,7 @@ Listen <%= @koha_site_intra_port %>
    SetEnv KOHA_CONF "<%= @koha_site_dir %>/<%= @site_name %>/koha-conf.xml"
    SetEnv MEMCACHED_SERVERS "<%= @_memcached_servers %>"
    SetEnv MEMCACHED_NAMESPACE "<%= @_memcached_namespace %>"
-   AssignUserID <%= @_site_user %> <%= @_site_group %>
+   AssignUserID <%= @_koha_user %> <%= @_koha_user %>
 
 <% if @_opac_error_log_file -%>
    ErrorLog    <%= @_opac_error_log_file %>
@@ -41,7 +41,7 @@ Listen <%= @koha_site_intra_port %>
    SetEnv KOHA_CONF "<%= @koha_site_dir %>/<%= @site_name %>/koha-conf.xml"
    SetEnv MEMCACHED_SERVERS "<%= @_memcached_servers %>"
    SetEnv MEMCACHED_NAMESPACE "<%= @_memcached_namespace %>"
-   AssignUserID <%= @_site_user %> <%= @_site_group %>
+   AssignUserID <%= @_koha_user %> <%= @_koha_user %>
 
 <% if @_intranet_error_log_file -%>
    ErrorLog    <%= @_intranet_error_log_file %>

@@ -88,11 +88,6 @@ define koha::files::koha_conf_xml_site
 	$koha_zebra_sru_authorities_database	= undef
 )
 {
-	unless (defined(Class["::koha"]))
-	{
-		fail("You must define the Koha base class before using setting up a Koha site")
-	}
-
 	if ($koha_configured == true and $koha_zebra_configured != true and $koha_zebra_server != undef)
 	{
 		$_koha_zebra_biblioserver = "tcp:$koha_zebra_server:$koha_zebra_server_biblios_port/$koha_zebra_biblioserver"
@@ -108,7 +103,7 @@ define koha::files::koha_conf_xml_site
 	{ "$koha_site_dir/$site_name/koha-conf.xml":
 		ensure	=> $ensure,
 		owner	=> "root",
-		group	=> $_koha_user,
+		group	=> $koha_user,
 		mode	=> $koha_site_dir_conf_file_mode,
 		content	=> template("koha/koha-conf-site.xml.erb"),
 	}

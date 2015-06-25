@@ -59,7 +59,7 @@ define koha::site
 	$opac_error_log_file			= undef, # Defined in resource body
 
 	$intranet_access_log_file		= undef, # Defined in resource body
-	$intranet_error_log_file		= undef  # Defined in resource body
+	$intranet_error_log_file		= undef,  # Defined in resource body
 
 	# Global koha-conf.xml options.
 	$koha_user				= undef, # Defined in resource body
@@ -277,18 +277,6 @@ define koha::site
 		notify	=> Class["::koha::service"],
 	}
 
-	file
-	{ "$koha_site_dir/$site_name/koha-conf.xml":
-		ensure	=> $ensure,
-		owner	=> "root",
-		group	=> $_koha_user,
-		mode	=> $koha_site_dir_conf_file_mode,
-		content	=> template("koha/koha-conf-site.xml.erb"),
-		require	=> [ Class["::koha"], File["$koha_site_dir/$site_name"], ::Koha::User[$_koha_user] ],
-		before	=> Class["::apache::service"],
-		notify	=> Class["::koha::service"],
-	}
-
 	# Add global configuration options to koha-conf.xml, if it has not been defined already.
 	unless (defined(::Koha::Files::Koha_conf_xml_site[$site_name]))
 	{
@@ -328,7 +316,7 @@ define koha::site
 	::Koha::Files::Koha_conf_xml_site[$site_name] ~> Class["::koha::service"]
 
 	# Parameters specific to koha::site.
-	::Koha::Files::Koha_conf_xml_site[$site_name]
+	::Koha::Files::Koha_conf_xml_site <| name == $site_name |>
 	{
 		mysql_db		=> $_mysql_db,
 		mysql_hostname		=> $mysql_hostname,
