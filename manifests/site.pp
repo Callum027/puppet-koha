@@ -40,11 +40,13 @@ define koha::site
 	$ensure					= "present",
 	$site_name				= $name,
 
-	# Apache options.
-	$apache_sites_available_dir		= $::koha::params::apache_sites_available_dir,
-	$apache_sites_enabled_dir		= $::koha::params::apache_sites_enabled_dir,
-	$apache_sites_dir_conf_file_mode	= $::koha::params::apache_sites_dir_conf_file_mode,
+	$opac_port
+	$intra_port
 
+	# Koha options.
+	$koha_user				= undef, # Defined in resource body
+
+	# Apache options.
 	$site_intra				= undef, # Defined in resource body
 
 	$memcached_servers			= undef,
@@ -61,69 +63,51 @@ define koha::site
 	$intranet_access_log_file		= undef, # Defined in resource body
 	$intranet_error_log_file		= undef,  # Defined in resource body
 
-	# Global koha-conf.xml options.
-	$koha_user				= undef, # Defined in resource body
-	$koha_zebra_password,
+	# Database options.
+	$db_scheme				= $::koha::params::koha_conf_xml::config_db_scheme,
+	$database				= undef, # Defined in resource body
+	$db_hostname				= $::koha::params::koha_conf_xml::config_db_scheme,
+	$db_port				= undef,
+	$db_user				= undef, # Defined in resource body
+	$db_password,
 
-	$koha_config_dir			= $::koha::params::koha_config_dir,
+	# Zebra options.
+	$zebra_server				= undef, # TODO: auto-discover for remote Zebra server
+
+	$zebra_server_biblios_port		= $::koha::params::koha_conf_xml::biblioserver_sru_port,
+	$zebra_server_authorities_port		= $::koha::params::koha_conf_xml::authorityserver_sru_port,
+
+	$zebra_server_biblios_database		= $::koha::params::koha_conf_xml::config_biblioserver,
+	$zebra_server_authorities_database	= $::koha::params::koha_conf_xml::config_authorityserver,
+
+	$zebra_user				= $::koha::params::zebra_user,
+	$zebra_password,
+
+	# koha::params default values.
+	$apache_sites_available_dir		= $::koha::params::apache_sites_available_dir,
+	$apache_sites_enabled_dir		= $::koha::params::apache_sites_enabled_dir,
+	$apache_sites_dir_conf_file_owner	= $::koha::params::apache_sites_dir_conf_file_owner,
+	$apache_sites_dir_conf_file_mode	= $::koha::params::apache_sites_dir_conf_file_mode,
+
 	$koha_site_dir				= $::koha::params::koha_site_dir,
 	$koha_site_dir_mode			= $::koha::params::koha_site_dir_mode,
-	$koha_site_dir_conf_file_mode		= $::koha::params::koha_site_dir_conf_file_mode,
-	$koha_site_opac_port			= $::koha::params::koha_site_opac_port,
-	$koha_site_intra_port			= $::koha::params::koha_site_intra_port,
 
-	$koha_lib_dir				= $::koha::params::koha_lib_dir,
 	$koha_log_dir				= $::koha::params::koha_log_dir,
-	$koha_log_dir_mode			= $::koha::params::koha_log_dir_mode,
-
-	$koha_zebra_biblios_config		= $::koha::params::koha_zebra_biblios_config,
-	$koha_zebra_authorities_config		= $::koha::params::koha_zebra_authorities_config,
-
-	$koha_zebra_biblios_indexing_mode	= $::koha::params::koha_zebra_biblios_indexing_mode,
-	$koha_zebra_authorities_indexing_mode	= $::koha::params::koha_zebra_authorities_indexing_mode,
-
-	$koha_zebra_marc_format			= $::koha::params::koha_zebra_marc_format,
-
-	$koha_zebra_server_biblios_port		= $::koha::params::koha_zebra_sru_biblios_port,
-
-	$koha_zebra_server_authorities_port	= $::koha::params::koha_zebra_sru_authorities_port,
-
-	$koha_zebra_biblioserver		= $::koha::params::koha_zebra_biblioserver,
-	$koha_zebra_authorityserver		= $::koha::params::koha_zebra_authorityserver,
-
-	# koha-conf.xml options specific to the koha::site class.
-	$mysql_db				= undef, # Defined in resource body
-	$mysql_hostname				= "localhost",
-	$mysql_port				= "3306",
-	$mysql_user				= undef, # Defined in resource body
-	$mysql_password,
-
-	$koha_zebra_server			= undef # TODO: auto-discover for remote Z39.50 server
+	$koha_log_dir_mode			= $::koha::params::koha_log_dir_mode
 )
 {
+	##
+	# Resource dependencies.
+	##
+
 	unless (defined(Class["::koha"]))
 	{
 		fail("You must define the Koha base class before using setting up a Koha site")
 	}
 
-	if ($koha_zebra_server != undef)
-	{
-		$_koha_zebra_biblioserver = "tcp:$koha_zebra_server:$koha_zebra_server_biblios_port/$koha_zebra_biblioserver"
-		$_koha_zebra_authorityserver = "tcp:$koha_zebra_server:$koha_zebra_server_autorities_port/$koha_zebra_authorityserver"
-	}
-	else
-	{
-		$_koha_zebra_biblioserver = $koha_zebra_biblioserver
-		$_koha_zebra_authorityserver = $koha_zebra_authorityserver
-	}
-
-	if ($koha_zebra_sru_hostname != undef)
-	{
-		if ($koha_zebra_sru_biblios_port == undef)
-		{
-			fail("Zebra SRU biblios port not defined, but SRU hostname specified")
-		}
-	}
+	##
+	# Set default values.
+	##
 
 	if ($site_intra == undef)
 	{
@@ -176,7 +160,7 @@ define koha::site
 
 	if ($memcached_namespace == undef)
 	{
-		$_memcached_namespace = "koha_$site_name"
+		$_memcached_namespace = "koha_${site_name}"
 	}
 	else
 	{
@@ -185,7 +169,7 @@ define koha::site
 
 	if ($opac_server_name == undef)
 	{
-		$_opac_server_name = "$site_name.$::domain"
+		$_opac_server_name = "${site_name}.${::domain}"
 	}
 	else
 	{
@@ -194,7 +178,7 @@ define koha::site
 
 	if ($intra_server_name == undef)
 	{
-		$_intra_server_name = "$_site_intra.$::domain"
+		$_intra_server_name = "${_site_intra}.${::domain}"
 	}
 	else
 	{
@@ -204,7 +188,7 @@ define koha::site
 	# Apache log files.
 	if ($opac_access_log_file == undef)
 	{
-		$_opac_access_log_file = "$koha_log_dir/$site_name/opac-access.log"
+		$_opac_access_log_file = "${koha_log_dir}/${site_name}/opac-access.log"
 	}
 	else
 	{
@@ -213,7 +197,7 @@ define koha::site
 
 	if ($opac_error_log_file == undef)
 	{
-		$_opac_error_log_file = "$koha_log_dir/$site_name/opac-error.log"
+		$_opac_error_log_file = "${koha_log_dir}/${site_name}/opac-error.log"
 	}
 	else
 	{
@@ -222,7 +206,7 @@ define koha::site
 
 	if ($intranet_access_log_file == undef)
 	{
-		$_intranet_access_log_file = "$koha_log_dir/$site_name/intranet-access.log"
+		$_intranet_access_log_file = "${koha_log_dir}/${site_name}/intranet-access.log"
 	}
 	else
 	{
@@ -231,7 +215,7 @@ define koha::site
 
 	if ($intranet_error_log_file == undef)
 	{
-		$_intranet_error_log_file = "$koha_log_dir/$site_name/intranet-error.log"
+		$_intranet_error_log_file = "${koha_log_dir}/${site_name}/intranet-error.log"
 	}
 	else
 	{
@@ -248,6 +232,22 @@ define koha::site
 		$directory_ensure	= $ensure
 		$link_ensure		= $ensure
 	}
+
+	##
+	# Type validation.
+	##
+
+	if ($koha_zebra_sru_hostname != undef)
+	{
+		if ($koha_zebra_sru_biblios_port == undef)
+		{
+			fail("Zebra SRU biblios port not defined, but SRU hostname specified")
+		}
+	}
+
+	##
+	# Resource declaration.
+	##
 
 	# Generate the Koha user, and the log directory.
 	::koha::user
@@ -277,61 +277,37 @@ define koha::site
 		notify	=> Class["::koha::service"],
 	}
 
-	# Add global configuration options to koha-conf.xml, if it has not been defined already.
-	unless (defined(::Koha::Files::Koha_conf_xml_site[$site_name]))
-	{
-		::koha::files::koha_conf_xml_site
-		{ $site_name:
-			# Global parameters.
-			koha_user				=> $_koha_user,
-			koha_zebra_password			=> $koha_zebra_password,
+	::koha::files::koha_conf_xml::default
+	{ $site_name:
+		ensure				=> $ensure,
 
-			koha_config_dir				=> $koha_config_dir,
-			koha_site_dir				=> $koha_site_dir,
-			koha_site_dir_conf_file_mode		=> $koha_site_dir_conf_file_mode,
-			koha_lib_dir				=> $koha_lib_dir,
-			koha_log_dir				=> $koha_log_dir,
-			koha_log_dir_mode			=> $koha_log_dir_mode,
+		listen				=> false,
+		server				=> false,
+		serverinfo			=> false,
 
-			koha_zebra_biblios_config		=> $koha_zebra_biblios_config,
-			koha_zebra_authorities_config		=> $koha_zebra_authorities_config,
+		biblioserver			=> false,
+		authorityserver			=> false,
 
-			koha_zebra_biblios_indexing_mode	=>$koha_zebra_biblios_indexing_mode,
-			koha_zebra_authorities_indexing_mode	=>$koha_zebra_authorities_indexing_mode,
+		config_db_scheme		=> $db_scheme,
+		config_database			=> $_database,
+		config_hostname			=> $db_hostname,
+		config_port			=> $db_port,
+		config_user			=> $_db_user,
+		config_pass			=> $db_password,
 
-			koha_zebra_marc_format			=> $koha_zebra_marc_format,
+		serverinfo_user			=> $zebra_user,
+		serverinfo_password		=> $zebra_password,
 
-			koha_zebra_server_biblios_port		=> $koha_zebra_server_biblios_port,
-			koha_zebra_server_authorities_port	=> $koha_zebra_server_authorities_port,
-
-			koha_zebra_biblioserver			=> $koha_zebra_biblioserver,
-			koha_zebra_authorityserver		=> $koha_zebra_authorityserver,
-		}
-	}
-
-	# Establish the relationship between Koha package installation, koha-conf.xml
-	# and the Apache and Koha services.
-	Class["::koha"] -> ::Koha::Files::Koha_conf_xml_site[$site_name]
-	::Koha::Files::Koha_conf_xml_site[$site_name] -> Class["::apache::service"]
-	::Koha::Files::Koha_conf_xml_site[$site_name] ~> Class["::koha::service"]
-
-	# Parameters specific to koha::site.
-	::Koha::Files::Koha_conf_xml_site <| name == $site_name |>
-	{
-		mysql_db		=> $_mysql_db,
-		mysql_hostname		=> $mysql_hostname,
-		mysql_port		=> $mysql_port,
-		mysql_user		=> $_mysql_user,
-		mysql_password		=> $mysql_password,
-
-		koha_zebra_server	=> $koha_zebra_server,
+		require				=> [ Class["::koha"], ::Koha::User[$_koha_user], File["$koha_site_dir/$site_name"] ],
+		before				=> Class["::apache::service"],
+		subscribe			=> Class["::koha::service"],
 	}
 
 	# Generate Apache vhosts for the OPAC and Intranet servers for this Koha site.
 	file
 	{ "$apache_sites_available_dir/$site_name.conf":
 		ensure	=> $ensure,
-		owner	=> "root",
+		owner	=> $apache_sites_dir_conf_file_owner,
 		group	=> $_koha_user,
 		mode	=> $apache_sites_dir_conf_file_mode,
 		content	=> template("koha/apache-site.conf.erb"),
@@ -344,9 +320,9 @@ define koha::site
 	{ "$apache_sites_enabled_dir/$site_name.conf":
 		ensure	=> $link_ensure,
 		target	=> "$apache_sites_available_dir/$site_name.conf",
-		owner	=> "root",
+		owner	=> $apache_sites_dir_conf_file_owner,
 		group	=> $_koha_user,
-		mode	=> 640,
+		mode	=> $apache_sites_dir_conf_file_mode,
 		require	=> [ Class["::koha"], File[["$koha_site_dir/$site_name", "$apache_sites_available_dir/$site_name.conf"]], ::Koha::User[$_koha_user] ],
 		before	=> Class["::koha::service"],
 		notify	=> Class["::apache::service"],

@@ -45,12 +45,12 @@ define koha::zebra::site
 
 	# Global koha-conf.xml options.
 	$koha_user				= undef, # Defined in resource body
-	$koha_zebra_password,
+
+	$zebra_user				= $::koha::params::zebra_user,
+	$zebra_password,
 
 	$koha_config_dir			= $::koha::params::koha_config_dir,
-	$koha_site_dir				= $::koha::params::koha_site_dir,
-	$koha_site_dir_mode			= $::koha::params::koha_site_dir_mode,
-	$koha_site_dir_conf_file_mode		= $::koha::params::koha_site_dir_conf_file_mode,
+
 	$koha_site_opac_port			= $::koha::params::koha_site_opac_port,
 	$koha_site_intra_port			= $::koha::params::koha_site_intra_port,
 
@@ -74,7 +74,7 @@ define koha::zebra::site
 	$koha_zebra_authorityserver		= $::koha::params::koha_zebra_authorityserver,
 
 	# Koha Zebra-specific koha-conf.xml configuration options.
-	$public_z3950_server			= false,
+	$public_sru_server			= false,
 	$koha_zebra_sru_hostname		= undef, # Defined in resource body
 
 	$koha_zebra_z3950_port			= $::koha::params::koha_zebra_z3950_port,
@@ -83,6 +83,12 @@ define koha::zebra::site
 
 	$koha_zebra_sru_biblios_database	= $::koha::params::koha_zebra_sru_biblios_database,
 	$koha_zebra_sru_authorities_database	= $::koha::params::koha_zebra_sru_authorities_database
+
+	# koha::params default values.
+	$koha_site_dir				= $::koha::params::koha_site_dir,
+	$koha_site_dir_mode			= $::koha::params::koha_site_dir_mode,
+	$koha_site_dir_conf_file_owner		= $::koha::params::koha_site_dir_conf_file_owner,
+	$koha_site_dir_conf_file_mode		= $::koha::params::koha_site_dir_conf_file_mode,
 )
 {
 	unless (defined(Class["::koha::zebra"]))
@@ -174,61 +180,63 @@ define koha::zebra::site
 		}
 	}
 
-	# Add global configuration options to koha-conf.xml, if it has not been defined already.
-	unless (defined(::Koha::Files::Koha_conf_xml_site[$site_name]))
+	# Define the default koha-conf.xml resource with Zebra-centric options, if it has not been defined already.
+	unless (defined(::Koha::Files::Koha_conf_xml::Default[$site_name]))
 	{
-		::koha::files::koha_conf_xml_site
+		::koha::files::koha_conf_xml::default
 		{ $site_name:
-			# Global parameters.
-			koha_user				=> $_koha_user,
-			koha_zebra_password			=> $koha_zebra_password,
-
-			koha_config_dir				=> $koha_config_dir,
-			koha_site_dir				=> $koha_site_dir,
-			koha_site_dir_conf_file_mode		=> $koha_site_dir_conf_file_mode,
-			koha_lib_dir				=> $koha_lib_dir,
-			koha_log_dir				=> $koha_log_dir,
-			koha_log_dir_mode			=> $koha_log_dir_mode,
-
-			koha_zebra_biblios_config		=> $koha_zebra_biblios_config,
-			koha_zebra_authorities_config		=> $koha_zebra_authorities_config,
-
-			koha_zebra_biblios_indexing_mode	=>$koha_zebra_biblios_indexing_mode,
-			koha_zebra_authorities_indexing_mode	=>$koha_zebra_authorities_indexing_mode,
-
-			koha_zebra_marc_format			=> $koha_zebra_marc_format,
-
-			koha_zebra_server_biblios_port		=> $koha_zebra_server_biblios_port,
-			koha_zebra_server_authorities_port	=> $koha_zebra_server_authorities_port,
-
-			koha_zebra_biblioserver			=> $koha_zebra_biblioserver,
-			koha_zebra_authorityserver		=> $koha_zebra_authorityserver,
+			config	=> false,
 		}
 	}
 
 	# Establish the relationship between the Zebra package installation, koha-conf.xml
 	# and the Zebra service.
-	Class["::koha::zebra"] -> ::Koha::Files::Koha_conf_xml_site[$site_name] ~> Class["::koha::zebra::service"]
+	Class["::koha::zebra"] -> ::Koha::Files::Koha_conf_xml::Default[$site_name] ~> Class["::koha::zebra::service"]
 
-	# Parameters specific to koha::zebra::site.
-	::Koha::Files::Koha_conf_xml_site <| title == $site_name |>
+	# koha-conf.xml parameters specific to koha::zebra::site.
+
+	# Only configure these options if this Zebra server is a public SRU server.
+	# Otherwise, configure fora local-only server.
+	if ($public_sru_server == true)
 	{
-		public_z3950_server			=> $public_z3950_server,
-		koha_zebra_sru_hostname			=> $_koha_zebra_sru_hostname,
+		::Koha::Files::Koha_conf_xml::Default <| title == $site_name |>
+		{
+			listen					=> true,
+			server					=> true,
+			serverinfo				=> true,
 
-		koha_zebra_z3950_port			=> $koha_zebra_z3950_port,
-		koha_zebra_sru_biblios_port		=> $koha_zebra_sru_biblios_port,
-		koha_zebra_sru_authorities_port		=> $koha_zebra_sru_authorities_port,
+			biblioserver				=> true,
+			authorityserver				=> true,
 
-		koha_zebra_sru_biblios_database		=> $koha_zebra_sru_biblios_database,
-		koha_zebra_sru_authorities_database	=> $koha_zebra_sru_authorities_database,
+			biblioserver_public_sru_server		=> true,
+			biblioserver_sru_host			=> $zebra_server,
+			biblioserver_sru_port			=> $zebra_server_biblios_port,
+			biblioserver_sru_database		=> $zebra_server_biblios_database,
+
+			authorityserver_public_sru_server	=> true,
+			authorityserver_sru_host		=> $zebra_server_sru_host,
+			authorityserver_sru_port		=> $zebra_server_authorities_port,
+			authorityserver_sru_database		=> $zebra_server_authorities_database,
+		}
+	}
+	else
+	{
+		::Koha::Files::Koha_conf_xml::Default <| title == $site_name |>
+		{
+			listen		=> true,
+			server		=> true,
+			serverinfo	=> true,
+
+			biblioserver	=> false,
+			authorityserver	=> false,
+		}
 	}
 
 	# Required configuration files for the Zebra index.
 	file
 	{ "$koha_site_dir/$site_name/zebra-biblios.cfg":
 		ensure	=> $ensure,
-		owner	=> root,
+		owner	=> $koha_site_dir_conf_file_owner,
 		group	=> $_koha_user,
 		mode	=> $koha_site_dir_conf_file_mode,
 		content	=> template("koha/zebra-biblios-site.cfg.erb"),
@@ -239,7 +247,7 @@ define koha::zebra::site
 	file
 	{ "$koha_site_dir/$site_name/zebra-biblios-dom.cfg":
 		ensure	=> $ensure,
-		owner	=> root,
+		owner	=> $koha_site_dir_conf_file_owner,
 		group	=> $_koha_user,
 		mode	=> $koha_site_dir_conf_file_mode,
 		content	=> template("koha/zebra-biblios-dom-site.cfg.erb"),
@@ -250,7 +258,7 @@ define koha::zebra::site
 	file
 	{ "$koha_site_dir/$site_name/zebra-authorities.cfg":
 		ensure	=> $ensure,
-		owner	=> root,
+		owner	=> $koha_site_dir_conf_file_owner,
 		group	=> $_koha_user,
 		mode	=> $koha_site_dir_conf_file_mode,
 		content	=> template("koha/zebra-authorities-site.cfg.erb"),
@@ -261,7 +269,7 @@ define koha::zebra::site
 	file
 	{ "$koha_site_dir/$site_name/zebra-authorities-dom.cfg":
 		ensure	=> $ensure,
-		owner	=> root,
+		owner	=> $koha_site_dir_conf_file_owner,
 		group	=> $_koha_user,
 		mode	=> $koha_site_dir_conf_file_mode,
 		content	=> template("koha/zebra-authorities-dom-site.cfg.erb"),
@@ -272,7 +280,7 @@ define koha::zebra::site
 	file
 	{ "$koha_site_dir/$site_name/zebra.passwd":
 		ensure	=> $ensure,
-		owner	=> root,
+		owner	=> $koha_site_dir_conf_file_owner,
 		group	=> $_koha_user,
 		mode	=> $koha_site_dir_passwd_file_mode,
 		content	=> template("koha/zebra.passwd.erb"),

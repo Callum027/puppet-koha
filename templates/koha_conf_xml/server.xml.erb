@@ -1,0 +1,82 @@
+<server id="<%= @id %>"  listenref="<%= @id %>">
+    <directory><%= @_directory %></directory>
+    <config><%= @config %></config>
+    <cql2rpn><%= @cql2rpn %></cql2rpn>
+<%- if @include_retrieval_info == true -%>
+<%- if @indexing_mode == "dom" -%>
+    <xi:include href="<%= @retrieval_info %>"
+                xmlns:xi="http://www.w3.org/2001/XInclude">
+     <xi:fallback>
+      <retrievalinfo>
+<%- elsif @indexing_mode == "grs1" -%>
+    <retrievalinfo>
+<%- end -%>
+       <retrieval syntax="<%= @marc_format %>" name="F"/>
+       <retrieval syntax="<%= @marc_format %>" name="B"/>
+       <retrieval syntax="xml" name="F"/>
+       <retrieval syntax="xml" name="B"/>
+       <retrieval syntax="xml" name="marcxml"
+                  identifier="info:srw/schema/1/marcxml-v1.1">
+         <backend syntax="<%= @marc_format %>" name="F">
+           <marc inputformat="marc" outputformat="marcxml"
+                 inputcharset="utf-8"/>
+         </backend>
+       </retrieval>
+       <retrieval syntax="xml" name="dc">
+         <backend syntax="<%= @marc_format %>" name="F">
+           <marc inputformat="marc" outputformat="marcxml"
+                 inputcharset="utf-8"/>
+           <xslt stylesheet="/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/xslt/MARC21slim2DC.xsl"/>
+         </backend>
+       </retrieval>
+       <retrieval syntax="xml" name="mods">
+         <backend syntax="<%= @marc_format %>" name="F">
+           <marc inputformat="marc" outputformat="marcxml"
+                 inputcharset="utf-8"/>
+           <xslt stylesheet="/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/xslt/MARC21slim2MODS.xsl"/>
+         </backend>
+       </retrieval>
+       <retrieval syntax="xml" name="rdfdc">
+         <backend syntax="<%= @marc_format %>" name="F">
+           <marc inputformat="marc" outputformat="marcxml"
+                 inputcharset="utf-8"/>
+           <xslt stylesheet="/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/xslt/MARC21slim2RDFDC.xsl"/>
+         </backend>
+       </retrieval>
+       <retrieval syntax="xml" name="rss2">
+         <backend syntax="<%= @marc_format %>" name="F">
+           <marc inputformat="marc" outputformat="marcxml"
+                 inputcharset="utf-8"/>
+           <xslt stylesheet="/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/xslt/MARC21slim2RSS2.xsl"/>
+         </backend>
+       </retrieval>
+       <retrieval syntax="xml" name="utils">
+         <backend syntax="<%= @marc_format %>" name="F">
+           <marc inputformat="marc" outputformat="marcxml"
+                 inputcharset="utf-8"/>
+           <xslt stylesheet="/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/xslt/MARC21slimUtils.xsl"/>
+         </backend>
+       </retrieval>
+<%- if @indexing_mode == "dom" %>
+      </retrievalinfo>
+     </xi:fallback>
+    </xi:include>
+<%- elsif @indexing_mode == "grs1" %>
+    </retrievalinfo>
+<%- end %>
+<%- if @remote_sru_server -%>
+    <xi:include href="<%= @sru_explain %>"
+                xmlns:xi="http://www.w3.org/2001/XInclude">
+      <xi:fallback>
+      <explain xmlns="http://explain.z3950.org/dtd/2.0/">
+          <serverInfo>
+            <host><%= @sru_host %></host>
+            <port><%= @sru_port %></port>
+            <database><%= @sru_database %></database>
+          </serverInfo>
+        </explain>
+      </xi:fallback>
+    </xi:include>
+<%- end -%>
+<%- end -%>
+</server>
