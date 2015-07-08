@@ -52,6 +52,7 @@ define koha::files::koha_conf_xml::default
 	$mergeserver				= false,
 
 	# koha-conf.xml file options.
+	$file,
 	$file_owner				= $::koha::params::koha_conf_xml::file_owner,
 	$file_group,
 	$file_mode				= $::koha::params::koha_conf_xml::file_mode,
@@ -287,6 +288,7 @@ define koha::files::koha_conf_xml::default
 		{ $site_name:
 			ensure		=> $ensure,
 
+			file		=> $file,
 			owner		=> $file_owner,
 			group		=> $file_group,
 			mode		=> $file_mode,

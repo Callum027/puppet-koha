@@ -64,7 +64,7 @@ define koha::files::koha_conf_xml
 
 	::concat
 	{ "${site_name}::koha_conf_xml":
-		path	=> $_file,
+		path	=> $file,
 		ensure	=> $ensure,
 		owner	=> $owner,
 		group	=> $group,
