@@ -40,6 +40,10 @@ class koha::params
 	{
 		'Debian':
 		{
+			##
+			# System-specific default configuration variables.
+			##
+
 			# Executable files.
 			$a2dismod					= "/usr/sbin/a2dismod"
 			$a2enmod					= "/usr/sbin/a2enmod"
@@ -72,33 +76,22 @@ class koha::params
 
 			$koha_spool_dir					= "/var/spool/koha"
 
-			# Apache configuration variables.
+			# Apache directories.
 			$apache_sites_available_dir			= "/etc/apache2/sites-available"
 			$apache_sites_enabled_dir			= "/etc/apache2/sites-enabled"
 			$apache_sites_dir_conf_file_mode		= 640
 
-			# MySQL configuration variables.
-			$mysql_bind_address				= "0.0.0.0"
-			$mysql_port					= 3306
-
-			# Koha configuration variables.
+			# Koha packages and services.
 			$koha_repo_release				= "stable"
 			$koha_packages					= [ "koha-common" ]
 			$koha_services					= [ "koha-common" ]
 
-			$koha_language					= "en"
-
-			$koha_site_opac_port				= "80"
-			$koha_site_intra_port				= "80"
-			
-			# Zebra configuration variables.
+			# Zebra packages and services.
 			$zebra_packages					= [ "koha-common" ]
 			$zebra_services					= [ "koha-common" ]
 
-			$zebra_user					= "kohauser"
-
-			# MySQL configuration variables.
-			$mysql_adminuser				= "1"
+			# Apache and MySQL packages and services are handled by their
+			# official modules.
 		}
 
 		# RedHat support will come at a later time!
@@ -108,4 +101,35 @@ class koha::params
 			fail("Sorry, but the koha module does not support the $::osfamily OS family at this time")
 		}
 	}
+
+	##
+	# Resource-specific default configuration variables.
+	##
+
+	# koha::site default values.
+	$site_elasticsearch		= false
+
+	$site_collect_db		= true
+	$site_collect_elasticsearch	= true
+	$site_collect_memcached		= true
+	$site_collect_zebra		= true
+
+	$site_opac_port			= "80"
+	$site_intra_port		= "80"
+
+	##
+	# Default configuration variables for specific software components.
+	# koha-conf.xml handling is in koha::params::koha_conf_xml.
+	##
+
+	# MySQL configuration variables.
+	$mysql_adminuser		= "1"
+	$mysql_bind_address		= "0.0.0.0"
+	$mysql_port			= 3306
+
+	# Koha configuration variables.
+	$koha_language			= "en"
+	
+	# Zebra configuration variables.
+	$zebra_user			= "kohauser"
 }

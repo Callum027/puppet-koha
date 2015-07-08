@@ -136,6 +136,6 @@ define koha::files::koha_conf_xml::config
 		target	=> "${site_name}::koha_conf_xml",
 		ensure	=> $ensure,
 		content	=> template("koha/koha_conf_xml/config.xml.erb"),
-		order	=> "04",
+		order	=> "05",
 	}
 }

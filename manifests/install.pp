@@ -40,12 +40,6 @@
 class koha::install
 (
 	$ensure			= "present",
-
-	$apache_modules_dir	= $::koha::params::apache_modules_dir,
-	$apache_modules_user	= $::koha::params::apache_modules_user,
-	$apache_modules_group	= $::koha::params::apache_modules_group,
-	$apache_modules_mode	= $::koha::params::apache_modules_mode,
-
 	$koha_packages		= $::koha::params::koha_packages
 ) inherits koha::params
 {

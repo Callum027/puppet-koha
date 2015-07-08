@@ -12,3 +12,5 @@ dependency 'puppetlabs/stdlib', '>= 4.6.0 <5.0.0'
 dependency 'puppetlabs/apache', '>= 1.4.0 <2.0.0'
 dependency 'puppetlabs/apt', '>= 1.8.0 <2.0.0'
 dependency 'puppetlabs/mysql', '>= 3.3.0 <4.0.0'
+
+dependency 'dalen/puppetdbquery', '>= 1.5.3 <2.0.0'

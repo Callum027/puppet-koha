@@ -35,55 +35,39 @@
 #
 # Copyright 2015 Callum Dickinson.
 #
-define koha::files::koha_conf_xml
+define koha::files::koha_conf_xml::elasticsearch
 (
 	$ensure		= "present",
-	$site_name	= $name,
+	$site_name,
 
-	$file,
-	$owner		= $::koha::params::koha_conf_xml::file_owner,
-	$group,
-	$mode		= $::koha::params::koha_conf_xml::file_mode,
-
-	# koha::params default values.
-	$koha_site_dir	= $::koha::params::koha_site_dir
+	# Elasticsearch options.
+	$server,
+	$index_name
 )
 {
-	##
-	# Resource dependencies.
-	##
-
-	unless (defined(Class["::koha::params"]))
+	unless (defined(::Koha::Files::Koha_conf_xml[$site_name]))
 	{
-		fail("You must define koha::params for this resource to work properly")
+		fail("You must define the koha::files::koha_conf_xml resource for $site_name for this resource to work properly")
 	}
 
-	##
-	# Resource declaration.
-	##
-
-	::concat
-	{ "${site_name}::koha_conf_xml":
-		path	=> $_file,
-		ensure	=> $ensure,
-		owner	=> $owner,
-		group	=> $group,
-		mode	=> $mode,
+	# Check validity of parameters.
+	if ($ensure != "present" and $ensure != "absent")
+	{
+		fail("Only possible values for \$ensure are 'present' and 'absent'")
 	}
 
-	::concat::fragment
-	{ "${site_name}::koha_conf_xml::header":
-		target	=> "${site_name}::koha_conf_xml",
-		ensure	=> $ensure,
-		content	=> "<yazgfs>\n<!-- This file is managed by Puppet. Any local modifications will be overwritten. -->\n\n",
-		order	=> "00",
+	validate_string($site_name, $id, $index_name)
+
+	if (is_array($server) != true)
+	{
+		validate_string($server)
 	}
 
 	::concat::fragment
-	{ "${site_name}::koha_conf_xml::footer":
+	{ "${site_name}::koha_conf_xml::elasticsearch":
 		target	=> "${site_name}::koha_conf_xml",
 		ensure	=> $ensure,
-		content	=> "</yazgfs>",
-		order	=> "99",
+		content	=> template("koha/koha_conf_xml/elasticsearch.xml.erb"),
+		order	=> "04",
 	}
 }

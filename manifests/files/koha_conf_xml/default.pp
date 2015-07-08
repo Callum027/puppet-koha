@@ -44,6 +44,7 @@ define koha::files::koha_conf_xml::default
 	$listen					= true,
 	$server					= true,
 	$serverinfo				= true,
+	$elasticsearch				= false,
 
 	$biblioserver				= true,
 	$authorityserver			= true,
@@ -73,6 +74,10 @@ define koha::files::koha_conf_xml::default
 	# Serverinfo options.
 	$serverinfo_user			= $::koha::params::koha_conf_xml::serverinfo_user,
 	$serverinfo_password			= undef, # Required for serverinfo == true
+
+	# Elasticsearch options.
+	$elasticsearch_server			= undef, # Required for elasticsearch == true
+	$elasticserach_index_name		= undef, # Required for elasticsearch == true
 
 	# Biblioserver options.
 	$biblioserver_id			= $::koha::params::koha_conf_xml::biblioserver_id,
@@ -320,6 +325,18 @@ define koha::files::koha_conf_xml::default
 			koha_lib_dir		=> $koha_lib_dir,
 			koha_run_dir		=> $koha_run_dir,
 			koha_spool_dir		=> $koha_spool_dir,
+		}
+	}
+
+	# Elasticsearch.
+	unless ($elasticsearch != true or defined(::Koha::Files::Koha_conf_xml::Elasticsearch[$site_name]))
+	{
+		::koha::files::koha_conf_xml::elasticsearch
+		{ $site_name:
+			ensure		=> $ensure,
+
+			server		=> $elasticsearch_server,
+			index_name	=> $elasticsearch_index_name,
 		}
 	}
 
