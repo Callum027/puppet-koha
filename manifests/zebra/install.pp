@@ -37,8 +37,8 @@
 #
 class koha::zebra::install
 (
-	$ensure			= "present",
-	$koha_zebra_services	= $::koha::params::koha_service
+	$ensure		= "present",
+	$zebra_packages = $::koha::params::zebra_packages
 ) inherits koha::params
 {
 	# Install the Koha repository.
@@ -59,7 +59,7 @@ class koha::zebra::install
 		if ($ensure == "present")
 		{
 			package
-			{ $koha_zebra_packages:
+			{ $zebra_packages:
 				ensure	=> "installed",		
 			}
 
@@ -76,14 +76,14 @@ class koha::zebra::install
 
 				contain "::apache"
 
-				Package[$koha_zebra_packages]
+				Package[$zebra_packages]
 				{
 					require	=> Class[["::koha::repo", "::apache"]],
 				}
 			}
 			else
 			{
-				Package[$koha_zebra_packages]
+				Package[$zebra_packages]
 				{
 					require	=> Class["::koha::repo"],
 				}
@@ -92,7 +92,7 @@ class koha::zebra::install
 		elsif ($ensure == "absent")
 		{
 			package
-			{ $koha_zebra_packages:
+			{ $zebra_packages:
 				ensure	=> "purged",
 				require	=> Class["::koha::repo"],
 			}

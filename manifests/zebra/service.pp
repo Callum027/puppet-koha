@@ -38,14 +38,14 @@
 class koha::zebra::service
 (
 	$ensure			= "present",
-	$koha_zebra_services	= $::koha::params::koha_zebra_services
+	$zebra_services	= $::koha::params::zebra_services
 ) inherits koha::params
 {
 	# This is a temporary requirement, while Zebra is still bound with Koha.
 	# TODO: When they are separate packages, they will be able to be started independently.
 	if (defined(Class["::koha::service"]))
 	{
-		Class["::koha::zebra::service"] ~> Class["::koha::service"]
+		Class["::koha::zebra::service"] ~> Service[$zebra_services]
 	}
 	else
 	{
@@ -53,7 +53,7 @@ class koha::zebra::service
 		if ($ensure == "present")
 		{
 			service
-			{ $koha_zebra_services:
+			{ $zebra_services:
 				ensure	=> "running",
 				enable	=> true,
 				require	=> Class["::koha::zebra"],
@@ -62,7 +62,7 @@ class koha::zebra::service
 		elsif ($ensure == "absent")
 		{
 			service
-			{ $koha_zebra_services:
+			{ $zebra_services:
 				ensure	=> "stopped",
 				enable	=> false,
 			}

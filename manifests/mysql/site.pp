@@ -47,6 +47,7 @@ define koha::mysql::site
 	$mysql_adminuser	= $::koha::params::mysql_adminuser,
 
 	$mysql_db		= undef, # Defined in resource body
+	$mysql_port		= $::koha::params::mysql_port,
 	$mysql_user		= undef, # Defined in resource body
 
 	$mysql_password
@@ -108,4 +109,13 @@ define koha::mysql::site
 	# }
 
 	# TODO: Upgrade the database schema, just in case the dump was from an old version.
+
+	::koha::db::site
+	{ $site_name:
+		scheme		=> "mysql",
+		database	=> $_mysql_db,
+		port		=> $mysql_port,
+		user		=> $_mysql_user,
+		password	=> $mysql_password,
+	}
 }

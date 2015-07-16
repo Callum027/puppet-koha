@@ -82,7 +82,7 @@ define koha::site
 
 	if ($collect_db == true)
 	{
-		$db_servers = query_facts("Koha::Db::Site[$site_name]", [ "scheme", "database", "port", "user", "pass" ])
+		$db_servers = query_facts("Koha::Db::Site['$site_name']", [ "scheme", "database", "port", "user", "pass" ])
 		$db_servers_array = any2array($db_servers)
 
 		$db_server = merge({ "hostname" =>  $db_servers_array[0] }, $db_servers_array[1])
@@ -90,17 +90,17 @@ define koha::site
 
 	if ($collect_elasticsearch == true)
 	{
-		$elasticsearch_servers = query_facts("Koha::Elasticsearch::Site[$site_name]", [ "index_name" ])
+		$elasticsearch_servers = query_facts("Koha::Elasticsearch::Site['$site_name']", [ "index_name" ])
 	}
 
 	if ($collect_memcached == true)
 	{
-		$memcached_servers = query_facts("Koha::Memcached::Site[$site_name]", [ "namespace" ])
+		$memcached_servers = query_facts("Koha::Memcached::Site['$site_name']", [ "namespace" ])
 	}
 
 	if ($collect_zebra == true)
 	{
-		$zebra_servers = query_facts("Koha::Zebra::Site[$site_name]", [ "user", "password" ])
+		$zebra_servers = query_facts("Koha::Zebra::Site['$site_name']", [ "user", "password" ])
 		$zebra_servers_array = any2array($zebra_servers)
 
 		$zebra_server = merge({ "hostname" =>  $zebra_servers_array[0] }, $zebra_servers_array[1])
@@ -240,10 +240,6 @@ define koha::site
 			{
 				fail("found more than one value for \$elasticsearch_index_name for $site_name (only one is possible): $elasticsearch_index_names")
 			}
-			elsif (size($elasticsearch_index_names) < 1)
-			{
-				fail("could not find value for \$elasticsearch_index_name for $site_name")
-			}
 
 			$_elasticsearch_index_name = join($elasticsearch_index_names, ",")
 		}
@@ -296,10 +292,6 @@ define koha::site
 			if (size($memcached_namespaces) > 1)
 			{
 				fail("found more than one value for \$memcached_namespace for $site_name (only one is possible): $memcached_namespaces")
-			}
-			elsif (size($memcached_namespaces) < 1)
-			{
-				fail("could not find value for \$memcached_namespace for $site_name")
 			}
 
 			$_memcached_namespace = join($memcached_namespaces, ",")

@@ -78,7 +78,7 @@ define koha::files::koha_conf_xml::default
 
 	# Elasticsearch options.
 	$elasticsearch_server			= undef, # Required for elasticsearch == true
-	$elasticserach_index_name		= undef, # Required for elasticsearch == true
+	$elasticsearch_index_name		= undef, # Required for elasticsearch == true
 
 	# Biblioserver options.
 	$biblioserver_id			= $::koha::params::koha_conf_xml::biblioserver_id,
@@ -316,13 +316,6 @@ define koha::files::koha_conf_xml::default
 
 			zebra_bib_index_mode	=> $config_zebra_bib_index_mode,
 			zebra_auth_index_mode	=> $config_zebra_auth_index_mode,
-
-			koha_config_dir		=> $koha_config_dir,
-			koha_doc_dir		=> $koha_doc_dir,
-			koha_lib_dir		=> $koha_lib_dir,
-			koha_run_dir		=> $koha_run_dir,
-			koha_share_dir		=> $koha_share_dir,
-			koha_spool_dir		=> $koha_spool_dir,
 
 			koha_lib_dir		=> $koha_lib_dir,
 			koha_run_dir		=> $koha_run_dir,
