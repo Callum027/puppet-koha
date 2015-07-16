@@ -82,7 +82,7 @@ define koha::site
 
 	if ($collect_db == true)
 	{
-		$db_servers = query_facts("Koha::Db::Site[$site_name]"), [ "scheme", "database", "port", "user", "pass" ])
+		$db_servers = query_facts("Koha::Db::Site[$site_name]", [ "scheme", "database", "port", "user", "pass" ])
 		$db_servers_array = any2array($db_servers)
 
 		$db_server = merge({ "hostname" =>  $db_servers_array[0] }, $db_servers_array[1])

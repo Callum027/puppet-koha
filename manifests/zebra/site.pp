@@ -82,13 +82,13 @@ define koha::zebra::site
 	$koha_zebra_sru_authorities_port	= $::koha::params::koha_zebra_sru_authorities_port,
 
 	$koha_zebra_sru_biblios_database	= $::koha::params::koha_zebra_sru_biblios_database,
-	$koha_zebra_sru_authorities_database	= $::koha::params::koha_zebra_sru_authorities_database
+	$koha_zebra_sru_authorities_database	= $::koha::params::koha_zebra_sru_authorities_database,
 
 	# koha::params default values.
 	$koha_site_dir				= $::koha::params::koha_site_dir,
 	$koha_site_dir_mode			= $::koha::params::koha_site_dir_mode,
 	$koha_site_dir_conf_file_owner		= $::koha::params::koha_site_dir_conf_file_owner,
-	$koha_site_dir_conf_file_mode		= $::koha::params::koha_site_dir_conf_file_mode,
+	$koha_site_dir_conf_file_mode		= $::koha::params::koha_site_dir_conf_file_mode
 )
 {
 	unless (defined(Class["::koha::zebra"]))
