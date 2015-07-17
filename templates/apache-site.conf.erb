@@ -21,13 +21,13 @@ Listen <%= @koha_site_intra_port %>
    AssignUserID <%= @_koha_user %> <%= @_koha_user %>
 
 <% if @_opac_error_log_file -%>
-   ErrorLog    <%= @_opac_error_log_file %>
+   ErrorLog    <%= @_opac_error_log %>
 <%- end -%>
 <%- if @_opac_access_log_file -%>
-   TransferLog <%= @_opac_access_log_file %>
+   TransferLog <%= @_opac_access_log %>
 <%- end -%>
 <% if @_opac_rewrite_log_file -%>
-   RewriteLog  <%= @_opac_rewrite_log_file %>
+   RewriteLog  <%= @_opac_rewrite_log %>
 <%- end -%>
 </VirtualHost>
 
@@ -44,12 +44,12 @@ Listen <%= @koha_site_intra_port %>
    AssignUserID <%= @_koha_user %> <%= @_koha_user %>
 
 <% if @_intranet_error_log_file -%>
-   ErrorLog    <%= @_intranet_error_log_file %>
+   ErrorLog    <%= @_intranet_error_log %>
 <%- end -%>
 <%- if @_intranet_access_log_file -%>
-   TransferLog <%= @_intranet_access_log_file %>
+   TransferLog <%= @_intranet_access_log %>
 <%- end -%>
 <%- if @_intranet_rewrite_log_file -%>
-   RewriteLog  <%= @_intranet_rewrite_log_file %>
+   RewriteLog  <%= @_intranet_rewrite_log %>
 <%- end -%>
 </VirtualHost>

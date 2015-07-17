@@ -40,51 +40,35 @@ define koha::zebra::site
 	$ensure					= "present",
 	$site_name				= $name,
 
-	# Zebra options.
-	$koha_language				= $::koha::params::koha_language,
-
-	# Global koha-conf.xml options.
 	$koha_user				= undef, # Defined in resource body
 
+	# Zebra options.
 	$zebra_user				= $::koha::params::zebra_user,
 	$zebra_password,
 
-	$koha_config_dir			= $::koha::params::koha_config_dir,
+	$language				= $::koha::params::language,
+	$marc_format				= $::koha::params::marc_format,
 
-	$koha_site_opac_port			= $::koha::params::koha_site_opac_port,
-	$koha_site_intra_port			= $::koha::params::koha_site_intra_port,
-
-	$koha_lib_dir				= $::koha::params::koha_lib_dir,
-	$koha_log_dir				= $::koha::params::koha_log_dir,
-	$koha_log_dir_mode			= $::koha::params::koha_log_dir_mode,
-
-	$koha_zebra_biblios_config		= $::koha::params::koha_zebra_biblios_config,
-	$koha_zebra_authorities_config		= $::koha::params::koha_zebra_authorities_config,
-
-	$koha_zebra_biblios_indexing_mode	= $::koha::params::koha_zebra_biblios_indexing_mode,
-	$koha_zebra_authorities_indexing_mode	= $::koha::params::koha_zebra_authorities_indexing_mode,
-
-	$koha_zebra_marc_format			= $::koha::params::koha_zebra_marc_format,
-
-	$koha_zebra_server_biblios_port		= $::koha::params::koha_zebra_sru_biblios_port,
-
-	$koha_zebra_server_authorities_port	= $::koha::params::koha_zebra_sru_authorities_port,
-
-	$koha_zebra_biblioserver		= $::koha::params::koha_zebra_biblioserver,
-	$koha_zebra_authorityserver		= $::koha::params::koha_zebra_authorityserver,
-
-	# Koha Zebra-specific koha-conf.xml configuration options.
+	# Global (both biblioserver and authorityserver) SRU server options.
 	$public_sru_server			= false,
-	$koha_zebra_sru_hostname		= undef, # Defined in resource body
+	$sru_host				= undef,
+	$sru_port				= undef,
 
-	$koha_zebra_z3950_port			= $::koha::params::koha_zebra_z3950_port,
-	$koha_zebra_sru_biblios_port		= $::koha::params::koha_zebra_sru_biblios_port,
-	$koha_zebra_sru_authorities_port	= $::koha::params::koha_zebra_sru_authorities_port,
+	# Biblioserver SRU options.
+	$biblioserver_public_sru_server		= undef,
+	$biblioserver_sru_host			= undef,
+	$biblioserver_sru_port			= undef,
+	$biblioserver_sru_database		= undef,
 
-	$koha_zebra_sru_biblios_database	= $::koha::params::koha_zebra_sru_biblios_database,
-	$koha_zebra_sru_authorities_database	= $::koha::params::koha_zebra_sru_authorities_database,
+	# Authorityserver SRU options.
+	$authorityserver_public_sru_server	= undef,
+	$authorityserver_sru_host		= undef,
+	$authorityserver_sru_port		= undef,
+	$authorityserver_sru_database		= undef,
 
 	# koha::params default values.
+	$koha_log_dir				= $::koha::params::koha_log_dir,
+	$koha_log_dir_mode			= $::koha::params::koha_log_dir_mode,
 	$koha_site_dir				= $::koha::params::koha_site_dir,
 	$koha_site_dir_mode			= $::koha::params::koha_site_dir_mode,
 	$koha_site_dir_conf_file_owner		= $::koha::params::koha_site_dir_conf_file_owner,
@@ -197,7 +181,7 @@ define koha::zebra::site
 
 	# Only configure these options if this Zebra server is a public SRU server.
 	# Otherwise, configure fora local-only server.
-	if ($public_sru_server == true)
+	if ($public_sru_server == true or $_biblioserver_public_sru_server == true or $_authorityserver_public_sru_server == true)
 	{
 		::Koha::Files::Koha_conf_xml::Default <| title == $site_name |>
 		{
@@ -208,15 +192,15 @@ define koha::zebra::site
 			biblioserver				=> true,
 			authorityserver				=> true,
 
-			biblioserver_public_sru_server		=> true,
-			biblioserver_sru_host			=> $zebra_server,
-			biblioserver_sru_port			=> $zebra_server_biblios_port,
-			biblioserver_sru_database		=> $zebra_server_biblios_database,
+			biblioserver_public_sru_server		=> $_biblioserver_public_sru_server,
+			biblioserver_sru_host			=> $_biblioserver_sru_host,
+			biblioserver_sru_port			=> $_biblioserver_sru_port,
+			biblioserver_sru_database		=> $_biblioserver_sru_database,
 
-			authorityserver_public_sru_server	=> true,
-			authorityserver_sru_host		=> $zebra_server_sru_host,
-			authorityserver_sru_port		=> $zebra_server_authorities_port,
-			authorityserver_sru_database		=> $zebra_server_authorities_database,
+			authorityserver_public_sru_server	=> $_authorityserver_public_sru_server,
+			authorityserver_sru_host		=> $_authorityserver_sru_host,
+			authorityserver_sru_port		=> $_authorityserver_sru_port,
+			authorityserver_sru_database		=> $_authorityserver_sru_database,
 		}
 	}
 	else
@@ -227,8 +211,8 @@ define koha::zebra::site
 			server		=> true,
 			serverinfo	=> true,
 
-			biblioserver	=> false,
-			authorityserver	=> false,
+			biblioserver	=> true,
+			authorityserver	=> true,
 		}
 	}
 
