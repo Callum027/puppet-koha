@@ -45,7 +45,7 @@ class koha::zebra::service
 	# TODO: When they are separate packages, they will be able to be started independently.
 	if (defined(Class["::koha::service"]))
 	{
-		Class["::koha::zebra::service"] ~> Service[$zebra_services]
+		Class["::koha::zebra::service"] ~> Class["::koha::service"]
 	}
 	else
 	{

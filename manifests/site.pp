@@ -437,7 +437,7 @@ define koha::site
 
 		require				=> [ Class["::koha"], ::Koha::User[$_koha_user], File["$koha_site_dir/$site_name"] ],
 		before				=> Class["::apache::service"],
-		subscribe			=> Class["::koha::service"],
+		notify				=> Class["::koha::service"],
 	}
 	
 	# Start the Koha service, if it hasn't been already.
