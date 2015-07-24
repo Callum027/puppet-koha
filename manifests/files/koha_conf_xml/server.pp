@@ -54,7 +54,7 @@ define koha::files::koha_conf_xml::server
 	$indexing_mode		= $::koha::params::koha_conf_xml::server_indexing_mode,
 	$marc_format		= $::koha::params::koha_conf_xml::server_marc_format,
 
-	$remote_sru_server	= $::koha::params::koha_conf_xml::server_remote_sru_server,
+	$public_sru_server	= $::koha::params::koha_conf_xml::server_public_sru_server,
 
 	$sru_explain		= undef,
 	$sru_host		= undef,

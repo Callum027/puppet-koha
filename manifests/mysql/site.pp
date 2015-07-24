@@ -116,6 +116,6 @@ define koha::mysql::site
 		database	=> $_mysql_db,
 		port		=> $mysql_port,
 		user		=> $_mysql_user,
-		password	=> $mysql_password,
+		pass		=> $mysql_password,
 	}
 }

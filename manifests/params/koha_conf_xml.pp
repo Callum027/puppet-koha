@@ -109,7 +109,7 @@ class koha::params::koha_conf_xml
 	$server_indexing_mode			= "dom"
 	$server_marc_format			= "marc21"
 
-	$server_remote_sru_server		= false
+	$server_public_sru_server		= false
 
 	# Serverinfo options.
 	$serverinfo_ccl2rpn			= "${::koha::params::koha_config_dir}/zebradb/ccl.properties"

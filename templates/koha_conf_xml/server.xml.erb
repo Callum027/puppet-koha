@@ -64,7 +64,7 @@
 <%- elsif @indexing_mode == "grs1" %>
     </retrievalinfo>
 <%- end %>
-<%- if @remote_sru_server -%>
+<%- if @public_sru_server -%>
     <xi:include href="<%= @sru_explain %>"
                 xmlns:xi="http://www.w3.org/2001/XInclude">
       <xi:fallback>

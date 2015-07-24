@@ -63,7 +63,7 @@ define koha::files::koha_conf_xml::default_server
 
 	# Serverinfo options.
 	$serverinfo_user		= undef,
-	$serverinfo_pass		= undef,
+	$serverinfo_password		= undef,
 
 	# koha::params default values.
 	$koha_lib_dir			= $::koha::params::koha_lib_dir
