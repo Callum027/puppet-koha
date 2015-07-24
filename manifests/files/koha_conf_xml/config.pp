@@ -104,32 +104,10 @@ define koha::files::koha_conf_xml::config
 		$_port = $::koha::params::koha_conf_xml::config_postgresql_port
 	}
 
-	if ($pluginsdir == undef)
-	{
-		$_pluginsdir = "${koha_lib_dir}/${site_name}/plugins"
-	}
-	else
-	{
-		$_pluginsdir = $pluginsdir
-	}
+	$_pluginsdir = pick($pluginsdir, "${koha_lib_dir}/${site_name}/plugins")
+	$_backupdir = pick($backupdir, "${koha_spool_dir}/${site_name}")
 
-	if ($backupdir == undef)
-	{
-		$_backupdir = "${koha_spool_dir}/${site_name}"
-	}
-	else
-	{
-		$_backupdir = $backupdir
-	}
-
-	if ($zebra_lockdir == undef)
-	{
-		$_zebra_lockdir = "${koha_run_dir}/${site_name}"
-	}
-	else
-	{
-		$_zebra_lockdir = $zebra_lockdir
-	}
+	$_zebra_lockdir = pick($zebra_lockdir, "${koha_run_dir}/${site_name}")
 
 	::concat::fragment
 	{ "${site_name}::koha_conf_xml::config":

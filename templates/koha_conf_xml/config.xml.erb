@@ -1,15 +1,15 @@
 <config>
  <db_scheme><%= @db_scheme %></db_scheme>
- <database><%= @db %></database>
+ <database><%= @database %></database>
  <hostname><%= @hostname %></hostname>
- <port><%= @port %></port>
+ <port><%= @_port %></port>
  <user><%= @user %></user>
- <pass><%= @password %></pass>
+ <pass><%= @pass %></pass>
  <biblioserver><%= @biblioserver %></biblioserver>
  <biblioservershadow><%= @biblioservershadow %></biblioservershadow>
  <authorityserver><%= @authorityserver %></authorityserver>
  <authorityservershadow><%= @authorityservershadow %></authorityservershadow>
- <pluginsdir><%= @pluginsdir %></pluginsdir>
+ <pluginsdir><%= @_pluginsdir %></pluginsdir>
  <enable_plugins><%= @enable_plugins %></enable_plugins>
  <intranetdir><%= @intranetdir %></intranetdir>
  <opacdir><%= @opacdir %></opacdir>
@@ -18,7 +18,7 @@
  <includes><%= @includes %></includes>
  <logdir><%= @logdir %></logdir>
  <docdir><%= @docdir %></docdir>
- <backupdir><%= @backupdir %></backupdir>
+ <backupdir><%= @_backupdir %></backupdir>
  <backup_db_via_tools><%= @backup_db_via_tools %></backup_db_via_tools>
  <backup_conf_via_tools><%= @backup_conf_via_tools %></backup_conf_via_tools>
 <%- if @pazpar2url -%>
@@ -29,7 +29,7 @@
  <useshibboleth><%= @useshibboleth %></useshibboleth>
  <zebra_bib_index_mode><%= @zebra_bib_index_mode %></zebra_bib_index_mode>
  <zebra_auth_index_mode><%= @zebra_auth_index_mode %></zebra_auth_index_mode>
- <zebra_lockdir><%= @zebra_lockdir %></zebra_lockdir>
+ <zebra_lockdir><%= @_zebra_lockdir %></zebra_lockdir>
  <use_zebra_facets><%= @use_zebra_facets %></use_zebra_facets>
  <queryparser_config><%= @queryparser_config %></queryparser_config>
 

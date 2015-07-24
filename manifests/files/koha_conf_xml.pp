@@ -83,7 +83,7 @@ define koha::files::koha_conf_xml
 	{ "${site_name}::koha_conf_xml::footer":
 		target	=> "${site_name}::koha_conf_xml",
 		ensure	=> $ensure,
-		content	=> "</yazgfs>",
+		content	=> "</yazgfs>\n",
 		order	=> "99",
 	}
 }
