@@ -383,6 +383,15 @@ define koha::site
 	# Resource declaration.
 	##
 
+	if ($ensure == "present")
+	{
+		$directory_ensure = "directory"
+	}
+	else
+	{
+		$directory_ensure = $ensure
+	}
+
 	# Generate the Koha user, and the log directory.
 	::koha::user
 	{ $_koha_user:

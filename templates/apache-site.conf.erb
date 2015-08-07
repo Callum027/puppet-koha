@@ -4,7 +4,7 @@
 # Koha instance <%= @site_name %> Apache config.
 
 Listen <%= @opac_port %>
-<%- if @koha_site_opac_port != @koha_site_intra_port -%>
+<%- if @opac_port != @intra_port -%>
 Listen <%= @intra_port %>
 <%- end -%>
 
@@ -20,13 +20,13 @@ Listen <%= @intra_port %>
    SetEnv MEMCACHED_NAMESPACE "<%= @_memcached_namespace %>"
    AssignUserID <%= @_koha_user %> <%= @_koha_user %>
 
-<% if @_opac_error_log_file -%>
+<% if @_opac_error_log -%>
    ErrorLog    <%= @_opac_error_log %>
 <%- end -%>
-<%- if @_opac_access_log_file -%>
+<%- if @_opac_access_log -%>
    TransferLog <%= @_opac_access_log %>
 <%- end -%>
-<% if @_opac_rewrite_log_file -%>
+<% if @_opac_rewrite_log -%>
    RewriteLog  <%= @_opac_rewrite_log %>
 <%- end -%>
 </VirtualHost>
@@ -43,13 +43,13 @@ Listen <%= @intra_port %>
    SetEnv MEMCACHED_NAMESPACE "<%= @_memcached_namespace %>"
    AssignUserID <%= @_koha_user %> <%= @_koha_user %>
 
-<% if @_intranet_error_log_file -%>
+<% if @_intranet_error_log -%>
    ErrorLog    <%= @_intranet_error_log %>
 <%- end -%>
-<%- if @_intranet_access_log_file -%>
+<%- if @_intranet_access_log -%>
    TransferLog <%= @_intranet_access_log %>
 <%- end -%>
-<%- if @_intranet_rewrite_log_file -%>
+<%- if @_intranet_rewrite_log -%>
    RewriteLog  <%= @_intranet_rewrite_log %>
 <%- end -%>
 </VirtualHost>
