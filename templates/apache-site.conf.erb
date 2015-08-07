@@ -3,13 +3,13 @@
 
 # Koha instance <%= @site_name %> Apache config.
 
-Listen <%= @koha_site_opac_port %>
+Listen <%= @opac_port %>
 <%- if @koha_site_opac_port != @koha_site_intra_port -%>
-Listen <%= @koha_site_intra_port %>
+Listen <%= @intra_port %>
 <%- end -%>
 
 # OPAC
-<VirtualHost *:<%= @koha_site_opac_port %>>
+<VirtualHost *:<%= @opac_port %>>
    Include /etc/koha/apache-shared.conf
 #  Include /etc/koha/apache-shared-disable.conf
    Include /etc/koha/apache-shared-opac.conf
@@ -32,7 +32,7 @@ Listen <%= @koha_site_intra_port %>
 </VirtualHost>
 
 # Intranet
-<VirtualHost *:<%= @koha_site_intra_port %>>
+<VirtualHost *:<%= @intra_port %>>
    Include /etc/koha/apache-shared.conf
 #  Include /etc/koha/apache-shared-disable.conf
    Include /etc/koha/apache-shared-intranet.conf

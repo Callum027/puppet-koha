@@ -47,6 +47,18 @@ define koha::site
 	$collect_memcached		= $::koha::params::site_collect_memcached,
 	$collect_zebra			= $::koha::params::site_collect_zebra,
 
+	# Site options.
+	$opac_port			= $::koha::params::site_opac_port,
+	$intra_port			= $::koha::params::site_intra_port,
+
+	$opac_error_log			= undef, # Defined in resource body
+	$opac_access_log		= undef, # Defined in resource body
+	$opac_rewrite_log		= undef, # Defined in resource body
+
+	$intranet_error_log		= undef, # Defined in resource body
+	$intranet_access_log		= undef, # Defined in resource body
+	$intranet_rewrite_log		= undef, # Defined in resource body
+
 	# Koha options.
 	$koha_conf_xml			= undef, # Defined in resource body
 	$koha_user			= undef, # Defined in resource body
@@ -354,6 +366,15 @@ define koha::site
 	##
 	# Processed default parameters.
 	##
+
+	$_opac_error_log = pick($opac_error_log, "${koha_log_dir}/${site_name}/opac-error.log")
+	$_opac_access_log = pick($opac_access_log, "${koha_log_dir}/${site_name}/opac-access.log")
+	$_opac_rewrite_log = pick($opac_rewrite_log, "${koha_log_dir}/${site_name}/opac-rewrite.log")
+
+	$_intranet_error_log = pick($intranet_error_log, "${koha_log_dir}/${site_name}/intra-error.log")
+	$_intranet_access_log = pick($intranet_access_log, "${koha_log_dir}/${site_name}/intra-access.log")
+	$_intranet_rewrite_log = pick($intranet_rewrite_log, "${koha_log_dir}/${site_name}/intra-rewrite.log")
+
 
 	$_koha_conf_xml = pick($koha_conf_xml, "${koha_site_dir}/${site_name}/koha-conf.xml")
 	$_koha_user = pick($koha_user, "$site_name-koha")
