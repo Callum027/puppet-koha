@@ -56,13 +56,13 @@ define koha::zebra::site
 
 	# Biblioserver SRU options.
 	$biblioserver_public_sru_server		= $::koha::params::koha_conf_xml::biblioserver_public_sru_server,
-	$biblioserver_sru_host			= undef, # Required for biblioserver_public_sru_server == true
+	$biblioserver_sru_host			= undef, # Defined in resource body
 	$biblioserver_sru_port			= $::koha::params::koha_conf_xml::biblioserver_sru_port,
 	$biblioserver_sru_database		= $::koha::params::koha_conf_xml::config_biblioserver,
 
 	# Authorityserver SRU options.
 	$authorityserver_public_sru_server	= $::koha::params::koha_conf_xml::authorityserver_public_sru_server,
-	$authorityserver_sru_host		= undef, # Required for authorityserver_public_sru_server == true
+	$authorityserver_sru_host		= undef, # Defined in resource body
 	$authorityserver_sru_port		= $::koha::params::koha_conf_xml::authorityserver_sru_port,
 	$authorityserver_sru_database		= $::koha::params::koha_conf_xml::config_authorityserver,
 
@@ -86,25 +86,12 @@ define koha::zebra::site
 		include ::koha::zebra::service
 	}
 
-	# Set the default value for the Koha user account.
-	if ($koha_user == undef)
-	{
-		$_koha_user = "$site_name-koha"
-	}
-	else
-	{
-		$_koha_user = $koha_user
-	}
+	$_koha_conf_xml = pick($koha_conf_xml, "${koha_site_dir}/${site_name}/koha-conf.xml")
+	$_koha_user = pick($koha_user, "$site_name-koha")
 
-	# Set the default value for the public Zebra Z39.50 server.
-	if ($koha_zebra_sru_hostname == undef)
-	{
-		$_koha_zebra_sru_hostname = "$site_name.$::domain"
-	}
-	else
-	{
-		$_koha_zebra_sru_hostname = $koha_zebra_sru_hostname
-	}
+	$_biblioserver_sru_host = pick($biblioserver_sru_host, "$site_name.$::domain")
+	$_authorityserver_sru_host = pick($authorityserver_sru_host, "$site_name.$::domain")
+
 
 	if ($ensure == "present")
 	{
@@ -169,7 +156,10 @@ define koha::zebra::site
 	{
 		::koha::files::koha_conf_xml::default
 		{ $site_name:
-			config	=> false,
+			file		=> $_koha_conf_xml,
+			file_group	=> $_koha_user,
+
+			config		=> false,
 		}
 	}
 
