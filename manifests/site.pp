@@ -51,6 +51,8 @@ define koha::site
 	$opac_port			= $::koha::params::site_opac_port,
 	$intra_port			= $::koha::params::site_intra_port,
 
+	$use_rewrite_log		= $::koha::params::site_use_rewrite_log,
+
 	$opac_error_log			= undef, # Defined in resource body
 	$opac_access_log		= undef, # Defined in resource body
 	$opac_rewrite_log		= undef, # Defined in resource body

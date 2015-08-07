@@ -26,7 +26,7 @@ Listen <%= @intra_port %>
 <%- if @_opac_access_log -%>
    TransferLog <%= @_opac_access_log %>
 <%- end -%>
-<% if @_opac_rewrite_log -%>
+<% if @_use_rewrite_log == true and @_opac_rewrite_log -%>
    RewriteLog  <%= @_opac_rewrite_log %>
 <%- end -%>
 </VirtualHost>
@@ -49,7 +49,7 @@ Listen <%= @intra_port %>
 <%- if @_intranet_access_log -%>
    TransferLog <%= @_intranet_access_log %>
 <%- end -%>
-<%- if @_intranet_rewrite_log -%>
+<%- if @_use_rewrite_log == true and @_intranet_rewrite_log -%>
    RewriteLog  <%= @_intranet_rewrite_log %>
 <%- end -%>
 </VirtualHost>

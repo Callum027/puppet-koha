@@ -117,6 +117,8 @@ class koha::params
 	$site_opac_port			= "80"
 	$site_intra_port		= "80"
 
+	$site_use_rewrite_log		= false
+
 	##
 	# Default configuration variables for specific software components.
 	# koha-conf.xml handling is in koha::params::koha_conf_xml.
