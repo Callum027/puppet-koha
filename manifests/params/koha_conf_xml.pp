@@ -46,12 +46,16 @@ class koha::params::koha_conf_xml
 	$default_authorities_indexing_mode	= "dom"
 
 	# Server-specific options.
+	$biblioserver_public_sru_server		= false
 	$biblioserver_id			= "biblioserver"
 	$biblioserver_sru_explain		= "${::koha::params::koha_config_dir}/zebradb/explain-biblios.xml"
+	$biblioserver_sru_host			= $::fqdn
 	$biblioserver_sru_port			= "9998"
 
+	$authorityserver_public_sru_server	= false
 	$authorityserver_id			= "authorityserver"
 	$authorityserver_sru_explain		= "${::koha::params::koha_config_dir}/zebradb/explain-authorities.xml"
+	$authorityserver_sru_host		= $::fqdn
 	$authorityserver_sru_port		= "9999"
 
 	$publicserver_id			= "publicserver"

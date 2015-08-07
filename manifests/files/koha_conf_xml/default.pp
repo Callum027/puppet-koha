@@ -86,9 +86,9 @@ define koha::files::koha_conf_xml::default
 	$biblioserver_config			= undef, # Defined in resource body
 	$biblioserver_dom_retrieval_info	= undef, # Defined in resource body
 
-	$biblioserver_public_sru_server		= false,
+	$biblioserver_public_sru_server		= $::koha::params::koha_conf_xml::biblioserver_public_sru_server,
 	$biblioserver_sru_explain		= $::koha::params::koha_conf_xml::biblioserver_sru_explain,
-	$biblioserver_sru_host			= undef, # Required for biblioserver_public_sru_server == true
+	$biblioserver_sru_host			= $::koha::params::koha_conf_xml::biblioserver_sru_host,
 	$biblioserver_sru_port			= $::koha::params::koha_conf_xml::biblioserver_sru_port,
 	$biblioserver_sru_database		= $::koha::params::koha_conf_xml::config_biblioserver,
 
@@ -98,9 +98,9 @@ define koha::files::koha_conf_xml::default
 	$authorityserver_config			= undef, # Defined in resource body
 	$authorityserver_dom_retrieval_info	= undef, # Defined in resource body
 
-	$authorityserver_public_sru_server	= false,
+	$authorityserver_public_sru_server	= $::koha::params::koha_conf_xml::authorityserver_public_sru_server,
 	$authorityserver_sru_explain		= $::koha::params::koha_conf_xml::authorityserver_sru_explain,
-	$authorityserver_sru_host		= undef, # Required for authorityserver_public_sru_server == true
+	$authorityserver_sru_host		= $::koha::params::koha_conf_xml::authorityserver_sru_host,
 	$authorityserver_sru_port		= $::koha::params::koha_conf_xml::authorityserver_sru_port,
 	$authorityserver_sru_database		= $::koha::params::koha_conf_xml::config_authorityserver,
 

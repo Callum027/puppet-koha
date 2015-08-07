@@ -55,16 +55,16 @@ define koha::zebra::site
 	$sru_port				= undef,
 
 	# Biblioserver SRU options.
-	$biblioserver_public_sru_server		= undef,
-	$biblioserver_sru_host			= undef,
-	$biblioserver_sru_port			= undef,
-	$biblioserver_sru_database		= undef,
+	$biblioserver_public_sru_server		= $::koha::params::koha_conf_xml::biblioserver_public_sru_server,
+	$biblioserver_sru_host			= undef, # Required for biblioserver_public_sru_server == true
+	$biblioserver_sru_port			= $::koha::params::koha_conf_xml::biblioserver_sru_port,
+	$biblioserver_sru_database		= $::koha::params::koha_conf_xml::config_biblioserver,
 
 	# Authorityserver SRU options.
-	$authorityserver_public_sru_server	= undef,
-	$authorityserver_sru_host		= undef,
-	$authorityserver_sru_port		= undef,
-	$authorityserver_sru_database		= undef,
+	$authorityserver_public_sru_server	= $::koha::params::koha_conf_xml::authorityserver_public_sru_server,
+	$authorityserver_sru_host		= undef, # Required for authorityserver_public_sru_server == true
+	$authorityserver_sru_port		= $::koha::params::koha_conf_xml::authorityserver_sru_port,
+	$authorityserver_sru_database		= $::koha::params::koha_conf_xml::config_authorityserver,
 
 	# koha::params default values.
 	$koha_log_dir				= $::koha::params::koha_log_dir,
