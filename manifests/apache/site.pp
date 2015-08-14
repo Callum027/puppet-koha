@@ -137,12 +137,12 @@ define koha::apache::site
 	# Resource declaration.
 	##
 
-	unless (defined[::Apache::Listen[$opac_port])
+	unless (defined(::Apache::Listen[$opac_port]))
 	{
 		::apache::listen { $opac_port: }
 	}
 
-	unless (defined[::Apache::Listen[$intra_port])
+	unless (defined(::Apache::Listen[$intra_port]))
 	{
 		::apache::listen { $intra_port: }
 	}
