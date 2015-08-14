@@ -137,6 +137,16 @@ define koha::apache::site
 	# Resource declaration.
 	##
 
+	unless (defined[::Apache::Listen[$opac_port])
+	{
+		::apache::listen { $opac_port: }
+	}
+
+	unless (defined[::Apache::Listen[$intra_port])
+	{
+		::apache::listen { $intra_port: }
+	}
+
 	# Generate Apache vhosts for the OPAC and Intranet servers for this Koha site.
 	file
 	{ "$apache_sites_available_dir/$site_name.conf":

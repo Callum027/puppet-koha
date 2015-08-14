@@ -3,11 +3,6 @@
 
 # Koha instance <%= @site_name %> Apache config.
 
-Listen <%= @opac_port %>
-<%- if @opac_port != @intra_port -%>
-Listen <%= @intra_port %>
-<%- end -%>
-
 # OPAC
 <VirtualHost *:<%= @opac_port %>>
    Include /etc/koha/apache-shared.conf
