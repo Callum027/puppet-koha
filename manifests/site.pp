@@ -409,7 +409,7 @@ define koha::site
 		memcached_server	=> $_memcached_server,
 		memcached_namespace	=> $_memcached_namespace,
 
-		require			=> [ Class["::koha"], ::Koha::User[$_koha_user] ],
+		require			=> ::Koha::User[$_koha_user],
 		before			=> Class["::koha::service"],
 		notify			=> Class["::apache::service"],
 	}
