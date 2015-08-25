@@ -3,8 +3,10 @@
 
 # Koha instance <%= @site_name %> Apache config.
 
+<% if @ssl_only != true -%>
 # OPAC
-<VirtualHost *:<%= @opac_port %>>
+<% @opac_port.each do |p| -%>
+<VirtualHost *:<%= p %>>
    Include /etc/koha/apache-shared.conf
 #  Include /etc/koha/apache-shared-disable.conf
    Include /etc/koha/apache-shared-opac.conf
@@ -26,8 +28,44 @@
 <%- end -%>
 </VirtualHost>
 
+<%- end -%>
+<%- end -%>
+<% if @opac_ssl == true -%>
+# OPAC (SSL)
+<% @opac_ssl_port.each do |p| -%>
+<VirtualHost *:<%= p %>>
+   Include /etc/koha/apache-shared.conf
+#  Include /etc/koha/apache-shared-disable.conf
+   Include /etc/koha/apache-shared-opac.conf
+
+   ServerName <%= @_opac_server_name %>
+   SetEnv KOHA_CONF "<%= @koha_site_dir %>/<%= @site_name %>/koha-conf.xml"
+   SetEnv MEMCACHED_SERVERS "<%= @_memcached_servers %>"
+   SetEnv MEMCACHED_NAMESPACE "<%= @_memcached_namespace %>"
+   AssignUserID <%= @_koha_user %> <%= @_koha_user %>
+
+<% if @_opac_error_ssl_log -%>
+   ErrorLog    <%= @_opac_error_ssl_log %>
+<%- end -%>
+<%- if @_opac_access_ssl_log -%>
+   TransferLog <%= @_opac_access_ssl_log %>
+<%- end -%>
+<% if @_use_rewrite_log == true and @_opac_rewrite_ssl_log -%>
+   RewriteLog  <%= @_opac_rewrite_ssl_log %>
+
+   SSLEngine on
+   SSLCertificateFile      "@opac_ssl_certificate_file"
+   SSLCertificateKeyFile   "@opac_ssl_certificate_key_file"
+   SSLCACertificatePath    "@opac_ssl_certificate_path"
+<%- end -%>
+</VirtualHost>
+
+<%- end -%>
+<%- end -%>
+<% if @ssl_only != true -%>
 # Intranet
-<VirtualHost *:<%= @intra_port %>>
+<% @intra_port.each do |p| -%>
+<VirtualHost *:<%= p %>>
    Include /etc/koha/apache-shared.conf
 #  Include /etc/koha/apache-shared-disable.conf
    Include /etc/koha/apache-shared-intranet.conf
@@ -48,3 +86,37 @@
    RewriteLog  <%= @_intranet_rewrite_log %>
 <%- end -%>
 </VirtualHost>
+
+<%- end -%>
+<% if @intra_ssl == true -%>
+# Intranet (SSL)
+<% @intra_ssl_port.each do |p| -%>
+<VirtualHost *:<%= p %>>
+   Include /etc/koha/apache-shared.conf
+#  Include /etc/koha/apache-shared-disable.conf
+   Include /etc/koha/apache-shared-intranet.conf
+   
+   ServerName <%= @_intra_server_name %>
+   SetEnv KOHA_CONF "<%= @koha_site_dir %>/<%= @site_name %>/koha-conf.xml"
+   SetEnv MEMCACHED_SERVERS "<%= @_memcached_servers %>"
+   SetEnv MEMCACHED_NAMESPACE "<%= @_memcached_namespace %>"
+   AssignUserID <%= @_koha_user %> <%= @_koha_user %>
+
+<% if @_intranet_error_ssl_log -%>
+   ErrorLog    <%= @_intranet_error_ssl_log %>
+<%- end -%>
+<%- if @_intranet_access_ssl_log -%>
+   TransferLog <%= @_intranet_access_ssl_log %>
+<%- end -%>
+<%- if @_use_rewrite_ssl_log == true and @_intranet_rewrite_ssl_log -%>
+   RewriteLog  <%= @_intranet_rewrite_ssl_log %>
+<%- end -%>
+
+   SSLEngine on
+   SSLCertificateFile      "@intra_ssl_certificate_file"
+   SSLCertificateKeyFile   "@intra_ssl_certificate_key_file"
+   SSLCACertificatePath    "@intra_ssl_certificate_path"
+</VirtualHost>
+
+<%- end -%>
+<%- end -%>

@@ -44,8 +44,24 @@ define koha::apache::site
 
 	$koha_user,
 
+	$ssl				= $::koha::params::site_ssl,
+	$ssl_only			= $::koha::params::site_ssl_only,
+	$opac_ssl			= undef, # Defined in resource body
+	$intra_ssl			= undef, # Defined in resource body
+
 	$opac_port			= $::koha::params::site_opac_port,
+	$opac_ssl_port			= $::koha::params::site_opac_ssl_port,
+
 	$intra_port			= $::koha::params::site_intra_port,
+	$intra_ssl_port			= $::koha::params::site_intra_ssl_port,
+
+	$opac_ssl_certificate_file	= $::koha::params::site_ssl_certificate_file,
+	$opac_ssl_certificate_key_file	= $::koha::params::site_ssl_certificate_key_file,
+	$opac_ssl_ca_certificate_path	= $::koha::params::site_ssl_ca_certificate_path,
+
+	$intra_ssl_certificate_file	= $::koha::params::site_ssl_certificate_file,
+	$intra_ssl_certificate_key_file	= $::koha::params::site_ssl_certificate_key_file,
+	$intra_ssl_ca_certificate_path	= $::koha::params::site_ssl_ca_certificate_path,
 
 	$opac_server_name		= undef, # Defined in resource body
 	$intra_server_name		= undef, # Defined in resource body
@@ -58,11 +74,20 @@ define koha::apache::site
 	$opac_access_log		= undef, # Defined in resource body
 	$opac_rewrite_log		= undef, # Defined in resource body
 
+	$opac_error_ssl_log		= undef, # Defined in resource body
+	$opac_access_ssl_log		= undef, # Defined in resource body
+	$opac_rewrite_ssl_log		= undef, # Defined in resource body
+
 	$intranet_error_log		= undef, # Defined in resource body
 	$intranet_access_log		= undef, # Defined in resource body
 	$intranet_rewrite_log		= undef, # Defined in resource body
 
+	$intranet_error_ssl_log		= undef, # Defined in resource body
+	$intranet_access_ssl_log	= undef, # Defined in resource body
+	$intranet_rewrite_ssl_log	= undef, # Defined in resource body
+
 	# koha::params default values.
+	$koha_site_dir			= $::koha::params::koha_site_dir,
 	$apache_sites_available_dir	= $::koha::params::apache_sites_available_dir,
 	$apache_sites_enabled_dir	= $::koha::params::apache_sites_enabled_dir
 )
@@ -82,8 +107,8 @@ define koha::apache::site
 
 	$_site_intra = pick($site_intra, "$site_name-intra")
 
-	$_mysql_db = pick($mysql_db, "koha_$site_name")
-	$_mysql_user = pick($mysql_user, $_mysql_db)
+	$_opac_ssl = pick($opac_ssl, $ssl)
+	$_intra_ssl = pick($intra_ssl, $ssl)
 
 	if (is_array($memcached_servers))
 	{
@@ -108,9 +133,18 @@ define koha::apache::site
 	$_opac_access_log = pick($opac_access_log, "${koha_log_dir}/${site_name}/opac-access.log")
 	$_opac_rewrite_log = pick($opac_rewrite_log, "${koha_log_dir}/${site_name}/opac-rewrite.log")
 
+	$_opac_error_ssl_log = pick($opac_error_ssl_log, "${koha_log_dir}/${site_name}/opac-error-ssl.log")
+	$_opac_access_ssl_log = pick($opac_access_ssl_log, "${koha_log_dir}/${site_name}/opac-access-ssl.log")
+	$_opac_rewrite_ssl_log = pick($opac_rewrite_ssl_log, "${koha_log_dir}/${site_name}/opac-rewrite-ssl.log")
+
+
 	$_intranet_error_log = pick($intranet_error_log, "${koha_log_dir}/${site_name}/intranet-error.log")
 	$_intranet_access_log = pick($intranet_access_log, "${koha_log_dir}/${site_name}/intranet-access.log")
 	$_intranet_rewrite_log = pick($intranet_rewrite_log, "${koha_log_dir}/${site_name}/intranet-rewrite.log")
+
+	$_intranet_error_ssl_log = pick($intranet_error_ssl_log, "${koha_log_dir}/${site_name}/intranet-error-ssl.log")
+	$_intranet_access_ssl_log = pick($intranet_access_ssl_log, "${koha_log_dir}/${site_name}/intranet-access-ssl.log")
+	$_intranet_rewrite_ssl_log = pick($intranet_rewrite_ssl_log, "${koha_log_dir}/${site_name}/intranet-rewrite-ssl.log")
 
 
 	if ($ensure == "present")
@@ -137,15 +171,8 @@ define koha::apache::site
 	# Resource declaration.
 	##
 
-	unless (defined(::Apache::Listen[$opac_port]))
-	{
-		::apache::listen { $opac_port: }
-	}
-
-	unless (defined(::Apache::Listen[$intra_port]))
-	{
-		::apache::listen { $intra_port: }
-	}
+	ensure_resource("apache::listen", $opac_port)
+	ensure_resource("apache::listen", $intra_port)
 
 	# Generate Apache vhosts for the OPAC and Intranet servers for this Koha site.
 	file

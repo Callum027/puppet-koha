@@ -117,8 +117,17 @@ class koha::params
 	$site_collect_memcached		= true
 	$site_collect_zebra		= true
 
-	$site_opac_port			= [ "80", "443" ]
-	$site_intra_port		= [ "80", "443" ]
+	$site_ssl			= true
+	$site_ssl_only			= false
+
+	$site_opac_port			= "80"
+	$site_opac_ssl_port		= "443"
+	$site_intra_port		= "80"
+	$site_intra_ssl_port		= "443"
+
+	$site_ssl_certificate_file	= "/etc/ssl/certs/ssl-cert-snakeoil.pem"
+	$site_ssl_certificate_key_file	= "/etc/ssl/private/ssl-cert-snakeoil.key"
+	$site_ssl_ca_certificate_path	= "/etc/ssl/certs"
 
 	$site_use_rewrite_log		= false
 
