@@ -63,7 +63,10 @@ class koha::params
 			$koha_lib_dir					= "/var/lib/koha"
 
 			$koha_log_dir					= "/var/log/koha"
+			$koha_log_dir_owner				= "root"
+			$koha_log_dir_group				= "root"
 			$koha_log_dir_mode				= 755
+			$koha_log_dir_site_mode				= 755
 
 			$koha_run_dir					= "/var/run/koha"
 			$koha_share_dir					= "/usr/share/koha"

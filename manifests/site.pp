@@ -415,15 +415,11 @@ define koha::site
 	}
 
 	# Required folders for configuration and log files.
-	file
-	{ "$koha_log_dir/$site_name":
-		ensure	=> $directory_ensure,
-		owner	=> $_koha_user,
-		group	=> $_koha_user,
-		mode	=> $koha_log_dir_mode,
-
-		require	=> [ Class["::koha"], ::Koha::User[$_koha_user] ],
-		notify	=> Class["::apache::service"],
+	::koha::log_dir
+	{ $site_name:
+		koha_user	=> $_koha_user,
+		require		=> Class["::koha"],
+		notify		=> Class["::apache::service"],
 	}
 
 	file
