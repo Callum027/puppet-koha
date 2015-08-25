@@ -117,8 +117,8 @@ class koha::params
 	$site_collect_memcached		= true
 	$site_collect_zebra		= true
 
-	$site_opac_port			= "80"
-	$site_intra_port		= "80"
+	$site_opac_port			= [ "80", "443" ]
+	$site_intra_port		= [ "80", "443" ]
 
 	$site_use_rewrite_log		= false
 
