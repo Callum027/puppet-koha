@@ -73,6 +73,7 @@ class koha::install
 
 		::apache::mod { "cgi": }
 		contain ::apache::mod::rewrite
+		contain ::apache::mod::ssl
 	}
 
 	# Install packages.
