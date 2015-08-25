@@ -116,9 +116,9 @@ define koha::zebra::site
 		}
 	}
 
-	if (defined(File["$koha_log_dir/$site_name"]))
+	if (defined(::Koha::Log_dir[$site_name]))
 	{
-		Class["::koha::zebra"] -> File["$koha_log_dir/$site_name"] ~> Class["::koha::zebra::service"]
+		Class["::koha::zebra"] -> ::Koha::Log_dir[$site_name] ~> Class["::koha::zebra::service"]
 	}
 	else
 	{
