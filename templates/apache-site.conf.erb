@@ -49,12 +49,12 @@
 <%- end -%>
 <% if @_use_rewrite_log == true and @_opac_rewrite_ssl_log -%>
    RewriteLog  <%= @_opac_rewrite_ssl_log %>
+<%- end -%>
 
    SSLEngine on
    SSLCertificateFile      "<%= @opac_ssl_certificate_file %>"
    SSLCertificateKeyFile   "<%= @opac_ssl_certificate_key_file %>"
    SSLCACertificatePath    "<%= @opac_ssl_ca_certificate_path %>"
-<%- end -%>
 </VirtualHost>
 
 <%- end -%>
