@@ -172,7 +172,9 @@ define koha::apache::site
 	##
 
 	ensure_resource("apache::listen", $opac_port)
+	ensure_resource("apache::listen", $opac_ssl_port)
 	ensure_resource("apache::listen", $intra_port)
+	ensure_resource("apache::listen", $intra_ssl_port)
 
 	# Generate Apache vhosts for the OPAC and Intranet servers for this Koha site.
 	file
