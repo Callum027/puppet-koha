@@ -450,15 +450,15 @@ define koha::site
 		biblioserver			=> false,
 		authorityserver			=> false,
 
-		config_db_scheme		=> $db_scheme,
-		config_database			=> $_database,
-		config_hostname			=> $db_hostname,
-		config_port			=> $db_port,
+		config_db_scheme		=> $_db_scheme,
+		config_database			=> $_db_database,
+		config_hostname			=> $_db_hostname,
+		config_port			=> $_db_port,
 		config_user			=> $_db_user,
-		config_pass			=> $db_password,
+		config_pass			=> $_db_pass,
 
-		serverinfo_user			=> $zebra_user,
-		serverinfo_password		=> $zebra_password,
+		serverinfo_user			=> $_zebra_user,
+		serverinfo_password		=> $_zebra_password,
 
 		elasticsearch_server		=> $_elasticsearch_server,
 		elasticsearch_index_name	=> $_elasticsearch_index_name,
