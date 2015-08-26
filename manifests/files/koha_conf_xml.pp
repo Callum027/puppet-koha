@@ -58,6 +58,11 @@ define koha::files::koha_conf_xml
 		fail("You must define koha::params for this resource to work properly")
 	}
 
+	unless (defined(Class["::koha::params::koha_conf_xml"]))
+	{
+		fail("You must define koha::params::koha_conf_xml for this resource to work properly")
+	}
+
 	##
 	# Resource declaration.
 	##
@@ -66,9 +71,9 @@ define koha::files::koha_conf_xml
 	{ "${site_name}::koha_conf_xml":
 		path	=> $file,
 		ensure	=> $ensure,
-		owner	=> $owner,
+		owner	=> $_owner,
 		group	=> $group,
-		mode	=> $mode,
+		mode	=> $_mode,
 	}
 
 	::concat::fragment

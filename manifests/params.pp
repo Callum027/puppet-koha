@@ -34,8 +34,6 @@
 #
 class koha::params
 {
-	include ::koha::params::koha_conf_xml
-
 	case $::osfamily
 	{
 		'Debian':
