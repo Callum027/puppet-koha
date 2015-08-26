@@ -43,8 +43,8 @@ define koha::zebra::site
 	$koha_user				= undef, # Defined in resource body
 
 	# Zebra options.
-	$zebra_user				= $::koha::params::zebra_user,
-	$zebra_password,
+	$user					= $::koha::params::zebra_user,
+	$password,
 
 	$language				= $::koha::params::language,
 	$marc_format				= $::koha::params::marc_format,
