@@ -36,10 +36,19 @@
 # Copyright 2015 Callum Dickinson.
 #
 class koha::params::koha_conf_xml
+(
+	$koha_config_dir		= $::koha::params::koha_config_dir,
+	$koha_doc_dir			= $::koha::params::koha_doc_dir,
+	$koha_lib_dir			= $::koha::params::koha_lib_dir,
+	$koha_site_dir_conf_file_owner	= $::koha::params::koha_site_dir_conf_file_owner,
+	$koha_site_dir_conf_file_mode	= $::koha::params::koha_site_dir_conf_file_mode,
+	$koha_share_dir			= $::koha::params::koha_share_dir,
+	$zebra_user			= $::koha::params::zebra_user
+) inherits koha::params
 {
 	# File options.
-	$file_owner				= $::koha::params::koha_site_dir_conf_file_owner
-	$file_mode				= $::koha::params::koha_site_dir_conf_file_mode
+	$file_owner				= $koha_site_dir_conf_file_owner
+	$file_mode				= $koha_site_dir_conf_file_mode
 
 	# Global default options.
 	$default_biblios_indexing_mode		= "dom"
@@ -48,12 +57,12 @@ class koha::params::koha_conf_xml
 	# Server-specific options.
 	$biblioserver_public_sru_server		= false
 	$biblioserver_id			= "biblioserver"
-	$biblioserver_sru_explain		= "${::koha::params::koha_config_dir}/zebradb/explain-biblios.xml"
+	$biblioserver_sru_explain		= "${koha_config_dir}/zebradb/explain-biblios.xml"
 	$biblioserver_sru_port			= "9998"
 
 	$authorityserver_public_sru_server	= false
 	$authorityserver_id			= "authorityserver"
-	$authorityserver_sru_explain		= "${::koha::params::koha_config_dir}/zebradb/explain-authorities.xml"
+	$authorityserver_sru_explain		= "${koha_config_dir}/zebradb/explain-authorities.xml"
 	$authorityserver_sru_port		= "9999"
 
 	$publicserver_id			= "publicserver"
@@ -62,7 +71,7 @@ class koha::params::koha_conf_xml
 	$publicserver_sru_port			= "210"
 
 	$mergeserver_id				= "mergeserver"
-	$mergeserver_cql2rpn			= "${::koha::params::koha_lib_dir}/zebradb/pqf.properties"
+	$mergeserver_cql2rpn			= "${koha_lib_dir}/zebradb/pqf.properties"
 	$mergeserver_socket			= "tcp:@:${mergeserver_port}"
 
 	# Config options.
@@ -78,17 +87,17 @@ class koha::params::koha_conf_xml
 
 	$config_enable_plugins			= 0
 
-	$config_intranetdir 			= "${::koha::params::koha_share_dir}/intranet/cgi-bin"
-	$config_opacdir				= "${::koha::params::koha_share_dir}/opac/cgi-bin/opac"
-	$config_opachtdocs			= "${::koha::params::koha_share_dir}/opac/htdocs/opac-tmpl"
-	$config_intrahtdocs			= "${::koha::params::koha_share_dir}/intranet/htdocs/intranet-tmpl"
-	$config_includes			= "${::koha::params::koha_share_dir}/intranet/htdocs/intranet-tmpl/prog/en/includes/"
-	$config_docdir				= "${::koha::params::koha_doc_dir}"
+	$config_intranetdir 			= "${koha_share_dir}/intranet/cgi-bin"
+	$config_opacdir				= "${koha_share_dir}/opac/cgi-bin/opac"
+	$config_opachtdocs			= "${koha_share_dir}/opac/htdocs/opac-tmpl"
+	$config_intrahtdocs			= "${koha_share_dir}/intranet/htdocs/intranet-tmpl"
+	$config_includes			= "${koha_share_dir}/intranet/htdocs/intranet-tmpl/prog/en/includes/"
+	$config_docdir				= "${koha_doc_dir}"
 
 	$config_backup_db_via_tools		= 0
 	$config_backup_conf_via_tools		= 0
 
-	$config_install_log			= "${::koha::params::koha_share_dir}/misc/koha-install-log"
+	$config_install_log			= "${koha_share_dir}/misc/koha-install-log"
 
 	$config_useldapserver			= 0
 	$config_useshibboleth			= 0
@@ -98,13 +107,13 @@ class koha::params::koha_conf_xml
 
 	$config_use_zebra_facets		= 1
 
-	$config_queryparser_config		= "${::koha::params::koha_config_dir}/searchengine/queryparser.yaml"
+	$config_queryparser_config		= "${koha_config_dir}/searchengine/queryparser.yaml"
 
 	# Listen options.
 	
 
 	# Server options.
-	$server_cql2rpn				= "${::koha::params::koha_config_dir}/zebradb/pqf.properties"
+	$server_cql2rpn				= "${koha_config_dir}/zebradb/pqf.properties"
 
 	$server_include_retrieval_info		= true
 
@@ -114,6 +123,6 @@ class koha::params::koha_conf_xml
 	$server_public_sru_server		= false
 
 	# Serverinfo options.
-	$serverinfo_ccl2rpn			= "${::koha::params::koha_config_dir}/zebradb/ccl.properties"
-	$serverinfo_user			= $::koha::params::zebra_user
+	$serverinfo_ccl2rpn			= "${koha_config_dir}/zebradb/ccl.properties"
+	$serverinfo_user			= $zebra_user
 }

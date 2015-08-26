@@ -23,6 +23,7 @@
 class koha($ensure = "present")
 {
 	require ::koha::params
+	require ::koha::params::koha_conf_xml
 
 	unless (defined(Class["::koha::install"]))
 	{	
