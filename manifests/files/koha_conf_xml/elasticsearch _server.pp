@@ -41,6 +41,7 @@ define koha::files::koha_conf_xml::elasticsearch
 	$site_name,
 
 	# Elasticsearch options.
+	$server,
 	$index_name
 )
 {
@@ -63,18 +64,10 @@ define koha::files::koha_conf_xml::elasticsearch
 	}
 
 	::concat::fragment
-	{ "${site_name}::koha_conf_xml::elasticsearch_start":
+	{ "${site_name}::koha_conf_xml::elasticsearch_server::${server}":
 		target	=> "${site_name}::koha_conf_xml",
 		ensure	=> $ensure,
-		content	=> "<elasticsearch>\n",
-		order	=> "04",
-	}
-
-	::concat::fragment
-	{ "${site_name}::koha_conf_xml::elasticsearch_end":
-		target	=> "${site_name}::koha_conf_xml",
-		ensure	=> $ensure,
-		content	=> " <index_name>$index_name</index_name>\n</elasticsearch>\n",
-		order	=> "06",
+		content	=> " <server>$server</server>\n",
+		order	=> "05",
 	}
 }

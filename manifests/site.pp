@@ -66,7 +66,7 @@ define koha::site
 	$koha_user			= undef, # Defined in resource body
 
 	# Database options. Automatically collected from other resources.
-	$db_scheme			= undef,
+	$db_db_scheme			= undef,
 	$db_database			= undef,
 	$db_hostname			= undef,
 	$db_port			= undef,
@@ -96,28 +96,69 @@ define koha::site
 
 	if ($collect_db == true)
 	{
-		$db_servers = query_facts("Koha::Db::Site['$site_name']", [ "scheme", "database", "port", "user", "pass" ])
-		$db_servers_array = any2array($db_servers)
-
-		$db_server = merge({ "hostname" =>  $db_servers_array[0] }, $db_servers_array[1])
+		::Koha::Site::Db <<| site_name == $site_name |>>
+	}
+	else
+	{
+		::koha::site::db
+		{ $site_name:
+			db_scheme	=> $db_db_scheme,
+			database	=> $db_database,
+			hostname	=> $db_hostname,
+			port		=> $db_port,
+			user		=> $db_user,
+			pass		=> $db_pass,
+		}
 	}
 
 	if ($collect_elasticsearch == true)
 	{
-		$elasticsearch_servers = query_facts("Koha::Elasticsearch::Site['$site_name']", [ "index_name" ])
+		::Koha::Site::Elasticsearch <<| site_name == $site_name |>>
+		::Koha::Site::Elasticsearch_server <<| index_name == $site_name |>>
+	}
+	else
+	{
+		::koha::site::elasticsearch
+		{ $site_name:
+			index_name	=> $elasticsearch_index_name,
+		}
+
+		::koha::site::elasticsearch_server
+		{ $elasticsearch_server:
+			index_name	=> $elasticsearch_index_name,
+		}
 	}
 
 	if ($collect_memcached == true)
 	{
-		$memcached_servers = query_facts("Koha::Memcached::Site['$site_name']", [ "namespace" ])
+		::Koha::Site::Memcached <<| site_name == $site_name |>>
+		::Koha::Site::Memcached_server <<| namespace == $site_name |>>
+	}
+	else
+	{
+		::koha::site::memcached
+		{ $site_name:
+			namespace	=> $memcached_namespace,
+		}
+
+		::koha::site::memcached_server
+		{ $memcached_server:
+			namespace	=> $memcached_namespace,
+		}
 	}
 
 	if ($collect_zebra == true)
 	{
-		$zebra_servers = query_facts("Koha::Zebra::Site['$site_name']", [ "user", "password" ])
-		$zebra_servers_array = any2array($zebra_servers)
-
-		$zebra_server = merge({ "hostname" =>  $zebra_servers_array[0] }, $zebra_servers_array[1])
+		::Koha::Site::Zebra <<| site_name == $site_name |>>
+	}
+	else
+	{
+		::koha::site::zebra
+		{ $site_name:
+			hostname	=> $zebra_hostname,
+			user		=> $zebra_user,
+			password	=> $zebra_password,	
+		}
 	}
 
 	##
@@ -406,8 +447,6 @@ define koha::site
 		koha_user		=> $_koha_user,
 
 		koha_conf		=> $_koha_conf_xml,
-		memcached_server	=> $_memcached_server,
-		memcached_namespace	=> $_memcached_namespace,
 
 		require			=> ::Koha::User[$_koha_user],
 		before			=> Class["::koha::service"],
@@ -450,23 +489,11 @@ define koha::site
 		biblioserver			=> false,
 		authorityserver			=> false,
 
-		config_db_scheme		=> $_db_scheme,
-		config_database			=> $_db_database,
-		config_hostname			=> $_db_hostname,
-		config_port			=> $_db_port,
-		config_user			=> $_db_user,
-		config_pass			=> $_db_pass,
-
-		serverinfo_user			=> $_zebra_user,
-		serverinfo_password		=> $_zebra_password,
-
-		elasticsearch_server		=> $_elasticsearch_server,
-		elasticsearch_index_name	=> $_elasticsearch_index_name,
-
 		require				=> [ Class["::koha"], ::Koha::User[$_koha_user], File["$koha_site_dir/$site_name"] ],
 		before				=> Class["::apache::service"],
 		notify				=> Class["::koha::service"],
 	}
+
 	
 	# Start the Koha service, if it hasn't been already.
 	include koha::service
