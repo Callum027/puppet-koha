@@ -1,6 +1,6 @@
-# == Class: koha::mysql::site
+# == Class: koha::site
 #
-# Add a Koha MySQL database for the given site name.
+# Set up a Koha site instance.
 #
 # === Parameters
 #
@@ -35,24 +35,39 @@
 #
 # Copyright 2015 Callum Dickinson.
 #
-define koha::site::elasticsearch
+define koha::files::koha_conf_xml::elasticsearch_server
 (
-	$ensure			= "present",
-	$site_name		= $name,
+	$ensure		= "present",
+	$site_name,
 
+	# Elasticsearch options.
 	$server,
 	$index_name
 )
 {
-	::Koha::Files::Koha_conf_xml::Default <| site_name == $site_name |>
+	unless (defined(::Koha::Files::Koha_conf_xml[$site_name]))
 	{
-		elasticsearch			=> true,
-		elasticsearch_index_name	=> $index_name,
+		fail("You must define the koha::files::koha_conf_xml resource for $site_name for this resource to work properly")
 	}
 
-	::koha::files::koha_conf_xml::elasticsearch_server
-	{ "$index_name-$server":
-		server		=> $server,
-		index_name	=> $index_name,
+	# Check validity of parameters.
+	if ($ensure != "present" and $ensure != "absent")
+	{
+		fail("Only possible values for \$ensure are 'present' and 'absent'")
+	}
+
+	validate_string($site_name, $id, $index_name)
+
+	if (is_array($server) != true)
+	{
+		validate_string($server)
+	}
+
+	::concat::fragment
+	{ "${site_name}::koha_conf_xml::elasticsearch_server::${server}":
+		target	=> "${site_name}::koha_conf_xml",
+		ensure	=> $ensure,
+		content	=> " <server>$server</server>\n",
+		order	=> "05",
 	}
 }

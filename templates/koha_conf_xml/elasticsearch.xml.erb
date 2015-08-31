@@ -1,9 +1,0 @@
-<elasticsearch>
-<%- if @server.is_a? String -%>
-	<server><%= @server %></server>
-<%- else -%>
-<%- for @server.each do |s| -%>
-	<server><%= s %></server>
-<%- end -%>
-        <index_name><%= @index_name %></index_name>
-</elasticsearch>

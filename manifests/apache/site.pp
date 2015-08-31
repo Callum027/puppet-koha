@@ -67,7 +67,9 @@ define koha::apache::site
 	$intra_server_name		= undef, # Defined in resource body
 
 	$koha_conf,
-	$memcached_server,
+
+	$collect_memcached,
+	$memcached_servers		= undef,
 	$memcached_namespace,
 
 	$opac_error_log			= undef, # Defined in resource body
@@ -110,6 +112,13 @@ define koha::apache::site
 	$_opac_ssl = pick($opac_ssl, $ssl)
 	$_intra_ssl = pick($intra_ssl, $ssl)
 
+	$_memcached_namespace = pick($memcached_namespace, "koha_${site_name}")
+
+	if ($collect_memcached != true)
+	{
+		$memcached_servers_query = query_nodes('Koha::Site::Memcached["$_memcached_namespace"]')
+	}
+
 	if (is_array($memcached_servers))
 	{
 		$_memcached_servers = join($memcached_servers, ",")
@@ -118,12 +127,14 @@ define koha::apache::site
 	{
 		$_memcached_servers = $memcached_servers
 	}
+	elsif ($memcached_servers_query != undef)
+	{
+		$_memcached_servers = join($memcached_servers_query, ",")
+	}
 	else
 	{
 		$_memcached_servers = ""
 	}
-
-	$_memcached_namespace = pick($memcached_namespace, "koha_${site_name}")
 
 	$_opac_server_name = pick($opac_server_name, "${site_name}.${::domain}")
 	$_intra_server_name = pick($intra_server_name, "${_site_intra}.${::domain}")
