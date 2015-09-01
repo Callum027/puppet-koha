@@ -40,11 +40,19 @@ define koha::db::site
 	$ensure			= "present",
 	$site_name		= $name,
 
-	$scheme,
+	$db_scheme,
 	$database,
 	$port,
 	$user,
 	$pass
 )
 {
+	@@::koha::site::db
+	{ $site_name:
+		db_scheme	=> $db_scheme,
+		database	=> $database,
+		port		=> $port,
+		user		=> $user,
+		pass		=> $pass,
+	}
 }

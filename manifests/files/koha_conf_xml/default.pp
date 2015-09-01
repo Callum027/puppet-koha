@@ -140,7 +140,7 @@ define koha::files::koha_conf_xml::default
 		{
 			"mysql":	{ $_config_port = $::koha::params::koha_conf_xml::config_port_mysql }
 			"postgresql":	{ $_config_port = $::koha::params::koha_conf_xml::config_port_postgresql }
-			default:	{ fail("$config_db_scheme is not a valid database scheme") }
+			default:	{ fail("unable to load default port for database scheme $config_db_scheme") }
 		}
 	}
 	else
@@ -179,14 +179,7 @@ define koha::files::koha_conf_xml::default
 		$_biblioserver_config = $biblioserver_config
 	}
 
-	if ($biblioserver_dom_retrieval_info == undef)
-	{
-		$_biblioserver_dom_retrieval_info = "${koha_config_dir}/${server_marc_format}-retrieval-info-bib-dom.xml"
-	}
-	else
-	{
-		$_biblioserver_dom_retrieval_info = $biblioserver_dom_retrieval_info
-	}
+	$_biblioserver_dom_retrieval_info = pick($biblioserver_dom_retrieval_info, "${koha_config_dir}/${server_marc_format}-retrieval-info-bib-dom.xml")
 
 	# Authorityserver options.
 	if ($authorityserver_socket == undef)
@@ -219,43 +212,14 @@ define koha::files::koha_conf_xml::default
 		$_authorityserver_config = $authorityserver_config
 	}
 
-	if ($authorityserver_dom_retrieval_info == undef)
-	{
-		$_authorityserver_dom_retrieval_info = "${koha_config_dir}/${server_marc_format}-retrieval-info-bib-dom.xml"
-	}
-	else
-	{
-		$_authorityserver_dom_retrieval_info = $authorityserver_dom_retrieval_info
-	}
+	$_authorityserver_dom_retrieval_info = pick($authorityserver_dom_retrieval_info, "${koha_config_dir}/${server_marc_format}-retrieval-info-auth-dom.xml")
 
 	# Publicserver options.
-	if ($publicserver_config == undef)
-	{
-		$_publicserver_config = $_biblioserver_config
-	}
-	else
-	{
-		$_publicserver_config = $publicserver_config
-	}
-
-	if ($publicserver_dom_retrieval_info == undef)
-	{
-		$_publicserver_dom_retrieval_info = $_biblioserver_dom_retrieval_info
-	}
-	else
-	{
-		$_publicserver_dom_retrieval_info = $publicserver_dom_retrieval_info
-	}
+	$_publicserver_config = pick($publicserver_config, $_biblioserver_config)
+	$_publicserver_dom_retrieval_info = pick($publicserver_dom_retrieval_info, $_biblioserver_dom_retrieval_info)
 
 	# Mergeserver options.
-	if ($mergeserver_config == undef)
-	{
-		$_mergeserver_config = $_biblioserver_config
-	}
-	else
-	{
-		$_mergeserver_config = $mergeserver_config
-	}
+	$_mergeserver_config = pick($mergeserver_config, $_biblioserver_config)
 
 	##
 	# Type validation.
@@ -263,7 +227,8 @@ define koha::files::koha_conf_xml::default
 
 	unless ($config != true)
 	{
-		# Validation for $config_db_scheme is done when $config_port is checked.
+		# TODO: PostgreSQL support when Koha adds it.
+		validate_re($config_db_scheme, "^mysql$", "invalid database scheme '$config_db_scheme'")
 		validate_string($config_database, $config_hostname, $config_user, $config_pass)
 	}
 
