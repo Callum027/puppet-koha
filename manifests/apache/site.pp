@@ -70,7 +70,7 @@ define koha::apache::site
 
 	$collect_memcached,
 	$memcached_servers		= undef,
-	$memcached_namespace,
+	$memcached_namespace		= undef,
 
 	$opac_error_log			= undef, # Defined in resource body
 	$opac_access_log		= undef, # Defined in resource body
@@ -111,8 +111,6 @@ define koha::apache::site
 
 	$_opac_ssl = pick($opac_ssl, $ssl)
 	$_intra_ssl = pick($intra_ssl, $ssl)
-
-	$_memcached_namespace = pick($memcached_namespace, "koha_${site_name}")
 
 	if ($collect_memcached != true)
 	{
