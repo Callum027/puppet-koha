@@ -61,22 +61,25 @@ define koha::files::koha_conf_xml::default
 	$biblios_indexing_mode			= $::koha::params::koha_conf_xml::default_biblios_indexing_mode,
 	$authorities_indexing_mode		= $::koha::params::koha_conf_xml::default_authorities_indexing_mode,
 
-	# Config options.
-	$config_db_scheme			= undef, # Required for config == true, default defined in koha::site::db
+	# Config options. Automatically filled out by the Koha puppet module
+	# when collect_db is set to "true" in koha::site.
+	$config_db_scheme			= undef, # Required for config == true
 	$config_database			= undef, # Required for config == true
 	$config_hostname			= undef, # Required for config == true
-	$config_port				= undef, # Defined in resource body
+	$config_port				= undef, # Required for config == true
 	$config_user				= undef, # Required for config == true
 	$config_pass				= undef, # Required for config == true
 
 	# Server options.
 	$server_marc_format			= $::koha::params::koha_conf_xml::server_marc_format,
 
-	# Serverinfo options.
-	$serverinfo_user			= $::koha::params::koha_conf_xml::serverinfo_user,
+	# Serverinfo options. Automatically filled out by the Koha puppet module
+	# when collect_zebra is set to "true" in koha::site.
+	$serverinfo_user			= undef, # Required for serverinfo == true
 	$serverinfo_password			= undef, # Required for serverinfo == true
 
-	# Elasticsearch options.
+	# Elasticsearch options. Automatically filled out by the Koha puppet module
+	# when collect_elasticsearch is set to "true" in koha::site.
 	$elasticsearch_server			= undef, # Required for elasticsearch == true
 	$elasticsearch_index_name		= undef, # Required for elasticsearch == true
 
@@ -131,22 +134,6 @@ define koha::files::koha_conf_xml::default
 	##
 	# Set default values.
 	##
-
-	# Config options.
-	if ($config_port == undef)
-	{
-		# Also does validation for $config_db_scheme.
-		case $config_db_scheme
-		{
-			"mysql":	{ $_config_port = $::koha::params::koha_conf_xml::config_port_mysql }
-			"postgresql":	{ $_config_port = $::koha::params::koha_conf_xml::config_port_postgresql }
-			default:	{ fail("unable to load default port for database scheme '$config_db_scheme'") }
-		}
-	}
-	else
-	{
-		$_config_port = $config_port
-	}
 
 	# Biblioserver options.
 	if ($biblioserver_socket == undef)
@@ -222,27 +209,6 @@ define koha::files::koha_conf_xml::default
 	$_mergeserver_config = pick($mergeserver_config, $_biblioserver_config)
 
 	##
-	# Type validation.
-	##
-
-	unless ($config != true)
-	{
-		# TODO: PostgreSQL support when Koha adds it.
-		validate_re($config_db_scheme, "^mysql$", "invalid database scheme '$config_db_scheme'")
-		validate_string($config_database, $config_hostname, $config_user, $config_pass)
-	}
-
-	unless ($serverinfo != true or ($biblioserver != true and $authorityserver != true and $publicserver != true))
-	{
-		validate_string($serverinfo_user, $serverinfo_password)
-	}
-
-	if (!is_integer($_config_port))
-	{
-		validate_re($_config_port, "^[:digit:]*$", "$_config_port is not a valid port number")
-	}
-
-	##
 	# Config part resource declarations.
 	##
 
@@ -270,9 +236,9 @@ define koha::files::koha_conf_xml::default
 			ensure			=> $ensure,
 
 			db_scheme		=> $config_db_scheme,
-			database		=> $_config_database,
+			database		=> $config_database,
 			hostname		=> $config_hostname,
-			port			=> $_config_port,
+			port			=> $config_port,
 			user			=> $config_user,
 			pass			=> $config_pass,			
 
