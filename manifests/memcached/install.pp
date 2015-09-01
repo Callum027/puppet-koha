@@ -37,8 +37,8 @@
 #
 class koha::memcached::install($ensure = "present")
 {
-	class
-	{ '::memcached':
-		ensure	=> $ensure,
+	if ($ensure == "present")
+	{
+		contain ::memcached
 	}
 }
