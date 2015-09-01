@@ -40,7 +40,7 @@ define koha::files::koha_conf_xml
 	$ensure		= "present",
 	$site_name	= $name,
 
-	$file,
+	$file		= undef, # Defined in resource body
 	$owner		= $::koha::params::koha_conf_xml::file_owner,
 	$group,
 	$mode		= $::koha::params::koha_conf_xml::file_mode,
@@ -66,14 +66,15 @@ define koha::files::koha_conf_xml
 	##
 	# Resource declaration.
 	##
+	$_file = pick($file, "${koha_site_dir}/${site_name}/koha-conf.xml")
 
 	::concat
 	{ "${site_name}::koha_conf_xml":
-		path	=> $file,
+		path	=> $_file,
 		ensure	=> $ensure,
-		owner	=> $_owner,
+		owner	=> $owner,
 		group	=> $group,
-		mode	=> $_mode,
+		mode	=> $mode,
 	}
 
 	::concat::fragment
@@ -90,5 +91,10 @@ define koha::files::koha_conf_xml
 		ensure	=> $ensure,
 		content	=> "</yazgfs>\n",
 		order	=> "99",
+	}
+
+	::koha::site::koha_conf_xml
+	{ $site_name:
+		koha_conf_xml	=> $_file,
 	}
 }

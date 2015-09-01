@@ -35,40 +35,19 @@
 #
 # Copyright 2015 Callum Dickinson.
 #
-define koha::site::db
+define koha::site::koha_conf_xml
 (
 	$ensure			= "present",
 	$site_name		= $name,
 
-	$db_scheme		= $::koha::params::koha_conf_xml::config_db_scheme,
-	$database,
-	$port,
-	$user,
-	$pass
+	$koha_conf_xml
 )
 {
 	if ($ensure == "present")
 	{
-		validate_re($config_db_scheme, "^mysql$", "invalid database scheme '$config_db_scheme'")
-
-		if (is_string($db_port))
+		::Koha::Apache::Site <| site_name == $site_name |>
 		{
-			validate_re($db_port, "^[0-9]*$", "the given parameter is not a valid port number")
-		}
-		else
-		{
-			validate_integer($db_port)
-		}
-
-		validate_string($config_database, $config_hostname, $config_user, $config_pass)
-
-		::Koha::Files::Koha_conf_xml::Default <| site_name == $site_name |>
-		{
-			config_db_scheme	=> $db_scheme,
-			config_database		=> $database,
-			config_port		=> $port,
-			config_user		=> $user,
-			config_pass		=> $pass,
+			koha_conf_xml	=> $koha_conf_xml,
 		}
 	}
 }

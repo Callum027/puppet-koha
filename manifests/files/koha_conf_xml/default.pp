@@ -62,7 +62,7 @@ define koha::files::koha_conf_xml::default
 	$authorities_indexing_mode		= $::koha::params::koha_conf_xml::default_authorities_indexing_mode,
 
 	# Config options.
-	$config_db_scheme			= $::koha::params::koha_conf_xml::config_db_scheme,
+	$config_db_scheme			= undef, # Required for config == true, default defined in koha::site::db
 	$config_database			= undef, # Required for config == true
 	$config_hostname			= undef, # Required for config == true
 	$config_port				= undef, # Defined in resource body
@@ -140,7 +140,7 @@ define koha::files::koha_conf_xml::default
 		{
 			"mysql":	{ $_config_port = $::koha::params::koha_conf_xml::config_port_mysql }
 			"postgresql":	{ $_config_port = $::koha::params::koha_conf_xml::config_port_postgresql }
-			default:	{ fail("unable to load default port for database scheme $config_db_scheme") }
+			default:	{ fail("unable to load default port for database scheme '$config_db_scheme'") }
 		}
 	}
 	else
