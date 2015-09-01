@@ -47,12 +47,15 @@ define koha::site::db
 	$pass
 )
 {
-	::Koha::Files::Koha_conf_xml::Default <| site_name == $site_name |>
+	if ($ensure == "present")
 	{
-		config_db_scheme	=> $db_scheme,
-		config_database		=> $database,
-		config_port		=> $port,
-		config_user		=> $user,
-		config_pass		=> $pass,
+		::Koha::Files::Koha_conf_xml::Default <| site_name == $site_name |>
+		{
+			config_db_scheme	=> $db_scheme,
+			config_database		=> $database,
+			config_port		=> $port,
+			config_user		=> $user,
+			config_pass		=> $pass,
+		}
 	}
 }

@@ -1,6 +1,6 @@
-# == Class: koha::mysql::site
+# == Class: koha::mysql
 #
-# Add a Koha MySQL database for the given site name.
+# Configure the MySQL database.
 #
 # === Parameters
 #
@@ -35,20 +35,17 @@
 #
 # Copyright 2015 Callum Dickinson.
 #
-define koha::site::memcached
-(
-	$ensure			= "present",
-	$site_name		= $name,
-
-	$server,
-	$namespace
-)
+class koha::memcached($ensure = "present")
 {
-	if ($ensure == "present")
+	require koha::params
+
+	unless (defined(Class["::koha::memcached::install"]))
 	{
-		::Koha::Apache::Site <| site_name == $site_name |>
-		{
-			memcached_namespace	=> $namespace,
+		class
+		{ "::koha::memcached::install":
+			ensure	=> $ensure,
 		}
+
+		contain "::koha::memcached::install"
 	}
 }

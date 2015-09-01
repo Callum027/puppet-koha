@@ -35,20 +35,23 @@
 #
 # Copyright 2015 Callum Dickinson.
 #
-define koha::site::memcached
+define koha::memcached::site
 (
 	$ensure			= "present",
 	$site_name		= $name,
 
-	$server,
-	$namespace
+	$server			= $::fqdn,
+	$namespace		= undef # Defined in resource body
 )
 {
-	if ($ensure == "present")
-	{
-		::Koha::Apache::Site <| site_name == $site_name |>
-		{
-			memcached_namespace	=> $namespace,
-		}
+	$_namespace = pick($namespace, $site_name)
+
+	validate_string($site_name, $server, $_namespace)
+
+	@@::koha::site::memcached
+	{ "$server-$_namespace":
+		ensure		=> $ensure,
+		server		=> $server,
+		namespace	=> $_namespace,
 	}
 }

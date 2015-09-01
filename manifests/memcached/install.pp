@@ -35,20 +35,10 @@
 #
 # Copyright 2015 Callum Dickinson.
 #
-define koha::site::memcached
-(
-	$ensure			= "present",
-	$site_name		= $name,
-
-	$server,
-	$namespace
-)
+class koha::memcached::install($ensure = "present")
 {
-	if ($ensure == "present")
-	{
-		::Koha::Apache::Site <| site_name == $site_name |>
-		{
-			memcached_namespace	=> $namespace,
-		}
+	class
+	{ '::memcached':
+		ensure	=> $ensure,
 	}
 }

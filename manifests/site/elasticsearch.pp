@@ -44,14 +44,18 @@ define koha::site::elasticsearch
 	$index_name
 )
 {
-	::Koha::Files::Koha_conf_xml::Default <| site_name == $site_name |>
+	if ($ensure == "present")
 	{
-		elasticsearch			=> true,
-		elasticsearch_index_name	=> $index_name,
+		::Koha::Files::Koha_conf_xml::Default <| site_name == $site_name |>
+		{
+			elasticsearch			=> true,
+			elasticsearch_index_name	=> $index_name,
+		}
 	}
 
 	::koha::files::koha_conf_xml::elasticsearch_server
 	{ "$index_name-$server":
+		ensure		=> $ensure,
 		server		=> $server,
 		index_name	=> $index_name,
 	}

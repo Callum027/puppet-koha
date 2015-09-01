@@ -44,9 +44,12 @@ define koha::site::zebra
 	$password
 )
 {
-	::Koha::Files::Koha_conf_xml::Default <| site_name == $site_name |>
+	if ($ensure == "present")
 	{
-		serverinfo_user		=> $user,
-		serverinfo_password	=> $password,
+		::Koha::Files::Koha_conf_xml::Default <| site_name == $site_name |>
+		{
+			serverinfo_user		=> $user,
+			serverinfo_password	=> $password,
+		}
 	}
 }
