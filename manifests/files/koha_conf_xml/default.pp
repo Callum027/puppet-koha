@@ -136,77 +136,77 @@ define koha::files::koha_conf_xml::default
 	##
 
 	# Biblioserver options.
-	if ($biblioserver_socket == undef)
-	{
-		if ($biblioserver_public_sru_server == true)
-		{
-			$_biblioserver_socket = "tcp:@:${biblioserver_sru_port}"
-		}
-		else
-		{
-			$_biblioserver_socket = "unix:${koha_run_dir}/${site_name}/bibliosocket"
-		}
-	}
-	else
-	{
-		$_biblioserver_socket = $biblioserver_socket
-	}
+	#if ($biblioserver_socket == undef)
+	#{
+	#	if ($biblioserver_public_sru_server == true)
+	#	{
+	#		$_biblioserver_socket = "tcp:@:${biblioserver_sru_port}"
+	#	}
+	#	else
+	#	{
+	#		$_biblioserver_socket = "unix:${koha_run_dir}/${site_name}/bibliosocket"
+	#	}
+	#}
+	#else
+	#{
+	#	$_biblioserver_socket = $biblioserver_socket
+	#}
 
-	if ($biblioserver_config == undef)
-	{
-		case $biblios_indexing_mode
-		{
-			"dom":	{ $_biblioserver_config = "${koha_site_dir}/${site_name}/zebra-biblios-dom.cfg" }
-			"grs1":	{ $_biblioserver_config = "${koha_site_dir}/${site_name}/zebra-biblios.cfg" }
-			default: { fail("$biblios_indexing_mode is not a valid indexing mode for bibliographic records") }
-		}
-	}
-	else
-	{
-		$_biblioserver_config = $biblioserver_config
-	}
+	#if ($biblioserver_config == undef)
+	#{
+	#	case $biblios_indexing_mode
+	#	{
+	#		"dom":	{ $_biblioserver_config = "${koha_site_dir}/${site_name}/zebra-biblios-dom.cfg" }
+	#		"grs1":	{ $_biblioserver_config = "${koha_site_dir}/${site_name}/zebra-biblios.cfg" }
+	#		default: { fail("$biblios_indexing_mode is not a valid indexing mode for bibliographic records") }
+	#	}
+	#}
+	#else
+	#{
+	#	$_biblioserver_config = $biblioserver_config
+	#}
 
-	$_biblioserver_dom_retrieval_info = pick($biblioserver_dom_retrieval_info, "${koha_config_dir}/${server_marc_format}-retrieval-info-bib-dom.xml")
+	#$_biblioserver_dom_retrieval_info = pick($biblioserver_dom_retrieval_info, "${koha_config_dir}/${server_marc_format}-retrieval-info-bib-dom.xml")
 
 	# Authorityserver options.
-	if ($authorityserver_socket == undef)
-	{
-		if ($authorityserver_public_sru_server == true)
-		{
-			$_authorityserver_socket = "tcp:@:${authorityserver_sru_port}"
-		}
-		else
-		{
-			$_authorityserver_socket = "unix:${koha_run_dir}/${site_name}/authoritysocket"
-		}
-	}
-	else
-	{
-		$_authorityserver_socket = $authorityserver_socket
-	}
+	#if ($authorityserver_socket == undef)
+	#{
+	#	if ($authorityserver_public_sru_server == true)
+	#	{
+	#		$_authorityserver_socket = "tcp:@:${authorityserver_sru_port}"
+	#	}
+	#	else
+	#	{
+	#		$_authorityserver_socket = "unix:${koha_run_dir}/${site_name}/authoritysocket"
+	#	}
+	#}
+	#else
+	#{
+	#	$_authorityserver_socket = $authorityserver_socket
+	#}
 
-	if ($authorityserver_config == undef)
-	{
-		case $authorities_indexing_mode
-		{
-			"dom":	{ $_authorityserver_config = "${koha_site_dir}/${site_name}/zebra-authorities-dom.cfg" }
-			"grs1":	{ $_authorityserver_config = "${koha_site_dir}/${site_name}/zebra-authorities.cfg" }
-			default: { fail("$authorities_indexing_mode is not a valid indexing mode for authority records") }
-		}
-	}
-	else
-	{
-		$_authorityserver_config = $authorityserver_config
-	}
+	#if ($authorityserver_config == undef)
+	#{
+	#	case $authorities_indexing_mode
+	#	{
+	#		"dom":	{ $_authorityserver_config = "${koha_site_dir}/${site_name}/zebra-authorities-dom.cfg" }
+	#		"grs1":	{ $_authorityserver_config = "${koha_site_dir}/${site_name}/zebra-authorities.cfg" }
+	#		default: { fail("$authorities_indexing_mode is not a valid indexing mode for authority records") }
+	#	}
+	#}
+	#else
+	#{
+	#	$_authorityserver_config = $authorityserver_config
+	#}
 
-	$_authorityserver_dom_retrieval_info = pick($authorityserver_dom_retrieval_info, "${koha_config_dir}/${server_marc_format}-retrieval-info-auth-dom.xml")
+	#$_authorityserver_dom_retrieval_info = pick($authorityserver_dom_retrieval_info, "${koha_config_dir}/${server_marc_format}-retrieval-info-auth-dom.xml")
 
 	# Publicserver options.
-	$_publicserver_config = pick($publicserver_config, $_biblioserver_config)
-	$_publicserver_dom_retrieval_info = pick($publicserver_dom_retrieval_info, $_biblioserver_dom_retrieval_info)
+	#$_publicserver_config = pick($publicserver_config, $_biblioserver_config)
+	#$_publicserver_dom_retrieval_info = pick($publicserver_dom_retrieval_info, $_biblioserver_dom_retrieval_info)
 
 	# Mergeserver options.
-	$_mergeserver_config = pick($mergeserver_config, $_biblioserver_config)
+	#$_mergeserver_config = pick($mergeserver_config, $_biblioserver_config)
 
 	##
 	# Config part resource declarations.
@@ -219,12 +219,12 @@ define koha::files::koha_conf_xml::default
 		{ $site_name:
 			ensure		=> $ensure,
 
-			file		=> $file,
-			owner		=> $file_owner,
-			group		=> $file_group,
-			mode		=> $file_mode,
+			#file		=> $file,
+			#owner		=> $file_owner,
+			#group		=> $file_group,
+			#mode		=> $file_mode,
 
-			koha_site_dir	=> $koha_site_dir,
+			#koha_site_dir	=> $koha_site_dir,
 		}
 	}
 
@@ -255,127 +255,79 @@ define koha::files::koha_conf_xml::default
 	}
 
 	# Elasticsearch.
-	unless ($elasticsearch != true or defined(::Koha::Files::Koha_conf_xml::Elasticsearch[$site_name]))
-	{
-		::koha::files::koha_conf_xml::elasticsearch
-		{ $site_name:
-			ensure		=> $ensure,
+	#unless ($elasticsearch != true or defined(::Koha::Files::Koha_conf_xml::Elasticsearch[$site_name]))
+	#{
+	#	::koha::files::koha_conf_xml::elasticsearch
+	#	{ $site_name:
+	#		ensure		=> $ensure,
 
-			server		=> $elasticsearch_server,
-			index_name	=> $elasticsearch_index_name,
-		}
-	}
+	#		server		=> $elasticsearch_server,
+	#		index_name	=> $elasticsearch_index_name,
+	#	}
+	#}
 
 	# Biblioserver.
 	if ($biblioserver == true)
 	{
-		::koha::files::koha_conf_xml::default_server
-		{ "$site_name-$biblioserver_id":
-			ensure				=> $ensure,
-
-			site_name			=> $site_name,
-			id				=> $biblioserver_id,
-
-			listen_socket			=> $_biblioserver_socket,
-
-			server_config			=> $_biblioserver_config,
-			server_dom_retrieval_info	=> $_biblioserver_dom_retrieval_info,
-			server_indexing_mode		=> $biblios_indexing_mode,
-			server_marc_format		=> $server_marc_format,
-
-			server_public_sru_server	=> $biblioserver_public_sru_server,
-			server_sru_explain		=> $biblioserver_sru_explain,
-			server_sru_host			=> $biblioserver_sru_host,
-			server_sru_port			=> $biblioserver_sru_port,
-			server_sru_database		=> $biblioserver_sru_database,
-
-			serverinfo_user			=> $serverinfo_user,
-			serverinfo_password		=> $serverinfo_password,
-
-			koha_lib_dir			=> $koha_lib_dir,
-		}
+		::koha::files::koha_conf_xml::biblioserver { $site_name: }
 	}
 
 	# Authorityserver.
 	if ($authorityserver == true)
 	{
-		::koha::files::koha_conf_xml::default_server
-		{ "$site_name-$authorityserver_id":
-			ensure				=> $ensure,
-
-			site_name			=> $site_name,
-			id				=> $authorityserver_id,
-
-			listen_socket			=> $_authorityserver_socket,
-
-			server_config			=> $_authorityserver_config,
-			server_dom_retrieval_info	=> $_authorityserver_dom_retrieval_info,
-			server_indexing_mode		=> $authorities_indexing_mode,
-			server_marc_format		=> $server_marc_format,
-
-			server_public_sru_server	=> $authorityserver_public_sru_server,
-			server_sru_explain		=> $authorityserver_sru_explain,
-			server_sru_host			=> $authorityserver_sru_host,
-			server_sru_port			=> $authorityserver_sru_port,
-			server_sru_database		=> $authorityserver_sru_database,
-
-			serverinfo_user			=> $serverinfo_user,
-			serverinfo_password		=> $serverinfo_password,
-
-			koha_lib_dir			=> $koha_lib_dir,
-		}
+		::koha::files::koha_conf_xml::authorityserver { $site_name: }
 	}
 
 	# Publicserver.
-	if ($publicserver == true)
-	{
-		::koha::files::koha_conf_xml::default_server
-		{ "$site_name-$publicserver_id":
-			ensure				=> $ensure,
+	#if ($publicserver == true)
+	#{
+	#	::koha::files::koha_conf_xml::default_server
+	#	{ "$site_name-$publicserver_id":
+	#		ensure				=> $ensure,
 
-			site_name			=> $site_name,
-			id				=> $publicserver_id,
+	#		site_name			=> $site_name,
+	#		id				=> $publicserver_id,
 
-			listen_socket			=> $_publicserver_socket,
+	#		listen_socket			=> $_publicserver_socket,
 
-			server_config			=> $_publicserver_config,
-			server_dom_retrieval_info	=> $_publicserver_dom_retrieval_info,
-			server_indexing_mode		=> $biblios_indexing_mode,
-			server_marc_format		=> $server_marc_format,
+	#		server_config			=> $_publicserver_config,
+	#		server_dom_retrieval_info	=> $_publicserver_dom_retrieval_info,
+	#		server_indexing_mode		=> $biblios_indexing_mode,
+	#		server_marc_format		=> $server_marc_format,
 
-			server_public_sru_server	=> true,
-			server_sru_explain		=> $publicserver_sru_explain,
-			server_sru_host			=> $publicserver_sru_host,
-			server_sru_port			=> $publicserver_sru_port,
-			server_sru_database		=> $publicserver_sru_database,
+	#		server_public_sru_server	=> true,
+	#		server_sru_explain		=> $publicserver_sru_explain,
+	#		server_sru_host			=> $publicserver_sru_host,
+	#		server_sru_port			=> $publicserver_sru_port,
+	#		server_sru_database		=> $publicserver_sru_database,
 
-			serverinfo_user			=> $serverinfo_user,
-			serverinfo_password		=> $serverinfo_password,
+	#		serverinfo_user			=> $serverinfo_user,
+	#		serverinfo_password		=> $serverinfo_password,
 
-			koha_lib_dir			=> $koha_lib_dir,
-		}
-	}
+	#		koha_lib_dir			=> $koha_lib_dir,
+	#	}
+	#}
 
 	# Mergeserver.
-	if ($mergeserver == true)
-	{
-		::koha::files::koha_conf_xml::default_server
-		{ "$site_name-$mergeserver_id":
-			ensure				=> $ensure,
+	#if ($mergeserver == true)
+	#{
+	#	::koha::files::koha_conf_xml::default_server
+	#	{ "$site_name-$mergeserver_id":
+	#		ensure				=> $ensure,
 
-			site_name			=> $site_name,
-			id				=> $mergeserver_id,
+	#		site_name			=> $site_name,
+	#		id				=> $mergeserver_id,
 
-			serverinfo			=> false,
+	#		serverinfo			=> false,
 
-			listen_socket			=> $mergeserver_socket,
+	#		listen_socket			=> $mergeserver_socket,
 
-			server_config			=> $_mergeserver_config,
-			server_cql2rpn			=> $mergeserver_cql2rpn,
-			server_include_retrieval_info	=> false,
+	#		server_config			=> $_mergeserver_config,
+	#		server_cql2rpn			=> $mergeserver_cql2rpn,
+	#		server_include_retrieval_info	=> false,
 
-			koha_lib_dir			=> $koha_lib_dir,
-		}
-	}
+	#		koha_lib_dir			=> $koha_lib_dir,
+	#	}
+	#}
 
 }

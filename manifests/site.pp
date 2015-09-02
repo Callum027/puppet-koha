@@ -92,6 +92,7 @@ define koha::site
 		::koha::files::koha_conf_xml::default
 		{ $site_name:
 			ensure	=> $ensure,
+			file_group => $_
 		}
 	}
 
