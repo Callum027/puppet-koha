@@ -38,57 +38,55 @@
 define koha::files::koha_conf_xml::biblioserver
 (
 	$ensure			= "present",
-	$site_name		= $name,
 
-	$password,
+	$site_name			= $name,
+	$id				= "biblioserver",
+
+	# Listen options.
+	$listen_socket			= undef, # Filled in by koha::site::koha_conf_xml::biblioserver
 
 	# Server options.
-	$id			= "biblioserver",
+	$server_directory		= undef, # Default defined in koha::files::koha_conf_xml::server
+	$server_config			= undef, # Defined in resource body
+	$server_cql2rpn			= undef, # Default defined in koha::files::koha_conf_xml::server
 
-	$directory		= undef,
-	$config			= undef, # Defined in resource body
-	$cql2rpn		= undef, # Default defined in koha::files::koha_conf_xml::server
+	$server_include_retrieval_info	= undef, # Default defined in koha::files::koha_conf_xml::server
 
-	$include_retrieval_info	= undef, # Default defined in koha::files::koha_conf_xml::server
+	$server_dom_retrieval_info	= undef, # Defined in resource body
 
-	$dom_retrieval_info	= undef, # Defined in resource body
+	# Default defined in koha::files::koha_conf_xml::server
+	$server_indexing_mode		= undef, # Filled in by koha::site::koha_conf_xml::biblioserver
+	$server_marc_format		= undef, # Filled in by koha::site::koha_conf_xml::biblioserver
 
-	$indexing_mode		= undef, # Default defined in koha::files::koha_conf_xml::server
-	$marc_format		= undef, # Default defined in koha::files::koha_conf_xml::server
+	$server_public_sru_server	= undef, # Filled in by koha::site::koha_conf_xml::biblioserver
 
-	$public_sru_server	= false,
+	$server_sru_explain		= undef, # Defined in resource body
+	$server_sru_host		= undef, # Filled in by koha::site::koha_conf_xml::biblioserver
+	$server_sru_port		= undef, # Filled in by koha::site::koha_conf_xml::biblioserver
+	$server_sru_database		= undef, # Filled in by koha::site::koha_conf_xml::biblioserver
 
-	$sru_explain		= undef, # Defined in resource body
-	$sru_host		= undef,
-	$sru_port		= "9998",
-	$sru_database		= $::koha::params::koha_conf_xml::config_biblioserver,
+	# Serverinfo options.
+	$serverinfo_user		= undef, # Filled in by koha::site::koha_conf_xml::biblioserver
+	$serverinfo_password		= undef, # Filled in by koha::site::koha_conf_xml::biblioserver
 
 	# koha::params default values.
-	$koha_config_dir	= $::koha::params::koha_config_dir,
-	$koha_lib_dir		= $::koha::params::koha_lib_dir,
-	$koha_site_dir		= $::koha::params::koha_site_dir
+	$koha_config_dir		= $::koha::params::koha_config_dir,
+	$koha_lib_dir			= $::koha::params::koha_lib_dir,
+	$koha_site_dir			= $::koha::params::koha_site_dir
 )
 {
 	##
-	# Resource dependencies.
-	##
-	unless (defined(::Koha::Files::Koha_conf_xml[$site_name]))
-	{
-		fail("You must define the koha::files::koha_conf_xml resource for $site_name for this resource to work properly")
-	}
-
-	##
 	# Default configuration values.
 	##
-	case $indexing_mode
+	case $server_indexing_mode
 	{
-		"dom":	{ $_config = "${koha_site_dir}/${site_name}/zebra-biblios-dom.cfg" }
-		"grs1":	{ $_config = "${koha_site_dir}/${site_name}/zebra-biblios.cfg" }
+		"dom":	{ $_server_config = "${koha_site_dir}/${site_name}/zebra-biblios-dom.cfg" }
+		"grs1":	{ $_server_config = "${koha_site_dir}/${site_name}/zebra-biblios.cfg" }
 		default: { fail("invalid indexing mode for bibliographic records '$indexing_mode'") }
 	}
 
-	$_dom_retrieval_info = pick($dom_retrieval_info, "${koha_config_dir}/${marc_format}-retrieval-info-bib-dom.xml")
-	$_sru_explain = pick($sru_explain, "${koha_config_dir}/zebradb/explain-biblios.xml")
+	$_server_dom_retrieval_info = pick($server_dom_retrieval_info, "${koha_config_dir}/${marc_format}-retrieval-info-bib-dom.xml")
+	$_server_sru_explain = pick($server_sru_explain, "${koha_config_dir}/zebradb/explain-biblios.xml")
 
 	##
 	# Parameter validation.
@@ -101,32 +99,44 @@ define koha::files::koha_conf_xml::biblioserver
 	##
 	# Defined resources.
 	##
+	::koha::files::koha_conf_xml::listen
+	{ "$site_name-$id":
+		site_name	=> $site_name,
+		id		=> $id,
+
+		socket		=> $listen_socket,
+	}
+
 	::koha::files::koha_conf_xml::server
 	{ "$site_name-$id":
 		site_name		=> $site_name,
 		id			=> $id,
 
-		directory		=> $directory,
-		config			=> $_config,
-		cql2rpn			=> $cql2rpn,
+		directory		=> $server_directory,
+		config			=> $_server_config,
+		cql2rpn			=> $server_cql2rpn,
 
-		include_retrieval_info	=> $include_retrieval_info,
+		include_retrieval_info	=> $server_include_retrieval_info,
 
-		dom_retrieval_info	=> $_dom_retrieval_info,
+		dom_retrieval_info	=> $_server_dom_retrieval_info,
 
-		indexing_mode		=> $indexing_mode,
-		marc_format		=> $marc_format,
+		indexing_mode		=> $server_indexing_mode,
+		marc_format		=> $server_marc_format,
 
-		public_sru_server	=> $public_sru_server,
+		public_sru_server	=> $server_public_sru_server,
 
-		sru_explain		=> $_sru_explain,
-		sru_host		=> $sru_host,
-		sru_port		=> $sru_port,
-		sru_database		=> $sru_database,
+		sru_explain		=> $_server_sru_explain,
+		sru_host		=> $server_sru_host,
+		sru_port		=> $server_sru_port,
+		sru_database		=> $server_sru_database,
 	}
 
 	::koha::files::koha_conf_xml::serverinfo
-	{
-		password	=> $password,
+	{ "$site_name-$id":
+		site_name	=> $site_name,
+		id		=> $id,
+
+		user		=> $serverinfo_user,
+		password	=> $serverinfo_password,
 	}
 }

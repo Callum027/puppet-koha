@@ -41,7 +41,7 @@ define koha::files::koha_conf_xml::elasticsearch_server
 	$site_name,
 
 	# Elasticsearch options.
-	$server
+	$server		= $::fqdn
 )
 {
 	::concat::fragment
