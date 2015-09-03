@@ -35,28 +35,47 @@
 #
 # Copyright 2015 Callum Dickinson.
 #
-define koha::files::koha_conf_xml::elasticsearch
+define koha::files::koha_conf_xml::koha_site
 (
-	$ensure		= "present",
-	$site_name	= $name,
+	$ensure			= "present",
+	$site_name		= $name,
 
-	# Elasticsearch options.
-	$index_name	= undef # Filled in by ::koha::site::elasticsearch
+	$collect_db		= true,
+	$collect_zebra		= true,
+	$collect_elasticsearch	= false
 )
 {
-	::concat::fragment
-	{ "${site_name}::koha_conf_xml::elasticsearch_start":
-		target	=> "${site_name}::koha_conf_xml",
-		ensure	=> $ensure,
-		content	=> "<elasticsearch>\n",
-		order	=> "04",
+	unless (defined(::Koha::Files::Koha_conf_xml[$site_name]))
+	{
+		::koha::files::koha_conf_xml
+		{ $site_name:
+			ensure	=> $ensure,
+		}
 	}
 
-	::concat::fragment
-	{ "${site_name}::koha_conf_xml::elasticsearch_end":
-		target	=> "${site_name}::koha_conf_xml",
-		ensure	=> $ensure,
-		content	=> " <index_name>$index_name</index_name>\n</elasticsearch>\n",
-		order	=> "06",
+	unless (defined(::Koha::Files::Koha_conf_xml::Config[$site_name]))
+	{
+		::koha::files::koha_conf_xml::config
+		{ $site_name:
+			ensure	=> $ensure,
+		}
+	}
+
+	if ($ensure == "present" and $collect_db == true)
+	{
+		::Koha::Site::Db <<| site_name == $site_name |>>
+	}
+
+	unless (defined(::Koha::Files::Koha_conf_xml::Zebra_site[$site_name]))
+	{
+		if ($ensure == "present" and $collect_zebra == true)
+		{
+			::Koha::Site::Zebra <<| site_name == $site_name |>>
+		}
+	}
+
+	if ($ensure == "present" and $collect_elasticsearch == true)
+	{
+		::Koha::Site::Elasticsearch <<| site_name == $site_name |>>
 	}
 }

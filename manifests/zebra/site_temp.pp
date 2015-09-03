@@ -35,7 +35,7 @@
 #
 # Copyright 2015 Callum Dickinson.
 #
-define koha::zebra::site
+define koha::zebra::site_temp
 (
 	$ensure					= "present",
 	$site_name				= $name,

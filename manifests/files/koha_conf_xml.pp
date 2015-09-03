@@ -42,7 +42,7 @@ define koha::files::koha_conf_xml
 
 	$file		= undef, # Defined in resource body
 	$owner		= $::koha::params::koha_conf_xml::file_owner,
-	$group,
+	$group		= undef, # Fetched from ::koha::user
 	$mode		= $::koha::params::koha_conf_xml::file_mode,
 
 	# koha::params default values.
@@ -67,13 +67,14 @@ define koha::files::koha_conf_xml
 	# Resource declaration.
 	##
 	$_file = pick($file, "${koha_site_dir}/${site_name}/koha-conf.xml")
+	$_group = pick($group, getparam(::Koha::User[$site_name], $user))
 
 	::concat
 	{ "${site_name}::koha_conf_xml":
 		path	=> $_file,
 		ensure	=> $ensure,
 		owner	=> $owner,
-		group	=> $group,
+		group	=> $_group,
 		mode	=> $mode,
 	}
 

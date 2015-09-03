@@ -35,28 +35,39 @@
 #
 # Copyright 2015 Callum Dickinson.
 #
-define koha::files::koha_conf_xml::elasticsearch
+define koha::files::koha_conf_xml::default
 (
-	$ensure		= "present",
-	$site_name	= $name,
-
-	# Elasticsearch options.
-	$index_name	= undef # Filled in by ::koha::site::elasticsearch
+	$ensure					= "present",
+	$site_name				= $name
 )
 {
-	::concat::fragment
-	{ "${site_name}::koha_conf_xml::elasticsearch_start":
-		target	=> "${site_name}::koha_conf_xml",
-		ensure	=> $ensure,
-		content	=> "<elasticsearch>\n",
-		order	=> "04",
+	unless (defined(::Koha::Files::Koha_conf_xml[$site_name]))
+	{
+		::koha::files::koha_conf_xml { $site_name: }
 	}
 
-	::concat::fragment
-	{ "${site_name}::koha_conf_xml::elasticsearch_end":
-		target	=> "${site_name}::koha_conf_xml",
-		ensure	=> $ensure,
-		content	=> " <index_name>$index_name</index_name>\n</elasticsearch>\n",
-		order	=> "06",
+	unless (defined(::Koha::Files::Koha_conf_xml::Config[$site_name]))
+	{
+		::koha::files::koha_conf_xml::config { $site_name: }
+	}
+
+	unless (defined(::Koha::Files::Koha_conf_xml::Biblioserver[$site_name]))
+	{
+		::koha::files::koha_conf_xml::biblioserver { $site_name: }
+	}
+
+	unless (defined(::Koha::Files::Koha_conf_xml::Authorityserver[$site_name]))
+	{
+		::koha::files::koha_conf_xml::authorityserver { $site_name: }
+	}
+
+	unless (defined(::Koha::Files::Koha_conf_xml::Publicserver[$site_name]))
+	{
+		::koha::files::koha_conf_xml::publicserver { $site_name: }
+	}
+
+	unless (defined(::Koha::Files::Koha_conf_xml::Mergeserver[$site_name]))
+	{
+		::koha::files::koha_conf_xml::mergeserver { $site_name: }
 	}
 }

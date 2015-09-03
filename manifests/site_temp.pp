@@ -56,6 +56,7 @@ define koha::site_temp
 	::koha::log_dir
 	{ $site_name:
 		koha_user	=> "$site_name-koha",
+		koha_conf	=> "/etc/koha/sites/$site_name/koha-conf.xml",
 		require		=> Class["::koha"],
 		notify		=> Class["::apache::service"],
 	}
@@ -78,11 +79,15 @@ define koha::site_temp
 	# Apache vhost for the Koha site.
 	::koha::apache::site
 	{ $site_name:
+		koha_user	=> "$site_name-koha",
 		ensure		=> $ensure,
 	}
 
 	# koha-conf.xml.
-	::koha::files::koha_conf_xml { $site_name: }
+	::koha::files::koha_conf_xml
+	{ $site_name:
+		group	=> "$site_name-koha",
+	}
 
 	::koha::files::koha_conf_xml::config
 	{ $site_name:
@@ -93,9 +98,13 @@ define koha::site_temp
 	}
 
 	::koha::files::koha_conf_xml::biblioserver
+	{ $site_name:
+			password	=>  $site_name,
+	}
 	::koha::files::koha_conf_xml::authorityserver
-
-	::koha::files::koha_conf_xml::
+	{ $site_name:
+		password	=>  $site_name,
+	}
 
 	# Zebra.
 	::koha::zebra::site_temp

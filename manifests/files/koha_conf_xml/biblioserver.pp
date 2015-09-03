@@ -40,6 +40,8 @@ define koha::files::koha_conf_xml::biblioserver
 	$ensure			= "present",
 	$site_name		= $name,
 
+	$password,
+
 	# Server options.
 	$id			= "biblioserver",
 
@@ -121,5 +123,10 @@ define koha::files::koha_conf_xml::biblioserver
 		sru_host		=> $sru_host,
 		sru_port		=> $sru_port,
 		sru_database		=> $sru_database,
+	}
+
+	::koha::files::koha_conf_xml::serverinfo
+	{
+		password	=> $password,
 	}
 }

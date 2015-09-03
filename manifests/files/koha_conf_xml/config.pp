@@ -41,12 +41,12 @@ define koha::files::koha_conf_xml::config
 	$site_name		= $name,
 
 	# Config options.
-	$db_scheme		= $::koha::params::koha_conf_xml::config_db_scheme,
-	$database,
-	$hostname,
-	$port			= undef, # Defined in resource body
-	$user,
-	$pass,
+	$db_scheme		= undef, # Filled in by ::koha::site::db
+	$database		= undef, # Filled in by ::koha::site::db
+	$hostname		= undef, # Filled in by ::koha::site::db
+	$port			= undef, # Filled in by ::koha::site::db
+	$user			= undef, # Filled in by ::koha::site::db
+	$pass			= undef, # Filled in by ::koha::site::db
 
 	$biblioserver		= $::koha::params::koha_conf_xml::config_biblioserver,
 	$biblioservershadow	= $::koha::params::koha_conf_xml::config_biblioservershadow,
@@ -89,21 +89,6 @@ define koha::files::koha_conf_xml::config
 	$koha_spool_dir		= $::koha::params::koha_spool_dir
 )
 {
-	validate_re($db_scheme, [ "^mysql$", "^postgresql$" ], "the only supported database schemes are 'mysql' and 'postgresql'")
-
-	if ($port != undef)
-	{
-		$_port = $port
-	}
-	elsif ($db_scheme == "mysql")
-	{
-		$_port = $::koha::params::koha_conf_xml::config_mysql_port
-	}
-	elsif ($db_scheme == "postgresql")
-	{
-		$_port = $::koha::params::koha_conf_xml::config_postgresql_port
-	}
-
 	$_pluginsdir = pick($pluginsdir, "${koha_lib_dir}/${site_name}/plugins")
 	$_backupdir = pick($backupdir, "${koha_spool_dir}/${site_name}")
 

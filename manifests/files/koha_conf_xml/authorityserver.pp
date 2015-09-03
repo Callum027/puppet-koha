@@ -40,6 +40,8 @@ define koha::files::koha_conf_xml::authorityserver
 	$ensure			= "present",
 	$site_name		= $name,
 
+	$password,
+
 	# Server options.
 	$id			= "authorityserver",
 
@@ -121,5 +123,10 @@ define koha::files::koha_conf_xml::authorityserver
 		sru_host		=> $sru_host,
 		sru_port		=> $sru_port,
 		sru_database		=> $sru_database,
+	}
+
+	::koha::files::koha_conf_xml::serverinfo
+	{
+		password	=> $password,
 	}
 }

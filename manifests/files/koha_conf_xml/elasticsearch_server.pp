@@ -41,28 +41,9 @@ define koha::files::koha_conf_xml::elasticsearch_server
 	$site_name,
 
 	# Elasticsearch options.
-	$server,
-	$index_name
+	$server
 )
 {
-	unless (defined(::Koha::Files::Koha_conf_xml[$site_name]))
-	{
-		fail("You must define the koha::files::koha_conf_xml resource for $site_name for this resource to work properly")
-	}
-
-	# Check validity of parameters.
-	if ($ensure != "present" and $ensure != "absent")
-	{
-		fail("Only possible values for \$ensure are 'present' and 'absent'")
-	}
-
-	validate_string($site_name, $id, $index_name)
-
-	if (is_array($server) != true)
-	{
-		validate_string($server)
-	}
-
 	::concat::fragment
 	{ "${site_name}::koha_conf_xml::elasticsearch_server::${server}":
 		target	=> "${site_name}::koha_conf_xml",

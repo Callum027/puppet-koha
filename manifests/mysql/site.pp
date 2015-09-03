@@ -39,6 +39,8 @@ define koha::mysql::site
 (
 	$ensure			= present,
 
+	$export_db		= true,
+
 	$echo			= $::koha::params::echo,
 	$mysql			= $::koha::params::mysql,
 
@@ -87,6 +89,18 @@ define koha::mysql::site
 		require		=> Class["::koha::mysql"],
 	}
 
+	if ($export_db == true)
+	{
+		::koha::db::site
+		{ $site_name:
+			db_scheme	=> "mysql",
+			database	=> $_mysql_db,
+			port		=> $mysql_port,
+			user		=> $_mysql_user,
+			pass		=> $mysql_password,
+		}
+	}
+
 	# Re-fetch the passwords from the config we've generated, allows it
 	# to be different from what we set, in case the user had to change
 	# something.
@@ -109,13 +123,4 @@ define koha::mysql::site
 	# }
 
 	# TODO: Upgrade the database schema, just in case the dump was from an old version.
-
-	::koha::db::site
-	{ $site_name:
-		db_scheme	=> "mysql",
-		database	=> $_mysql_db,
-		port		=> $mysql_port,
-		user		=> $_mysql_user,
-		pass		=> $mysql_password,
-	}
 }
