@@ -2,9 +2,8 @@
     <directory><%= @_directory %></directory>
     <config><%= @config %></config>
     <cql2rpn><%= @cql2rpn %></cql2rpn>
-<%- if @include_retrieval_info == true -%>
 <%- if @indexing_mode == "dom" -%>
-    <xi:include href="<%= @retrieval_info %>"
+    <xi:include href="<%= @retrieval_config %>"
                 xmlns:xi="http://www.w3.org/2001/XInclude">
      <xi:fallback>
       <retrievalinfo>
@@ -64,7 +63,7 @@
 <%- elsif @indexing_mode == "grs1" %>
     </retrievalinfo>
 <%- end %>
-<%- if @public_sru_server -%>
+<%- if @enable_sru == "true" -%>
     <xi:include href="<%= @sru_explain %>"
                 xmlns:xi="http://www.w3.org/2001/XInclude">
       <xi:fallback>
@@ -77,6 +76,5 @@
         </explain>
       </xi:fallback>
     </xi:include>
-<%- end -%>
 <%- end -%>
 </server>

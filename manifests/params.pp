@@ -91,6 +91,12 @@ class koha::params
 			$zebra_packages					= [ "koha-common" ]
 			$zebra_services					= [ "koha-common" ]
 
+			# Zebra directories.
+			$zebra_run_dir					= "/var/run/koha"
+			$zebra_data_dir_base				= "/var/lib/koha"
+			$zebra_config_dir_base				= "/etc/koha/sites"
+			$zebra_
+
 			# Apache and MySQL packages and services are handled by their
 			# official modules.
 		}

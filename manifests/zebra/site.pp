@@ -87,31 +87,42 @@ define koha::zebra::site
 	# koha-conf.xml configuration for a Zebra server.
 	if ($biblioserver == true)
 	{
-		$_biblioserver_server_directory = pick($biblioserver_server_directory, "/biblios")
-
 		# TODO: hierarchy
 		# ::koha::zebra::site -> ::koha::zebra::site::server |-> ::koha::site::koha_conf_xml::server -> ::koha::koha_conf_xml::server
 		#                                                    |-> ::koha::site::koha_conf_xml::serverinfo  -> ::koha::koha_conf_xml::serverinfo
 		#                                                    |-> ::koha::site::koha_conf_xml::listen -> ::koha::koha_conf_xml::listen
+
+		$_biblioserver_server_directory = pick($biblioserver_server_directory, "$koha_lib_dir/$site_name/biblios")
+
+		case $listen_scheme
+		{
+			"grs1": { $_biblioserver_server_config = pick($biblioserver_server_config, "$koha_site_dir/$site_name/zebra-biblios.cfg") }
+			"dom": { $_biblioserver_server_config = pick($biblioserver_server_config, "$koha_site_dir/$site_name/zebra-biblios-dom.cfg") }
+		}
+
 		::koha::zebra::site::server
 		{ "$site_name-biblioserver":
-			site_name		=> $site_name,
-			id			=> "biblioserver",
+			site_name			=> $site_name,
+			id				=> "biblioserver",
 
-			listen_socket		=> $biblioserver_listen_socket,
-			listen_scheme		=> $biblioserver_listen_scheme,
-			listen_unix_socket	=> $biblioserver_listen_unix_socket,
-			listen_tcp_port		=> $biblioserver_listen_tcp_port,
+			listen_socket			=> $biblioserver_listen_socket,
+			listen_scheme			=> $biblioserver_listen_scheme,
+			listen_unix_socket		=> $biblioserver_listen_unix_socket,
+			listen_tcp_port			=> $biblioserver_listen_tcp_port,
 
-			server_indexing_mode	=> $indexing_mode,
-			server_marc_format	=> $marc_format,
-			server_directory	=> $_biblioserver_server_directory,
-			server_config		=> $_biblioserver_server_config,
-			server_retrieval_config	=> $_biblioserver_server_retrieval_config,
-			server_explain		=> $_biblioserver_server_explain,
+			server_indexing_mode		=> $indexing_mode,
+			server_marc_format		=> $marc_format,
+			server_directory		=> $_biblioserver_server_directory,
+			server_config			=> $_biblioserver_server_config,
+			server_retrieval_config		=> $_biblioserver_server_retrieval_config,
+			server_explain			=> $_biblioserver_server_explain,
+			server_enable_sru		=> $biblioserver_server_enable_sru,
+			server_sru_host			=> $biblioserver_server_sru_host,
+			server_sru_port			=> $biblioserver_server_sru_port,
+			server_sru_database		=> $biblioserver_server_sru_database,
 
-			serverinfo_user		=> $user,
-			serverinfo_password	=> $password,
+			serverinfo_user			=> $user,
+			serverinfo_password		=> $password,
 		}
 	}
 
