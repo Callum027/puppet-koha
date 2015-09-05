@@ -38,6 +38,7 @@
 class koha::zebra($ensure = "present")
 {
 	require koha::params
+	require koha::params::koha_conf_xml
 
 	unless (defined(Class["::koha::zebra::install"]))
 	{
@@ -47,5 +48,15 @@ class koha::zebra($ensure = "present")
 		}
 
 		contain "::koha::zebra::install"
+	}
+
+	unless (defined(Class["::koha::zebra::service"]))
+	{
+		class
+		{ "::koha::zebra::service":
+			ensure	=> $ensure,
+		}
+
+		contain "::koha::zebra::service"
 	}
 }

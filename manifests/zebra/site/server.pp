@@ -37,13 +37,13 @@
 #
 define koha::zebra::site::server
 (
-	$ensure			= "present",
+	$ensure				= "present",
 	$site_name,
 	$id,
 
 	# Zebra options meant to be set by the user.
 
-	$listen_socket		= undef, # Defined in resource body
+	$listen_socket			= undef, # Defined in resource body
 	# Variables used to determine the above.
 	$listen_scheme,
 	$listen_unix_socket,
@@ -52,26 +52,63 @@ define koha::zebra::site::server
 	$server_indexing_mode,
 	$server_marc_format,
 	$server_directory,
+	$server_config			= undef, # Defined in resource body
+	# Start variables used to determine $server_config.
+	$server_config_grs1,
+	$server_config_dom,
+	# End.
+	$server_cql2rpn,
+	$server_retrieval_config,
+	$server_enable_sru,
+	$server_sru_explain,
+	$server_sru_host,
+	$server_sru_port,
+	$server_sru_database,
 
+	$serverinfo_ccl2rpn,
 	$serverinfo_user,
 	$serverinfo_password,
 )
 {
 	case $listen_scheme
 	{
-		"unix": { $_listen_socket = pick($listen_socket, "unix:$koha_run_dir/bibliosocket") }
-		"tcp": { $_listen_socket = pick($listen_socket, "tcp:@:$listen_port") }
-		default: { fail("invalid listen scheme '$listen_scheme', valid values are 'unix' and 'tcp'") }
+		"unix": { $_listen_socket = pick($listen_socket, "unix:$koha_run_dir/$listen_unix_socket") }
+		"tcp": { $_listen_socket = pick($listen_socket, "tcp:@:$listen_tcp_port") }
+		default: { fail("invalid listen scheme '$listen_scheme' for '$id', valid values are 'unix' and 'tcp'") }
 	}
 
-	::koha::site::koha_conf_xml::${id}
-	{ $site_name:
+	case $indexing_mode
+	{
+		"grs1": { $_server_config = pick($server_config, $server_config_grs1) }
+		"dom": { $_server_config = pick($server_config, $server_config_dom) }
+		default: { fail("invalid indexing mode '$indexing_mode' for '$id', valid values are 'dom' and 'grs1'") }
+	}
+
+	::koha::site::zebra
+	{ $name:
 		ensure			=> $ensure,
+		site_name		=> $site_name,
+		id			=> $id,
+
+		listen			=> true,
+		server			=> true,
+		serverinfo		=> true,
+
 		listen_socket		=> $_listen_socket,
 
-		server_indexing_mode	=> $indexing_mode,
-		server_marc_format	=> $marc_format,
+		server_indexing_mode	=> $server_indexing_mode,
+		server_marc_format	=> $server_marc_format,
+		server_directory	=> $server_directory,
+		server_config		=> $server_config,
+		server_cql2rpn		=> $server_cql2rpn,
+		server_retrieval_config	=> $server_retrieval_config,
+		server_enable_sru	=> $server_enable_sru,
+		server_sru_explain	=> $server_sru_explain,
+		server_sru_host		=> $server_sru_host,
+		server_sru_port		=> $server_sru_port,
+		server_sru_database	=> $server_sru_database,
 
+		serverinfo_ccl2rpn	=> $serverinfo_ccl2rpn,
 		serverinfo_user		=> $serverinfo_user,
 		serverinfo_password	=> $serverinfo_password,
 	}

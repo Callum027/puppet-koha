@@ -35,6 +35,8 @@
 #
 # Copyright 2015 Callum Dickinson.
 #
+define koha::user_name($site_name = $name, $user) {}
+
 define koha::user
 (
 	$ensure		= "present",

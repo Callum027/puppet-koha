@@ -1,6 +1,6 @@
-# == Class: koha::mysql::site
+# == Class: koha::zebra::site
 #
-# Add a Koha MySQL database for the given site name.
+# Add a site to the Zebra indexer.
 #
 # === Parameters
 #
@@ -38,18 +38,81 @@
 define koha::site::zebra
 (
 	$ensure			= "present",
-	$site_name		= $name,
+	$site_name,
+	$id,
 
-	$user,
-	$password
+	$listen,
+	$server,
+	$serverinfo,
+
+	$listen_socket,
+	# Variables used to determine the above.
+	$listen_scheme,
+	$listen_unix_socket,
+	$listen_tcp_port,
+
+	$server_indexing_mode,
+	$server_marc_format,
+	$server_directory,
+	$server_config,
+	$server_cql2rpn,
+	$server_retrieval_config,
+	$server_enable_sru,
+	$server_sru_explain,
+	$server_sru_host,
+	$server_sru_port,
+	$server_sru_database,
+
+	$serverinfo_ccl2rpn,
+	$serverinfo_user,
+	$serverinfo_password,
 )
 {
-	if ($ensure == "present")
+	if ($listen == true)
 	{
-		::Koha::Files::Koha_conf_xml::Default <| site_name == $site_name |>
-		{
-			serverinfo_user		=> $user,
-			serverinfo_password	=> $password,
+		::koha::files::koha_conf_xml::listen
+		{ $name:
+			ensure		=> $ensure,
+			site_name	=> $site_name,
+			id		=> $id,
+
+			socket		=> $listen_socket,
+		}
+	}
+
+	if ($server == true)
+	{
+		::koha::files::koha_conf_xml::server
+		{ $name:
+			ensure			=> $ensure,
+			site_name		=> $site_name,
+			id			=> $id,
+
+			indexing_mode		=> $server_indexing_mode,
+			marc_format		=> $server_marc_format,
+			directory		=> $server_directory,
+			config			=> $server_config,
+			cql2rpn			=> $server_cql2rpn,
+			retrieval_config	=> $server_retrieval_config,
+			enable_sru		=> $server_enable_sru,
+			sru_explain		=> $server_sru_explain,
+			sru_host		=> $server_sru_host,
+			sru_port		=> $server_sru_port,
+			sru_database		=> $server_sru_database,
+		}
+	}
+
+	if ($serverinfo == true)
+	{
+		::koha::files::koha_conf_xml::serverinfo
+		{ $name:
+			ensure		=> $ensure,
+			site_name	=> $site_name,
+			id		=> $id,
+
+			ccl2rpn		=> $serverinfo_ccl2rpn,
+			user		=> $serverinfo_user,
+			password	=> $serverinfo_password,
 		}
 	}
 }
