@@ -213,7 +213,7 @@ define koha::apache::site
 		owner	=> $apache_sites_dir_conf_file_owner,
 		group	=> $koha_user,
 		mode	=> $apache_sites_dir_conf_file_mode,
-		require	=> [ File[["$apache_sites_available_dir/$site_name.conf", $koha_sites_enabled_dir]], ::Koha::User[$site_name] ],
+		require	=> [ File["$apache_sites_available_dir/$site_name.conf"], ::Concat["${site_name}::apache_site_conf"], ::Koha::User[$site_name] ],
 		before	=> Class["::koha::service"],
 		notify	=> Class["::apache::service"],
 	}
