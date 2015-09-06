@@ -40,59 +40,73 @@ define koha::site
 	$ensure				= "present",
 	$site_name			= $name,
 
-	$collect_db			= $::koha::params::site_collect_db,
-	$collect_elasticsearch		= $::koha::params::site_collect_elasticsearch,
-	$collect_memcached		= $::koha::params::site_collect_memcached,
-	$collect_zebra			= $::koha::params::site_collect_zebra
+	$collect_db			= true,
+	$collect_zebra			= true,
+	$collect_memcached		= true,
+	$collect_elasticsearch		= false
 )
 {
 	##
-	# Collect and/or configure the servers for each component, as well as ensure external
-	# resources for this server are available.
+	# Dependent resources.
 	##
 
-	# Apache HTTP Server.
-	::Koha::Site::System_resources[$site_name] -> Class["::koha::service"] ~> Class["::apache::service"]
+	unless (defined(::Koha::Site_resources[$site_name]))
+	{
+		::koha::site_resources
+		{ $site_name:
+			ensure	=> $ensure,
+		}
+	}
 
+	##
+	# Local Koha resources.
+	##
+
+	# koha-conf.xml configuration file.
+	unless (defined(::Koha::Files::Koha_conf_xml[$site_name]))
+	{
+		::koha::files::koha_conf_xml
+		{ $site_name:
+			ensure	=> $ensure,
+		}
+	}
+
+	# Apache HTTP Server.
 	unless (defined(::Koha::Apache::Site[$site_name]))
 	{
 		# Apache vhost for the Koha site.
 		::koha::apache::site
 		{ $site_name:
-			ensure		=> $ensure,
+			ensure	=> $ensure,
 		}
 	}
+
+	##
+	# Collected resources.
+	##
 
 	# Database (MySQL, PostgreSQL).
 	if ($collect_db == true)
 	{
 		::Koha::Site::Db <<| site_name == $site_name |>>
 	}
-	elsif (!defined(::Koha::Site::Db[$site_name]))
+	elsif (defined(::Koha::Site::Db[$site_name]) != true)
 	{
 		# to be defined manually because of a password requirement
-		fail("required site configuration resource koha::site::db not defined for site '$site_name'")
+		fail("required site configuration resource ::koha::site::db not defined for site '$site_name'")
 	}
 
-	# ElasticSearch.
-	if ($collect_elasticsearch == true)
+	# Zebra indexing system.
+	unless ($collect_elasticsearch == true or defined(::Koha::Site::Elasticsearch[$site_name]))
 	{
-		::Koha::Site::Elasticsearch <<| site_name == $site_name |>>
-	}
-	# elasticsearch support is optional, don't check if defined
-
-	# koha-conf.xml configuration file.
-	Class["::koha"] -> ::Koha::Files::Koha_conf_xml[$site_name]
-	::Koha::Site::System_resources[$site_name] -> ::Koha::Files::Koha_conf_xml[$site_name]
-	::Koha::Files::Koha_conf_xml[$site_name] -> Class["::apache::service"]
-	::Koha::Files::Koha_conf_xml[$site_name] ~> Class["::koha::service"]
-
-	unless (defined(::Koha::Files::Koha_conf_xml[$site_name]))
-	{
-		::koha::files::koha_conf_xml::default
-		{ $site_name:
-			ensure	=> $ensure,
-			file_group => $_
+		if ($collect_zebra == true)
+		{
+			::Koha::Site::Zebra <<| site_name == $site_name |>>
+		}
+		elsif (defined(::Koha::Site::Zebra[$site_name]) != true)
+		{
+			# to be defined manually because of a password requirement
+			fail("required site configuration resource ::koha::site::zebra not defined for site '$site_name'")
 		}
 	}
 
@@ -103,45 +117,10 @@ define koha::site
 	}
 	# memcached support is optional, don't check if defined
 
-	# System resources that are required by other classes.
-	unless (defined(::Koha::Site::System_resources[$site_name]))
+	# ElasticSearch.
+	if ($collect_elasticsearch == true)
 	{
-		::koha::site::system_resources
-		{ $site_name:
-			ensure	=> $ensure,
-		}
+		::Koha::Site::Elasticsearch <<| site_name == $site_name |>>
 	}
-
-	# Zebra indexing system.
-	if ($collect_zebra == true)
-	{
-		::Koha::Site::Zebra <<| site_name == $site_name |>>
-	}
-	elsif (!defined(::Koha::Site::Zebra[$site_name]))
-	{
-		# to be defined manually because of a password requirement
-		fail("required site configuration resource koha::site::zebra not defined for site '$site_name'")
-	}
-	
-	# Start the Koha service, if it hasn't been already.
-	if ($ensure == "present")
-	{
-		$service_ensure = "running"
-	}
-	elsif ($ensure == "absent")
-	{
-		$service_ensure	= "stopped"
-	}
-	else
-	{
-		$service_ensure = $ensure
-	}
-
-	unless (defined(Class["::koha::service"]))
-	{
-		class
-		{ "koha::service":
-			ensure	=> $service_ensure,
-		}
-	}
+	# elasticsearch support is optional, don't check if defined
 }

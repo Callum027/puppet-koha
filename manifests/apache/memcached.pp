@@ -1,6 +1,6 @@
-# == Class: koha::service
+# == Class: koha::site
 #
-# Set up the Koha service.
+# Set up a Koha site instance.
 #
 # === Parameters
 #
@@ -35,31 +35,23 @@
 #
 # Copyright 2015 Callum Dickinson.
 #
-class koha::service
+define koha::apache::memcached
 (
-	$ensure		= "present",
-	$koha_services	= $::koha::params::koha_services
-) inherits koha::params
+	$ensure			= "present",
+	$site_name		= $name,
+
+	$memcached_namespace
+)
 {
-	# Refresh the Koha Service.
-	if ($ensure == "present")
-	{
-		service
-		{ $koha_services:
-			ensure	=> "running",
-			enable	=> true,
-		}
-	}
-	elsif ($ensure == "absent")
-	{
-		service
-		{ $koha_services:
-			ensure	=> "stopped",
-			enable	=> false,
-		}
-	}
-	else
-	{
-		fail("invalid value for ensure: $ensure")
+	$opac_server_name = getparam(Koha::Apache::Site_name[$site_name], "opac_server_name")
+	$intra_server_name = getparam(Koha::Apache::Site_name[$site_name], "intra_server_name")
+	$memcached_servers = join(query_nodes("Koha::Memcached::Site['$site_name]'"), " ")
+
+	::concat::fragment
+	{ "${site_name}::apache_site_conf::memcached":
+		target	=> "${site_name}::apache_site_conf",
+		ensure	=> $ensure,
+		content	=> template("koha/apache-site-memcached.conf.erb"),
+		order	=> "01",
 	}
 }

@@ -56,15 +56,15 @@ class koha::params
 			$test						= "/usr/bin/test"
 
 			# Koha directories.
+			$koha_dir_owner					= "root"
+			$koha_dir_group					= "root"
+			$koha_dir_mode					= 755
+
 			$koha_config_dir				= "/etc/koha"
 			$koha_doc_dir					= "/usr/share/doc/koha-common"
 			$koha_lib_dir					= "/var/lib/koha"
 
 			$koha_log_dir					= "/var/log/koha"
-			$koha_log_dir_owner				= "root"
-			$koha_log_dir_group				= "root"
-			$koha_log_dir_mode				= 755
-			$koha_log_dir_site_mode				= 755
 
 			$koha_run_dir					= "/var/run/koha"
 			$koha_share_dir					= "/usr/share/koha"
@@ -78,8 +78,13 @@ class koha::params
 			$koha_spool_dir					= "/var/spool/koha"
 
 			# Apache directories.
+			$apache_dir_owner				= "root"
+			$apache_dir_group				= "root"
+			$apache_dir_mode				= 755
+			$apache_config_dir				= "/etc/apache2"
 			$apache_sites_available_dir			= "/etc/apache2/sites-available"
 			$apache_sites_enabled_dir			= "/etc/apache2/sites-enabled"
+			$apache_sites_dir_conf_file_owner		= "root"
 			$apache_sites_dir_conf_file_mode		= 640
 
 			# Koha packages and services.
@@ -90,12 +95,6 @@ class koha::params
 			# Zebra packages and services.
 			$zebra_packages					= [ "koha-common" ]
 			$zebra_services					= [ "koha-common" ]
-
-			# Zebra directories.
-			$zebra_run_dir					= "/var/run/koha"
-			$zebra_data_dir_base				= "/var/lib/koha"
-			$zebra_config_dir_base				= "/etc/koha/sites"
-			$zebra_
 
 			# Apache and MySQL packages and services are handled by their
 			# official modules.

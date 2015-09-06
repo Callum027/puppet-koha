@@ -40,15 +40,11 @@ define koha::site::memcached
 	$ensure			= "present",
 	$site_name		= $name,
 
-	$server,
 	$namespace
 )
 {
-	if ($ensure == "present")
-	{
-		::Koha::Apache::Site <| site_name == $site_name |>
-		{
-			memcached_namespace	=> $namespace,
-		}
+	::koha::apache::memcached
+	{ $site_name:
+		namespace	=> $namespace,
 	}
 }

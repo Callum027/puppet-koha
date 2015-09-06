@@ -159,9 +159,9 @@ define koha::zebra::site
 	##
 	# Files required by the Zebra server instance.
 	##
-	unless (defined(::Koha::System_resources[$site_name]))
+	unless (defined(::Koha::site_resources[$site_name]))
 	{
-		::koha::system_resources
+		::koha::site_resources
 		{ $site_name:
 			ensure	=> $ensure,
 		}
@@ -174,7 +174,7 @@ define koha::zebra::site
 		group	=> $koha_user,
 		mode	=> $koha_site_dir_passwd_file_mode,
 		content	=> template("koha/zebra.passwd.erb"),
-		require	=> [ Class["::koha::zebra"], ::Koha::System_resources[$site_name] ],
+		require	=> [ Class["::koha::zebra::install"], ::Koha::System_resources[$site_name] ],
 		notify	=> Class["::koha::zebra::service"],
 	}
 

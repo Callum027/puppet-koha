@@ -35,25 +35,18 @@
 #
 # Copyright 2015 Callum Dickinson.
 #
-class koha::system_resources
+define koha::system_resources
 (
-	$ensure			= "present",
+	$ensure				= "present",
+	$site_name			= $name,
 
 	# koha::params default values.
-	$koha_dir_owner		= $::koha::params::koha_dir_owner,
-	$koha_dir_group		= $::koha::params::koha_dir_group,
-	$koha_dir_mode		= $::koha::params::koha_dir_mode,
-
-	$koha_config_dir	= $::koha::params::koha_config_dir,
-	$koha_doc_dir		= $::koha::params::koha_doc_dir,
-	$koha_lib_dir		= $::koha::params::koha_lib_dir,
-	$koha_log_dir		= $::koha::params::koha_log_dir,
-
-	$koha_run_dir		= $::koha::params::koha_run_dir,
-	$koha_share_dir		= $::koha::params::koha_share_dir,
-
-	$koha_site_dir		= $::koha::params::koha_site_dir,
-	$koha_spool_dir		= $::koha::params::koha_spool_dir
+	$koha_log_dir			= $::koha::params::koha_log_dir,
+	$koha_log_dir_owner		= $::koha::params::koha_log_dir_owner,
+	$koha_log_dir_group		= $::koha::params::koha_log_dir_group,
+	$koha_log_dir_site		= $::koha::params::koha_log_dir_mode,
+	$koha_log_dir_site_mode		= $::koha::params::koha_log_dir_site_mode,
+	$koha_site_dir			= $::koha::params::koha_site_dir
 )
 {
 	##
@@ -72,13 +65,31 @@ class koha::system_resources
 	# Resource declaration.
 	##
 
+	# Generate the Koha user, and the log directory.
+	::koha::user
+	{ $site_name:
+		ensure	=> $ensure,
+	}
+
+	# Required folders for configuration and log files.
+	$koha_user = getparam(::Koha::User_name[$site_name], "user")
+
 	file
-	{ [ $koha_config_dir, $koha_doc_dir, $koha_lib_dir,
-			$koha_log_dir, $koha_run_dir, $koha_share_dir,
-			$koha_site_dir, $koha_spool_dir ]:
+	{ "$koha_log_dir/$site_name":
 		ensure	=> $directory_ensure,
-		owner	=> $koha_dir_owner,
-		group	=> $koha_dir_group,
-		mode	=> $koha_dir_mode,
+		owner	=> $koha_user,
+		group	=> $koha_user,
+		mode	=> $koha_log_dir_site_mode,
+		require	=> [ ::Koha::User[$site_name], Class["::koha::system_resources"] ],
+	}
+
+	file
+	{ "$koha_site_dir/$site_name":
+		ensure	=> $directory_ensure,
+		owner	=> $koha_user,
+		group	=> $koha_user,
+		mode	=> $koha_site_dir_mode,
+
+		require	=> [ ::Koha::User[$site_name], Class["::koha::system_resources"] ],
 	}
 }

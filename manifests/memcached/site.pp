@@ -40,18 +40,16 @@ define koha::memcached::site
 	$ensure			= "present",
 	$site_name		= $name,
 
-	$server			= $::fqdn,
 	$namespace		= undef # Defined in resource body
 )
 {
 	$_namespace = pick($namespace, $site_name)
 
-	validate_string($site_name, $server, $_namespace)
+	validate_string($site_name, $_namespace)
 
 	@@::koha::site::memcached
-	{ "$server-$_namespace":
+	{ $site_name:
 		ensure		=> $ensure,
-		server		=> $server,
 		namespace	=> $_namespace,
 	}
 }

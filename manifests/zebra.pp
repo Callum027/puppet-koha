@@ -37,17 +37,21 @@
 #
 class koha::zebra($ensure = "present")
 {
-	require koha::params
-	require koha::params::koha_conf_xml
+	require ::koha::params
+	require ::koha::params::koha_conf_xml
 
+	# Include other related resources used by other parts of the module.
+	include ::koha::system_resources
+
+	##
+	# Defined resources.
+	##
 	unless (defined(Class["::koha::zebra::install"]))
 	{
 		class
 		{ "::koha::zebra::install":
 			ensure	=> $ensure,
 		}
-
-		contain "::koha::zebra::install"
 	}
 
 	unless (defined(Class["::koha::zebra::service"]))
@@ -56,7 +60,10 @@ class koha::zebra($ensure = "present")
 		{ "::koha::zebra::service":
 			ensure	=> $ensure,
 		}
-
-		contain "::koha::zebra::service"
 	}
+
+	##
+	# Dependency chains.
+	##
+	Class["::koha::zebra::install"] ~> Class["::koha::zebra::service"]
 }
