@@ -45,7 +45,7 @@ define koha::apache::memcached
 {
 	$opac_server_name = getparam(Koha::Apache::Site_name[$site_name], "opac_server_name")
 	$intra_server_name = getparam(Koha::Apache::Site_name[$site_name], "intra_server_name")
-	$memcached_servers = join(query_nodes("Koha::Memcached::Site['$site_name]'"), " ")
+	$memcached_servers = join(query_nodes("Koha::Memcached::Site['$site_name']"), " ")
 
 	::concat::fragment
 	{ "${site_name}::apache_site_conf::memcached":
