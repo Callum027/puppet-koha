@@ -99,7 +99,7 @@ define koha::zebra::site::server
 		server_indexing_mode	=> $server_indexing_mode,
 		server_marc_format	=> $server_marc_format,
 		server_directory	=> $server_directory,
-		server_config		=> $server_config,
+		server_config		=> $_server_config,
 		server_cql2rpn		=> $server_cql2rpn,
 		server_retrieval_config	=> $server_retrieval_config,
 		server_enable_sru	=> $server_enable_sru,
