@@ -159,6 +159,13 @@ define koha::zebra::site
 	##
 	# Files required by the Zebra server instance.
 	##
+	unless (defined(::Koha::System_resources[$site_name]))
+	{
+		::koha::system_resources
+		{ $site_name:
+			ensure	=> $ensure,
+		}
+	}
 
 	file
 	{ "$koha_site_dir/$site_name/zebra.passwd":
@@ -167,7 +174,7 @@ define koha::zebra::site
 		group	=> $koha_user,
 		mode	=> $koha_site_dir_passwd_file_mode,
 		content	=> template("koha/zebra.passwd.erb"),
-		require	=> [ Class["::koha::zebra"], ::Koha::User[$koha_user] ],
+		require	=> [ Class["::koha::zebra"], ::Koha::System_resources[$site_name] ],
 		notify	=> Class["::koha::zebra::service"],
 	}
 
@@ -176,10 +183,10 @@ define koha::zebra::site
 	{ $biblioserver_server_config_grs1:
 		ensure	=> $ensure,
 		owner	=> $koha_site_dir_conf_file_owner,
-		group	=> $_koha_user,
+		group	=> $koha_user,
 		mode	=> $koha_site_dir_conf_file_mode,
 		content	=> template("koha/zebra-biblios-site.cfg.erb"),
-		require	=> [ Class["::koha::zebra"], ::Koha::User[$koha_user] ],
+		require	=> [ Class["::koha::zebra"], ::Koha::System_resources[$site_name] ],
 		notify	=> Class["::koha::zebra::service"],
 	}
 
@@ -187,10 +194,10 @@ define koha::zebra::site
 	{ $biblioserver_server_config_dom:
 		ensure	=> $ensure,
 		owner	=> $koha_site_dir_conf_file_owner,
-		group	=> $_koha_user,
+		group	=> $koha_user,
 		mode	=> $koha_site_dir_conf_file_mode,
 		content	=> template("koha/zebra-biblios-dom-site.cfg.erb"),
-		require	=> [ Class["::koha::zebra"], ::Koha::User[$koha_user] ],
+		require	=> [ Class["::koha::zebra"], ::Koha::System_resources[$site_name] ],
 		notify	=> Class["::koha::zebra::service"],
 	}
 
@@ -198,10 +205,10 @@ define koha::zebra::site
 	{ $authorityserver_server_config_grs1:
 		ensure	=> $ensure,
 		owner	=> $koha_site_dir_conf_file_owner,
-		group	=> $_koha_user,
+		group	=> $koha_user,
 		mode	=> $koha_site_dir_conf_file_mode,
 		content	=> template("koha/zebra-authorities-site.cfg.erb"),
-		require	=> [ Class["::koha::zebra"], ::Koha::User[$koha_user] ],
+		require	=> [ Class["::koha::zebra"], ::Koha::System_resources[$site_name] ],
 		notify	=> Class["::koha::zebra::service"],
 	}
 
@@ -209,16 +216,23 @@ define koha::zebra::site
 	{ $authorityserver_server_config_dom:
 		ensure	=> $ensure,
 		owner	=> $koha_site_dir_conf_file_owner,
-		group	=> $_koha_user,
+		group	=> $koha_user,
 		mode	=> $koha_site_dir_conf_file_mode,
 		content	=> template("koha/zebra-authorities-dom-site.cfg.erb"),
-		require	=> [ Class["::koha::zebra"], ::Koha::User[$koha_user] ],
+		require	=> [ Class["::koha::zebra"], ::Koha::System_resources[$site_name] ],
 		notify	=> Class["::koha::zebra::service"],
 	}
 
 	##
 	# koha-conf.xml configuration of the Zebra client and server.
 	##
+	unless (defined(::Koha::Files::Koha_conf_xml[$site_name]))
+	{
+		::koha::files::koha_conf_xml
+		{ $site_name:
+			ensure	=> $ensure,
+		}
+	}
 
 	if ($biblioserver == true)
 	{

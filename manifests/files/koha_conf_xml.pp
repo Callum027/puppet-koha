@@ -67,7 +67,7 @@ define koha::files::koha_conf_xml
 	# Resource declaration.
 	##
 	$_file = pick($file, "${koha_site_dir}/${site_name}/koha-conf.xml")
-	$_group = pick($group, getparam(::Koha::User[$site_name], $user))
+	$_group = pick($group, getparam(::Koha::User_name[$site_name], "user"))
 
 	::concat
 	{ "${site_name}::koha_conf_xml":

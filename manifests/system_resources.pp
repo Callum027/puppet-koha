@@ -35,43 +35,23 @@
 #
 # Copyright 2015 Callum Dickinson.
 #
-define koha::site::system_resources
+define koha::system_resources
 (
 	$ensure				= "present",
 	$site_name			= $name,
 
-	# Koha options.
-	$koha_user			= undef, # Defined in resource body
-
 	# koha::params default values.
+	$koha_log_dir			= $::koha::params::koha_log_dir,
+	$koha_log_dir_owner		= $::koha::params::koha_log_dir_owner,
+	$koha_log_dir_group		= $::koha::params::koha_log_dir_group,
+	$koha_log_dir_site		= $::koha::params::koha_log_dir_mode,
+	$koha_log_dir_site_mode		= $::koha::params::koha_log_dir_site_mode,
 	$koha_site_dir			= $::koha::params::koha_site_dir
 )
 {
 	##
-	# Add the Koha user to required resources.
-	##
-	if ($ensure == "present")
-	{
-		::Koha::Apache::Site <| site_name == $site_name |>
-		{
-			koha_user	=> $_koha_user,
-		}
-
-		::Koha::Files::Koha_conf_xml <| site_name == $site_name |>
-		{
-			file_group	=> $_koha_user,
-		}
-	}
-
-	##
 	# Processed default parameters.
 	##
-	$_koha_user = pick($koha_user, "$site_name-koha")
-
-	##
-	# Resource declaration.
-	##
-
 	if ($ensure == "present")
 	{
 		$directory_ensure = "directory"
@@ -81,29 +61,43 @@ define koha::site::system_resources
 		$directory_ensure = $ensure
 	}
 
+	##
+	# Resource declaration.
+	##
+
 	# Generate the Koha user, and the log directory.
 	::koha::user
-	{ $_koha_user:
-		notify	=> Class["::apache::service"],
+	{ $site_name:
+		ensure	=> $ensure,
 	}
 
 	# Required folders for configuration and log files.
-	::koha::log_dir
-	{ $site_name:
-		koha_user	=> $_koha_user,
-		require		=> Class["::koha"],
-		notify		=> Class["::apache::service"],
+	$koha_user = getparam(::Koha::User_name[$site_name], "user")
+
+	file
+	{ $koha_log_dir:
+		ensure	=> $directory_ensure,
+		owner	=> $koha_log_dir_owner,
+		group	=> $koha_log_dir_group,
+		mode	=> $koha_log_dir_mode,
+	}
+
+	file
+	{ "$koha_log_dir/$site_name":
+		ensure	=> $directory_ensure,
+		owner	=> $koha_user,
+		group	=> $koha_user,
+		mode	=> $koha_log_dir_site_mode,
+		require	=> [ ::Koha::User[$site_name], File[$koha_log_dir] ],
 	}
 
 	file
 	{ "$koha_site_dir/$site_name":
 		ensure	=> $directory_ensure,
-		owner	=> $_koha_user,
-		group	=> $_koha_user,
+		owner	=> $koha_user,
+		group	=> $koha_user,
 		mode	=> $koha_site_dir_mode,
 
-		require	=> [ Class["::koha"], ::Koha::User[$_koha_user] ],
-		before	=> Class["::apache::service"],
-		notify	=> Class["::koha::service"],
+		require	=> ::Koha::User[$site_name],
 	}
 }
