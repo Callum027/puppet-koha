@@ -37,14 +37,14 @@
 #
 define koha::mysql::site
 (
-	$ensure			= present,
-	$site_name		= $name,
+	$ensure		= present,
+	$site_name	= $name,
 
-	$mysql_db		= undef, # Defined in resource body
-	$mysql_port		= "3306",
-	$mysql_user		= undef, # Defined in resource body
+	$database	= undef, # Defined in resource body
+	$port		= "3306",
+	$user		= undef, # Defined in resource body
 
-	$mysql_password
+	$pass
 )
 {
 	##
@@ -60,8 +60,8 @@ define koha::mysql::site
 	# Processed default parameters.
 	##
 
-	$_mysql_db = pick($mysql_db, "koha_${site_name}")
-	$_mysql_user = pick($mysql_user, $_mysql_db)
+	$_database = pick($database, "koha_${site_name}")
+	$_user = pick($user, $_database)
 
 
 	##
@@ -70,9 +70,9 @@ define koha::mysql::site
 
 	# Set up MySQL database for this instance.
 	::mysql::db
-	{ $_mysql_db:
-		user		=> $_mysql_user,
-		password	=> $mysql_password,
+	{ $_database:
+		user		=> $_user,
+		password	=> $pass,
 		host		=> '%',
 		grant		=> 'ALL',
 		require		=> Class["::koha::mysql"],
@@ -82,9 +82,9 @@ define koha::mysql::site
 	::koha::db::site
 	{ $site_name:
 		db_scheme	=> "mysql",
-		database	=> $_mysql_db,
-		port		=> $mysql_port,
-		user		=> $_mysql_user,
-		pass		=> $mysql_password,
+		database	=> $_database,
+		port		=> $port,
+		user		=> $_user,
+		pass		=> $pass,
 	}
 }
