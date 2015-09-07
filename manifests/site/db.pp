@@ -40,7 +40,7 @@ define koha::site::db
 	$ensure			= "present",
 	$site_name		= $name,
 
-	$db_scheme		= $::koha::params::koha_conf_xml::config_db_scheme,
+	$db_scheme,
 	$database,
 	$port,
 	$user,
@@ -49,20 +49,7 @@ define koha::site::db
 {
 	if ($ensure == "present")
 	{
-		validate_re($config_db_scheme, "^mysql$", "invalid database scheme '$config_db_scheme'")
-
-		if (is_string($db_port))
-		{
-			validate_re($db_port, "^[0-9]*$", "the given parameter is not a valid port number")
-		}
-		else
-		{
-			validate_integer($db_port)
-		}
-
-		validate_string($config_database, $config_hostname, $config_user, $config_pass)
-
-		::Koha::Files::Koha_conf_xml::Default <| site_name == $site_name |>
+		::Koha::Files::Koha_conf_xml::Config <| site_name == $site_name |>
 		{
 			config_db_scheme	=> $db_scheme,
 			config_database		=> $database,

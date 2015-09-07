@@ -71,6 +71,14 @@ define koha::site
 		}
 	}
 
+	unless (defined(::Koha::Files::Koha_conf_xml::Config[$site_name]))
+	{
+		::koha::files::koha_conf_xml::config
+		{ $site_name:
+			ensure	=> $ensure,
+		}
+	}
+
 	# Apache HTTP Server.
 	unless (defined(::Koha::Apache::Site[$site_name]))
 	{

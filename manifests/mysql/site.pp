@@ -38,46 +38,35 @@
 define koha::mysql::site
 (
 	$ensure			= present,
-
-	$export_db		= true,
-
-	$echo			= $::koha::params::echo,
-	$mysql			= $::koha::params::mysql,
-
 	$site_name		= $name,
 
-	$mysql_adminuser	= $::koha::params::mysql_adminuser,
-
 	$mysql_db		= undef, # Defined in resource body
-	$mysql_port		= $::koha::params::mysql_port,
+	$mysql_port		= "3306",
 	$mysql_user		= undef, # Defined in resource body
 
 	$mysql_password
-	#$staff_password
 )
 {
+	##
+	# Check for required resources.
+	##
+
 	unless (defined(Class["::koha::mysql"]))
 	{
 		fail("You must include the Koha MySQL base class before setting up a Koha MySQL database")
 	}
 
-	if ($mysql_db == undef)
-	{
-		$_mysql_db = "koha_$site_name"
-	}
-	else
-	{
-		$_mysql_db = $mysql_db
-	}
+	##
+	# Processed default parameters.
+	##
 
-	if ($mysql_user == undef)
-	{
-		$_mysql_user = $_mysql_db
-	}
-	else
-	{
-		$_mysql_user = $mysql_user
-	}
+	$_mysql_db = pick($mysql_db, "koha_${site_name}")
+	$_mysql_user = pick($mysql_user, $_mysql_db)
+
+
+	##
+	# Resource definitons.
+	##
 
 	# Set up MySQL database for this instance.
 	::mysql::db
@@ -89,38 +78,13 @@ define koha::mysql::site
 		require		=> Class["::koha::mysql"],
 	}
 
-	if ($export_db == true)
-	{
-		::koha::db::site
-		{ $site_name:
-			db_scheme	=> "mysql",
-			database	=> $_mysql_db,
-			port		=> $mysql_port,
-			user		=> $_mysql_user,
-			pass		=> $mysql_password,
-		}
+	# Database configuration for the Koha instance.
+	::koha::db::site
+	{ $site_name:
+		db_scheme	=> "mysql",
+		database	=> $_mysql_db,
+		port		=> $mysql_port,
+		user		=> $_mysql_user,
+		pass		=> $mysql_password,
 	}
-
-	# Re-fetch the passwords from the config we've generated, allows it
-	# to be different from what we set, in case the user had to change
-	# something.
-
-	# TODO: Use the default database content if that exists.
-	# Step 1: get the user to pass in a default SQL parameters file
-	# Step 2: check if it was passed in and check if it exiss
-	# Step 3: pass it to MySQL
-
-	# TODO: Populate the database with default content.
-
-	# Change the default user's password.
-	# $staff_digest = md5($staff_password)
-
-	# TODO: Only do this if the database gets filled with default content!
-	# exec
-	# { "koha::mysql::site::mysql_change_default_password":
-	# 	command	=> "$echo_real \"USE \`$mysql_db_real\`; UPDATE borrowers SET password = '$staff_digest' WHERE borrowernumber = $mysql_adminuser_real;\" | $mysql_real --host='localhost' --user='$mysql_user_real' --password='$mysql_password'",
-	# 	require	=> [ Class["koha::mysql::install"], Mysql::Db[$mysql_db_real] ],
-	# }
-
-	# TODO: Upgrade the database schema, just in case the dump was from an old version.
 }

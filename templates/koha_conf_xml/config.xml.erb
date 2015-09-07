@@ -2,7 +2,7 @@
  <db_scheme><%= @db_scheme %></db_scheme>
  <database><%= @database %></database>
  <hostname><%= @hostname %></hostname>
- <port><%= @_port %></port>
+ <port><%= @port %></port>
  <user><%= @user %></user>
  <pass><%= @pass %></pass>
  <biblioserver><%= @biblioserver %></biblioserver>
@@ -11,27 +11,28 @@
  <authorityservershadow><%= @authorityservershadow %></authorityservershadow>
  <pluginsdir><%= @_pluginsdir %></pluginsdir>
  <enable_plugins><%= @enable_plugins %></enable_plugins>
- <intranetdir><%= @intranetdir %></intranetdir>
- <opacdir><%= @opacdir %></opacdir>
- <opachtdocs><%= @opachtdocs %></opachtdocs>
- <intrahtdocs><%= @intrahtdocs %></intrahtdocs>
- <includes><%= @includes %></includes>
- <logdir><%= @logdir %></logdir>
- <docdir><%= @docdir %></docdir>
+ <intranetdir><%= @_intranetdir %></intranetdir>
+ <opacdir><%= @_opacdir %></opacdir>
+ <opachtdocs><%= @_opachtdocs %></opachtdocs>
+ <intrahtdocs><%= @_intrahtdocs %></intrahtdocs>
+ <includes><%= @_includes %></includes>
+ <logdir><%= @_logdir %></logdir>
+ <docdir><%= @_docdir %></docdir>
  <backupdir><%= @_backupdir %></backupdir>
  <backup_db_via_tools><%= @backup_db_via_tools %></backup_db_via_tools>
  <backup_conf_via_tools><%= @backup_conf_via_tools %></backup_conf_via_tools>
 <%- if @pazpar2url -%>
  <pazpar2url><%= @pazpar2url %></pazpar2url>
 <%- end -%>
- <install_log><%= @install_log %></install_log>
+ <install_log><%= @_install_log %></install_log>
  <useldapserver><%= @useldapserver %></useldapserver>
  <useshibboleth><%= @useshibboleth %></useshibboleth>
  <zebra_bib_index_mode><%= @zebra_bib_index_mode %></zebra_bib_index_mode>
  <zebra_auth_index_mode><%= @zebra_auth_index_mode %></zebra_auth_index_mode>
  <zebra_lockdir><%= @_zebra_lockdir %></zebra_lockdir>
  <use_zebra_facets><%= @use_zebra_facets %></use_zebra_facets>
- <queryparser_config><%= @queryparser_config %></queryparser_config>
+ <queryparser_config><%= @_queryparser_config %></queryparser_config>
+ <log4perl_conf><@= @_log4perl_conf %></log4perl_conf>
 
  <ttf>
     <font type="TR" >/usr/share/fonts/truetype/ttf-dejavu/DejaVuSerif.ttf</font>

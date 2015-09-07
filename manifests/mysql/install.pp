@@ -44,6 +44,8 @@ class koha::mysql::install
 {
 	unless ($ensure != "present" or defined(Class["::mysql::server"]))
 	{
+		include ::mysql::client
+
 		class
 		{ "::mysql::server":
 			override_options	=>

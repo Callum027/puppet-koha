@@ -64,6 +64,7 @@ class koha::params
 			$koha_doc_dir					= "/usr/share/doc/koha-common"
 			$koha_lib_dir					= "/var/lib/koha"
 
+			$koha_lock_dir					= "/var/lock/koha"
 			$koha_log_dir					= "/var/log/koha"
 
 			$koha_run_dir					= "/var/run/koha"

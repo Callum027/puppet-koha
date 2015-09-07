@@ -48,51 +48,68 @@ define koha::files::koha_conf_xml::config
 	$user			= undef, # Filled in by ::koha::site::db
 	$pass			= undef, # Filled in by ::koha::site::db
 
-	$biblioserver		= $::koha::params::koha_conf_xml::config_biblioserver,
-	$biblioservershadow	= $::koha::params::koha_conf_xml::config_biblioservershadow,
+	$biblioserver		= "biblios",
+	$biblioservershadow	= 1,
 
-	$authorityserver	= $::koha::params::koha_conf_xml::config_authorityserver,
-	$authorityservershadow	= $::koha::params::koha_conf_xml::config_authorityservershadow,
+	$authorityserver	= "authorities",
+	$authorityservershadow	= 1,
 
 	$pluginsdir		= undef, # Defined in resource body
-	$enable_plugins		= $::koha::params::koha_conf_xml::config_enable_plugins,
+	$enable_plugins		= 0,
 
-	$intranetdir		= $::koha::params::koha_conf_xml::config_intranetdir,
-	$opacdir		= $::koha::params::koha_conf_xml::config_opacdir,
-	$opachtdocs		= $::koha::params::koha_conf_xml::config_opachtdocs,
-	$intrahtdocs		= $::koha::params::koha_conf_xml::config_intrahtdocs,
-	$includes		= $::koha::params::koha_conf_xml::config_includes,
-	$logdir			= $::koha::params::koha_conf_xml::config_logdir,
-	$docdir			= $::koha::params::koha_conf_xml::config_docdir,
-	$backupdir		= undef, # Defined in resource body
+	$intranetdir		= undef, # Defined in resource body
+	$opacdir		= undef, # Defined in resource body
+	$opachtdocs		= undef, # Defined in resource body
+	$intrahtdocs		= undef, # Defined in resource body
+	$includes		= undef, # Defined in resource body
+	$logdir			= undef, # Defined in resource body
+	$docdir			= $::koha::params::koha_doc_dir,
+	$backupdir		= 
 
-	$backup_db_via_tools	= $::koha::params::koha_conf_xml::config_backup_db_via_tools,
-	$backup_conf_via_tools	= $::koha::params::koha_conf_xml::config_backup_conf_via_tools,
+	$backup_db_via_tools	= 0,
+	$backup_conf_via_tools	= 0,
 
 	$pazpar2url		= undef,
 
-	$install_log		= $::koha::params::koha_conf_xml::config_install_log,
+	$install_log		= undef, # Defined in resource body
 
-	$useldapserver		= $::koha::params::koha_conf_xml::config_useldapserver,
-	$useshibboleth		= $::koha::params::koha_conf_xml::config_useshibboleth,
+	$useldapserver		= 0,
+	$useshibboleth		= 0,
 
-	$zebra_bib_index_mode,
-	$zebra_auth_index_mode,
+	$zebra_bib_index_mode, # Filled in by ::koha::site::zebra
+	$zebra_auth_index_mode, # Filled in by ::koha::site::zebra
 
 	$zebra_lockdir		= undef, # Defined in resource body
-	$use_zebra_facets	= $::koha::params::koha_conf_xml::config_use_zebra_facets,
-	$queryparser_config	= $::koha::params::koha_conf_xml::config_queryparser_config,
+	$use_zebra_facets	= 1,
+	$queryparser_config	= undef, # Defined in resource body
+	$log4perl_conf		= undef, # Defined in resource body
 
 	# koha::params default values.
 	$koha_lib_dir		= $::koha::params::koha_lib_dir,
-	$koha_run_dir		= $::koha::params::koha_run_dir,
+	$koha_lock_dir		= $::koha::params::koha_lock_dir,
+	$koha_share_dir		= $::koha::params::koha_share_dir,
 	$koha_spool_dir		= $::koha::params::koha_spool_dir
 )
 {
+	##
+	# Processed default parameters.
+	##
+
 	$_pluginsdir = pick($pluginsdir, "${koha_lib_dir}/${site_name}/plugins")
+
+	$_intranetdir = pick($intranetdir, "${koha_share_dir}/intranet/cgi-bin")
+	$_opacdir = pick($opacdir, "${koha_share_dir}/opac/cgi-bin/opac")
+	$_opachtdocs = pick($opachtdocs, "${koha_share_dir}/opac/htdocs/opac-tmpl")
+	$_intrahtdocs = pick($intrahtdocs, "${koha_share_dir}/intranet/htdocs/intranet-tmpl")
+	$_includes = pick($includes, "${koha_share_dir}/intranet/htdocs/intranet-tmpl/prog/en/includes/")
+	$_logdir = pick($logdir, "${koha_log_dir}/${site_name}")
 	$_backupdir = pick($backupdir, "${koha_spool_dir}/${site_name}")
 
-	$_zebra_lockdir = pick($zebra_lockdir, "${koha_run_dir}/${site_name}")
+	$_install_log = pick($install_log, "${koha_share_dir}/misc/koha-install-log")
+
+	$_zebra_lockdir = pick($zebra_lockdir, "${koha_lock_dir}/${site_name}")
+	$_queryparser_config = pick($queryparser_config, "${koha_config_dir}/searchengine/queryparser.yaml")
+	$_log4perl_conf = pick($log4perl_conf, "${koha_config_dir}/log4perl.conf")
 
 	::concat::fragment
 	{ "${site_name}::koha_conf_xml::config":
