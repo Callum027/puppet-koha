@@ -40,8 +40,6 @@ define koha::zebra::site
 	$ensure						= "present",
 	$site_name					= $name,
 
-	$koha_user					= undef, # Defined in resource body
-
 	# Zebra options meant to be set by the user.
 	$user						= "kohauser",
 	$password,
