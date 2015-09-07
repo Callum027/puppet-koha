@@ -35,37 +35,4 @@
 #
 # Copyright 2015 Callum Dickinson.
 #
-define koha::user
-(
-	$ensure		= "present",
-	$site_name	= $name,
-
-	$user		= undef, # Defined in resource body
-	$full_name	= undef, # Defined in resource body
-	$home		= undef,  # Defined in resource body
-
-	# koha::params default values.
-	$koha_lib_dir	= $::koha::params::koha_lib_dir,
-	$nologin	= $::koha::params::nologin
-)
-{
-	$_user = pick($user, "${site_name}-koha"
-	$_full_name = pick($full_name, "Koha instance $_user")
-	$_home = pick($home, "$koha_lib_dir/$_user")
-
-	user
-	{ $_user:
-		ensure		=> $ensure,
-
-		comment		=> $_full_name,
-		password	=> "!",
-
-		home		=> $_home,
-		shell		=> $nologin,
-	}
-
-	::koha::user_name
-	{ $site_name:
-		user	=> $_user,
-	}
-}
+define koha::user_name($site_name = $name, $user) {}

@@ -35,8 +35,6 @@
 #
 # Copyright 2015 Callum Dickinson.
 #
-define koha::files::koha_conf_xml_file($filename) {}
-
 define koha::files::koha_conf_xml
 (
 	$ensure		= "present",

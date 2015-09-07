@@ -35,8 +35,6 @@
 #
 # Copyright 2015 Callum Dickinson.
 #
-define koha::apache::site_name($site_name = $name, $site_intra, $opac_server_name, $intra_server_name) {}
-
 define koha::apache::site
 (
 	$ensure					= "present",

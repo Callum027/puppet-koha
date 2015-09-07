@@ -159,7 +159,7 @@ define koha::zebra::site
 	##
 	# Files required by the Zebra server instance.
 	##
-	unless (defined(::Koha::site_resources[$site_name]))
+	unless (defined(::Koha::Site_resources[$site_name]))
 	{
 		::koha::site_resources
 		{ $site_name:
