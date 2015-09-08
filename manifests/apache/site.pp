@@ -186,7 +186,7 @@ define koha::apache::site
 		owner	=> $apache_sites_dir_conf_file_owner,
 		group	=> $koha_user,
 		mode	=> $apache_sites_dir_conf_file_mode,
-		require	=> [ Class["::koha::install"], ::Koha::System_resources[$site_name] ],
+		require	=> [ Class["::koha::install"], ::Koha::Site_resources[$site_name] ],
 		before	=> Class["::koha::service"],
 		notify	=> Class["::apache::service"],
 	}
@@ -206,7 +206,7 @@ define koha::apache::site
 		owner	=> $apache_sites_dir_conf_file_owner,
 		group	=> $koha_user,
 		mode	=> $apache_sites_dir_conf_file_mode,
-		require	=> [ Class["::koha::install"], ::Koha::System_resources[$site_name], ::Concat["${site_name}::apache_site_conf"] ],
+		require	=> [ Class["::koha::install"], ::Koha::Site_resources[$site_name], ::Concat["${site_name}::apache_site_conf"] ],
 		before	=> Class["::koha::service"],
 		notify	=> Class["::apache::service"],
 	}
