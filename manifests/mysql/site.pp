@@ -41,8 +41,11 @@ define koha::mysql::site
 	$site_name	= $name,
 
 	$database	= undef, # Defined in resource body
+	$hostname	= undef, # Defined in resource body
 	$port		= "3306",
 	$user		= undef, # Defined in resource body
+
+	$hostname_use_fqdn = false,
 
 	$pass
 )
@@ -62,6 +65,15 @@ define koha::mysql::site
 
 	$_database = pick($database, "koha_${site_name}")
 	$_user = pick($user, $_database)
+
+	if ($hostname_use_fqdn == true)
+	{
+		$_hostname = pick($hostname, $::fqdn)
+	}
+	else
+	{
+		$_hostname = pick($hostname, $::ipaddress)
+	}
 
 
 	##
@@ -83,7 +95,7 @@ define koha::mysql::site
 	{ $site_name:
 		db_scheme	=> "mysql",
 		database	=> $_database,
-		hostname	=> $::fqdn,
+		hostname	=> $_hostname,
 		port		=> $port,
 		user		=> $_user,
 		pass		=> $pass,
