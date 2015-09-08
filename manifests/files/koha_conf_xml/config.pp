@@ -128,7 +128,7 @@ define koha::files::koha_conf_xml::config
 		target	=> "${site_name}::koha_conf_xml",
 		ensure	=> $ensure,
 		content	=> template("koha/koha_conf_xml/config_main.xml.erb"),
-		order	=> "06",
+		order	=> "07",
 	}
 
 	::concat::fragment

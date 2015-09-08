@@ -52,7 +52,7 @@ define koha::files::koha_conf_xml::config_index_mode
 			target	=> "${site_name}::koha_conf_xml",
 			ensure	=> $ensure,
 			content	=> " <zebra_bib_index_mode>$zebra_bib_index_mode</zebra_bib_index_mode>\n",
-			order	=> "07",
+			order	=> "06",
 		}
 	}
 
@@ -63,7 +63,8 @@ define koha::files::koha_conf_xml::config_index_mode
 			target	=> "${site_name}::koha_conf_xml",
 			ensure	=> $ensure,
 			content	=> " <zebra_auth_index_mode>$zebra_auth_index_mode</zebra_auth_index_mode>\n",
-			order	=> "07",
+			order	=> "06",
+			order	=> "06",
 		}
 	}
 }
