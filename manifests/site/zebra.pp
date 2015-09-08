@@ -46,10 +46,6 @@ define koha::site::zebra
 	$serverinfo,
 
 	$listen_socket,
-	# Variables used to determine the above.
-	$listen_scheme,
-	$listen_unix_socket,
-	$listen_tcp_port,
 
 	$server_indexing_mode,
 	$server_marc_format,
