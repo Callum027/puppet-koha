@@ -143,7 +143,7 @@ define koha::zebra::site
 	$_biblioserver_server_cql2rpn = pick($biblioserver_server_cql2rpn, $_server_cql2rpn)
 	$_biblioserver_server_retrieval_config = pick($biblioserver_server_retieval_config, "$koha_config_dir/${marc_format}-retrieval-info-bib-dom.xml")
 	$_biblioserver_server_sru_explain = pick($biblioserver_server_sru_explain, "$koha_config_dir/explain-biblios.xml")
-	$_biblioserver_serverinfo_ccl2rpn = pick($biblioserver_serverinfo_ccl2rpn, $_server_ccl2rpn)
+	$_biblioserver_serverinfo_ccl2rpn = pick($biblioserver_serverinfo_ccl2rpn, $_serverinfo_ccl2rpn)
 
 	# Biblioserver options.
 	$_authorityserver_server_directory = pick($authorityserver_server_directory, "$koha_lib_dir/${site_name}/authorities")
@@ -152,7 +152,7 @@ define koha::zebra::site
 	$_authorityserver_server_cql2rpn = pick($authorityserver_server_cql2rpn, $_server_cql2rpn)
 	$_authorityserver_server_retrieval_config = pick($authorityserver_server_retieval_config, "$koha_config_dir/${marc_format}-retrieval-info-auth-dom.xml")
 	$_authorityserver_server_sru_explain = pick($authorityserver_server_sru_explain, "$koha_config_dir/explain-authorities.xml")
-	$_authorityserver_serverinfo_ccl2rpn = pick($authorityserver_serverinfo_ccl2rpn, $_server_ccl2rpn)
+	$_authorityserver_serverinfo_ccl2rpn = pick($authorityserver_serverinfo_ccl2rpn, $_serverinfo_ccl2rpn)
 
 	##
 	# Files required by the Zebra server instance.
