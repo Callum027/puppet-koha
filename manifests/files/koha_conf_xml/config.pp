@@ -85,8 +85,10 @@ define koha::files::koha_conf_xml::config
 	$log4perl_conf		= undef, # Defined in resource body
 
 	# koha::params default values.
+	$koha_doc_dir		= $::koha::params::koha_doc_dir,
 	$koha_lib_dir		= $::koha::params::koha_lib_dir,
 	$koha_lock_dir		= $::koha::params::koha_lock_dir,
+	$koha_log_dir		= $::koha::params::koha_log_dir,
 	$koha_share_dir		= $::koha::params::koha_share_dir,
 	$koha_spool_dir		= $::koha::params::koha_spool_dir
 )
