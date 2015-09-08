@@ -37,9 +37,10 @@
 #
 class koha::mysql::install
 (
-	$ensure			= "present",
-	$mysql_bind_address	= $::koha::params::mysql_bind_address,
-	$mysql_port		= $::koha::params::mysql_port
+	$ensure		= "present",
+
+	$bind_address	= $::ipaddress,
+	$aport		= 3306
 ) inherits koha::params
 {
 	unless ($ensure != "present" or defined(Class["::mysql::server"]))
@@ -52,8 +53,8 @@ class koha::mysql::install
 			{
 				"mysqld"	=>
 				{
-					"bind-address"	=> $mysql_bind_address,
-					"port"		=> $mysql_port,
+					"bind-address"	=> $bind_address,
+					"port"		=> $port,
 				},
 			},
 		}
