@@ -64,7 +64,7 @@ define koha::files::koha_conf_xml::config
 	$includes		= undef, # Defined in resource body
 	$logdir			= undef, # Defined in resource body
 	$docdir			= $::koha::params::koha_doc_dir,
-	$backupdir		= 
+	$backupdir		= undef, # Defined in resource body
 
 	$backup_db_via_tools	= 0,
 	$backup_conf_via_tools	= 0,

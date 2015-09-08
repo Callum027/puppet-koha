@@ -63,11 +63,16 @@ define koha::site
 	##
 
 	# koha-conf.xml configuration file.
-	unless (defined(::Koha::Files::Koha_conf_xml[$site_name]))
+	if (defined(::Koha::Files::Koha_conf_xml[$site_name]))
+	{
+		Class["::koha::install"] -> ::Koha::Files::Koha_conf_xml[$site_name]
+	}
+	else
 	{
 		::koha::files::koha_conf_xml
 		{ $site_name:
 			ensure	=> $ensure,
+			require	=> Class["::koha::install"],
 		}
 	}
 
