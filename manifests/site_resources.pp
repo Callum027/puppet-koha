@@ -72,7 +72,8 @@ define koha::site_resources
 	}
 
 	# Required folders for configuration and log files.
-	$koha_user = getparam(::Koha::User_name[$site_name], "user")
+	# $koha_user = getparam(::Koha::User_name[$site_name], "user")
+	$koha_user = "${site_name}-koha"
 
 	file
 	{ "$koha_log_dir/$site_name":
