@@ -238,6 +238,16 @@ define koha::zebra::site
 		}
 	}
 
+	unless (defined(::Koha::Files::Koha_conf_xml::Config[$site_name]))
+	{
+		::koha::files::koha_conf_xml::config
+		{ $site_name:
+			ensure			=> $ensure,
+			zebra_bib_index_mode	=> $indexing_mode,
+			zebra_auth_index_mode	=> $indexing_mode,
+		}
+	}
+
 	if ($biblioserver == true)
 	{
 		::koha::zebra::site::client
