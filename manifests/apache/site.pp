@@ -47,7 +47,7 @@ define koha::apache::site
 	$opac_ssl				= undef, # Defined in resource body
 	$intra_ssl				= undef, # Defined in resource body
 
-	$port					= "80"
+	$port					= "80",
 	$ssl_port				= "443",
 
 	$opac_port				= undef, # Defined in resource body
