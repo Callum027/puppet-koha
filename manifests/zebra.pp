@@ -65,5 +65,6 @@ class koha::zebra($ensure = "present")
 	##
 	# Dependency chains.
 	##
-	Class["::koha::zebra::install"] ~> Class["::koha::zebra::service"]
+	Class["::koha::zebra::install"] -> Class["::koha::system_resources"]
+	Class["::koha::zebra::install"] -> Class["::koha::zebra::service"]
 }

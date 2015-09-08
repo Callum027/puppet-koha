@@ -63,16 +63,13 @@ define koha::site
 	##
 
 	# koha-conf.xml configuration file.
-	if (defined(::Koha::Files::Koha_conf_xml[$site_name]))
-	{
-		::Koha::Files::Koha_conf_xml[$site_name] -> Class["::koha::install"]
-	}
-	else
+	Class["::koha::install"] -> ::Koha::Files::Koha_conf_xml[$site_name]
+
+	unless (defined(::Koha::Files::Koha_conf_xml[$site_name]))
 	{
 		::koha::files::koha_conf_xml
 		{ $site_name:
 			ensure	=> $ensure,
-			before	=> Class["::koha::install"],
 		}
 	}
 
@@ -86,12 +83,16 @@ define koha::site
 	}
 
 	# Apache HTTP Server.
-	unless (defined(::Koha::Apache::Site[$site_name]))
+	if (defined(::Koha::Apache::Site[$site_name]))
+	{
+		Class["::koha::install"] -> ::Koha::Apache::Site[$site_name]
+	}
 	{
 		# Apache vhost for the Koha site.
 		::koha::apache::site
 		{ $site_name:
 			ensure	=> $ensure,
+			require	=> Class["::koha::install"],
 		}
 	}
 

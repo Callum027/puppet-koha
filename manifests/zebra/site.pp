@@ -188,7 +188,7 @@ define koha::zebra::site
 		group	=> $koha_user,
 		mode	=> $koha_site_dir_conf_file_mode,
 		content	=> template("koha/zebra-biblios-site.cfg.erb"),
-		require	=> [ Class["::koha::zebra"], ::Koha::Site_resources[$site_name] ],
+		require	=> [ Class["::koha::zebra::install"], ::Koha::Site_resources[$site_name] ],
 		notify	=> Class["::koha::zebra::service"],
 	}
 
@@ -199,7 +199,7 @@ define koha::zebra::site
 		group	=> $koha_user,
 		mode	=> $koha_site_dir_conf_file_mode,
 		content	=> template("koha/zebra-biblios-dom-site.cfg.erb"),
-		require	=> [ Class["::koha::zebra"], ::Koha::Site_resources[$site_name] ],
+		require	=> [ Class["::koha::zebra::install"], ::Koha::Site_resources[$site_name] ],
 		notify	=> Class["::koha::zebra::service"],
 	}
 
@@ -210,7 +210,7 @@ define koha::zebra::site
 		group	=> $koha_user,
 		mode	=> $koha_site_dir_conf_file_mode,
 		content	=> template("koha/zebra-authorities-site.cfg.erb"),
-		require	=> [ Class["::koha::zebra"], ::Koha::Site_resources[$site_name] ],
+		require	=> [ Class["::koha::zebra::install"], ::Koha::Site_resources[$site_name] ],
 		notify	=> Class["::koha::zebra::service"],
 	}
 
@@ -221,7 +221,7 @@ define koha::zebra::site
 		group	=> $koha_user,
 		mode	=> $koha_site_dir_conf_file_mode,
 		content	=> template("koha/zebra-authorities-dom-site.cfg.erb"),
-		require	=> [ Class["::koha::zebra"], ::Koha::Site_resources[$site_name] ],
+		require	=> [ Class["::koha::zebra::install"], ::Koha::Site_resources[$site_name] ],
 		notify	=> Class["::koha::zebra::service"],
 	}
 
@@ -229,16 +229,13 @@ define koha::zebra::site
 	# koha-conf.xml configuration of the Zebra client and server.
 	##
 
-	if (defined(::Koha::Files::Koha_conf_xml[$site_name]))
-	{
-		::Koha::Files::Koha_conf_xml[$site_name] -> Class["::koha::zebra::install"]
-	}
-	else
+	Class["::koha::zebra::install"] -> ::Koha::Files::Koha_conf_xml[$site_name]
+
+	unless (defined(::Koha::Files::Koha_conf_xml[$site_name]))
 	{
 		::koha::files::koha_conf_xml
 		{ $site_name:
 			ensure	=> $ensure,
-			before	=> Class["::koha::zebra::install"],
 		}
 	}
 

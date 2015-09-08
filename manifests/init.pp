@@ -32,7 +32,7 @@ class koha($ensure = "present")
 	# Defined resources.
 	##
 	unless (defined(Class["::koha::install"]))
-	{	
+	{
 		class
 		{ "::koha::install":
 			ensure	=> $ensure,
@@ -50,5 +50,6 @@ class koha($ensure = "present")
 	##
 	# Dependency chains.
 	##
-	Class["::koha::install"] ~> Class["::koha::service"]
+	Class["::koha::install"] -> Class["::koha::system_resources"]
+	Class["::koha::install"] -> Class["::koha::service"]
 }
