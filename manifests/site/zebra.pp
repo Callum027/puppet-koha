@@ -66,7 +66,7 @@ define koha::site::zebra
 {
 	if ($ensure == "present" and $id == "biblioserver")
 	{
-		::koha::site::koha_conf_xml::config_index_mode
+		::koha::files::koha_conf_xml::config_index_mode
 		{ $name:
 			ensure			=> $ensure,
 			site_name		=> $site_name,
@@ -77,7 +77,7 @@ define koha::site::zebra
 	}
 	elsif ($ensure == "present" and $id == "authorityserver")
 	{
-		::koha::site::koha_conf_xml::config_index_mode
+		::koha::files::koha_conf_xml::config_index_mode
 		{ $name:
 			ensure			=> $ensure,
 			site_name		=> $site_name,
