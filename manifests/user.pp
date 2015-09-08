@@ -49,7 +49,7 @@ define koha::user
 	$nologin	= $::koha::params::nologin
 )
 {
-	$_user = pick($user, "${site_name}-koha"
+	$_user = pick($user, "${site_name}-koha")
 	$_full_name = pick($full_name, "Koha instance $_user")
 	$_home = pick($home, "$koha_lib_dir/$_user")
 
