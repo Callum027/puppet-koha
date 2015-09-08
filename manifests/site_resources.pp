@@ -35,7 +35,7 @@
 #
 # Copyright 2015 Callum Dickinson.
 #
-define koha::system_resources
+define koha::site_resources
 (
 	$ensure				= "present",
 	$site_name			= $name,
