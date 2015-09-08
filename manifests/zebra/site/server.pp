@@ -75,7 +75,7 @@ define koha::zebra::site::server
 {
 	case $listen_scheme
 	{
-		"unix": { $_listen_socket = pick($listen_socket, "unix:$koha_run_dir/$listen_unix_socket") }
+		"unix": { $_listen_socket = pick($listen_socket, "unix:$koha_run_dir/$site_name/$listen_unix_socket") }
 		"tcp": { $_listen_socket = pick($listen_socket, "tcp:@:$listen_tcp_port") }
 		default: { fail("invalid listen scheme 'listen_scheme' for '$id', valid values are 'unix' and 'tcp'") }
 	}
