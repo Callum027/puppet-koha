@@ -229,7 +229,7 @@ define koha::zebra::site
 	# koha-conf.xml configuration of the Zebra client and server.
 	##
 
-	Class["::koha::zebra::install"] -> ::Koha::Files::Koha_conf_xml[$site_name]
+	Class["::koha::zebra::install"] -> ::Koha::Files::Koha_conf_xml[$site_name] ~> Class["::koha::zebra::service"]
 
 	unless (defined(::Koha::Files::Koha_conf_xml[$site_name]))
 	{
