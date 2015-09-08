@@ -49,6 +49,7 @@ class koha::mysql::install
 
 		class
 		{ "::mysql::server":
+			restart	=> true,
 			override_options	=>
 			{
 				"mysqld"	=>
