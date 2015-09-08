@@ -37,15 +37,15 @@
 #
 define koha::mysql::site
 (
-	$ensure		= present,
-	$site_name	= $name,
+	$ensure			= present,
+	$site_name		= $name,
 
-	$database	= undef, # Defined in resource body
-	$hostname	= undef, # Defined in resource body
-	$port		= "3306",
-	$user		= undef, # Defined in resource body
+	$database		= undef, # Defined in resource body
+	$hostname		= undef, # Defined in resource body
+	$port			= "3306",
+	$user			= undef, # Defined in resource body
 
-	$hostname_use_fqdn = false,
+	$hostname_use_fqdn	= false,
 
 	$pass
 )
