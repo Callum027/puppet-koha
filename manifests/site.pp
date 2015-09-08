@@ -65,14 +65,14 @@ define koha::site
 	# koha-conf.xml configuration file.
 	if (defined(::Koha::Files::Koha_conf_xml[$site_name]))
 	{
-		Class["::koha::install"] -> ::Koha::Files::Koha_conf_xml[$site_name]
+		::Koha::Files::Koha_conf_xml[$site_name] -> Class["::koha::install"]
 	}
 	else
 	{
 		::koha::files::koha_conf_xml
 		{ $site_name:
 			ensure	=> $ensure,
-			require	=> Class["::koha::install"],
+			before	=> Class["::koha::install"],
 		}
 	}
 

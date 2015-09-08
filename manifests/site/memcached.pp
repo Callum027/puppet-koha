@@ -38,7 +38,7 @@
 define koha::site::memcached
 (
 	$ensure			= "present",
-	$site_name		= $name,
+	$site_name,
 
 	$namespace
 )

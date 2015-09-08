@@ -49,6 +49,8 @@ define koha::db::site
 {
 	@@::koha::site::db
 	{ $site_name:
+		ensure		=> $ensure,
+		site_name	=> $site_name,
 		db_scheme	=> $db_scheme,
 		database	=> $database,
 		port		=> $port,

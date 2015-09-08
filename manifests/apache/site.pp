@@ -109,8 +109,10 @@ define koha::apache::site
 	# Set default values.
 	##
 
-	$koha_user = getparam(::Koha::User_name[$site_name], "user")
-	$koha_conf_xml = getparam(::Koha::Files::Koha_conf_xml_file[$site_name], "filename")
+	#$koha_user = getparam(::Koha::User_name[$site_name], "user")
+	$koha_user = "${site_name}-koha"
+	#$koha_conf_xml = getparam(::Koha::Files::Koha_conf_xml_file[$site_name], "filename")
+	$koha_conf_xml = "$koha_site_dir/$site_name/koha-conf.xml"
 
 	$_site_intra = pick($site_intra, "$site_name-intra")
 

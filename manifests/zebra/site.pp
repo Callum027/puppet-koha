@@ -40,6 +40,8 @@ define koha::zebra::site
 	$ensure						= "present",
 	$site_name					= $name,
 
+	$collect_db					= true,
+
 	# Zebra options meant to be set by the user.
 	$user						= "kohauser",
 	$password,
@@ -131,7 +133,8 @@ define koha::zebra::site
 	##
 	# Post-definition variable declarations.
 	##
-	$koha_user = getparam(::Koha::User_name[$site_name], "user")
+	#$koha_user = getparam(::Koha::User_name[$site_name], "user")
+	$koha_user = "${site_name}-koha"
 
 	# Global koha-conf.xml options.
 	$_server_cql2rpn = pick($server_cql2rpn, "${koha_config_dir}/zebradb/pqf.properties")
@@ -225,16 +228,17 @@ define koha::zebra::site
 	##
 	# koha-conf.xml configuration of the Zebra client and server.
 	##
+
 	if (defined(::Koha::Files::Koha_conf_xml[$site_name]))
 	{
-		Class["::koha::zebra::install"] -> ::Koha::Files::Koha_conf_xml[$site_name]
+		::Koha::Files::Koha_conf_xml[$site_name] -> Class["::koha::zebra::install"]
 	}
 	else
 	{
 		::koha::files::koha_conf_xml
 		{ $site_name:
 			ensure	=> $ensure,
-			require	=> Class["::koha::zebra::install"],
+			before	=> Class["::koha::zebra::install"],
 		}
 	}
 
@@ -246,6 +250,13 @@ define koha::zebra::site
 			zebra_bib_index_mode	=> $indexing_mode,
 			zebra_auth_index_mode	=> $indexing_mode,
 		}
+	}
+
+	# TODO: Make collecting the database information unnecessary, by
+	# separating Zebra configuration from Koha.
+	if ($collect_db == true)
+	{
+		::Koha::Site::Db <<| site_name == $site_name |>>
 	}
 
 	if ($biblioserver == true)

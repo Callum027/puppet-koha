@@ -38,7 +38,7 @@
 define koha::site::elasticsearch
 (
 	$ensure			= "present",
-	$site_name		= $name,
+	$site_name,
 
 	$server,
 	$index_name

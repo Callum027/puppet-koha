@@ -50,6 +50,7 @@ define koha::memcached::site
 	@@::koha::site::memcached
 	{ $site_name:
 		ensure		=> $ensure,
+		site_name	=> $site_name,
 		namespace	=> $_namespace,
 	}
 }

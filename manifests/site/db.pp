@@ -38,7 +38,7 @@
 define koha::site::db
 (
 	$ensure			= "present",
-	$site_name		= $name,
+	$site_name,
 
 	$db_scheme,
 	$database,
