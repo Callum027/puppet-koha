@@ -247,6 +247,7 @@ define koha::zebra::site
 		@::koha::files::koha_conf_xml::config
 		{ $site_name:
 			ensure			=> $ensure,
+			site_name		=> $site_name,
 			zebra_bib_index_mode	=> $indexing_mode,
 			zebra_auth_index_mode	=> $indexing_mode,
 		}

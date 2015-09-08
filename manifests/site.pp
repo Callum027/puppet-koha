@@ -80,7 +80,8 @@ define koha::site
 	{
 		@::koha::files::koha_conf_xml::config
 		{ $site_name:
-			ensure			=> $ensure,
+			ensure		=> $ensure,
+			site_name	=> $site_name,
 		}
 	}
 
