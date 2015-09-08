@@ -178,7 +178,7 @@ define koha::zebra::site
 
 	# Required configuration files for the Zebra index.
 	file
-	{ $biblioserver_server_config_grs1:
+	{ $_biblioserver_server_config_grs1:
 		ensure	=> $ensure,
 		owner	=> $koha_site_dir_conf_file_owner,
 		group	=> $koha_user,
@@ -189,7 +189,7 @@ define koha::zebra::site
 	}
 
 	file
-	{ $biblioserver_server_config_dom:
+	{ $_biblioserver_server_config_dom:
 		ensure	=> $ensure,
 		owner	=> $koha_site_dir_conf_file_owner,
 		group	=> $koha_user,
@@ -200,7 +200,7 @@ define koha::zebra::site
 	}
 
 	file
-	{ $authorityserver_server_config_grs1:
+	{ $_authorityserver_server_config_grs1:
 		ensure	=> $ensure,
 		owner	=> $koha_site_dir_conf_file_owner,
 		group	=> $koha_user,
@@ -211,7 +211,7 @@ define koha::zebra::site
 	}
 
 	file
-	{ $authorityserver_server_config_dom:
+	{ $_authorityserver_server_config_dom:
 		ensure	=> $ensure,
 		owner	=> $koha_site_dir_conf_file_owner,
 		group	=> $koha_user,
