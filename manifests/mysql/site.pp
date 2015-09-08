@@ -83,6 +83,7 @@ define koha::mysql::site
 	{ $site_name:
 		db_scheme	=> "mysql",
 		database	=> $_database,
+		hostname	=> $::fqdn,
 		port		=> $port,
 		user		=> $_user,
 		pass		=> $pass,

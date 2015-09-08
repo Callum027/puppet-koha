@@ -42,6 +42,7 @@ define koha::db::site
 
 	$db_scheme,
 	$database,
+	$hostname,
 	$port,
 	$user,
 	$pass
@@ -53,6 +54,7 @@ define koha::db::site
 		site_name	=> $site_name,
 		db_scheme	=> $db_scheme,
 		database	=> $database,
+		hostname	=> $hostname,
 		port		=> $port,
 		user		=> $user,
 		pass		=> $pass,

@@ -42,6 +42,7 @@ define koha::site::db
 
 	$db_scheme,
 	$database,
+	$hostname,
 	$port,
 	$user,
 	$pass
@@ -51,11 +52,12 @@ define koha::site::db
 	{
 		::Koha::Files::Koha_conf_xml::Config <| site_name == $site_name |>
 		{
-			config_db_scheme	=> $db_scheme,
-			config_database		=> $database,
-			config_port		=> $port,
-			config_user		=> $user,
-			config_pass		=> $pass,
+			db_scheme	=> $db_scheme,
+			database	=> $database,
+			hostname	=> $hostname,
+			port		=> $port,
+			user		=> $user,
+			pass		=> $pass,
 		}
 	}
 }
