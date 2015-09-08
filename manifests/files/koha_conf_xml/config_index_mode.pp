@@ -64,7 +64,6 @@ define koha::files::koha_conf_xml::config_index_mode
 			ensure	=> $ensure,
 			content	=> " <zebra_auth_index_mode>$zebra_auth_index_mode</zebra_auth_index_mode>\n",
 			order	=> "06",
-			order	=> "06",
 		}
 	}
 }
