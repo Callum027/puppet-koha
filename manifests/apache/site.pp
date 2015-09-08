@@ -169,13 +169,6 @@ define koha::apache::site
 	##
 
 	# Generate Apache vhosts for the OPAC and Intranet servers for this Koha site.
-	file
-	{ [ $apache_config_dir, $apache_sites_available_dir, $apache_sites_enabled_dir ]:
-		ensure	=> $directory_ensure,
-		owner	=> $apache_dir_owner,
-		group	=> $apache_dir_group,
-		mode	=> $apache_dir_mode,
-	}
 
 	##
 	# Apache vhost configuration.
@@ -193,7 +186,7 @@ define koha::apache::site
 		owner	=> $apache_sites_dir_conf_file_owner,
 		group	=> $koha_user,
 		mode	=> $apache_sites_dir_conf_file_mode,
-		require	=> [ File[$koha_sites_available_dir], ::Koha::User[$site_name] ],
+		require	=> [ Class["::koha::install"], ::Koha::System_resources[$site_name] ],
 		before	=> Class["::koha::service"],
 		notify	=> Class["::apache::service"],
 	}
@@ -213,7 +206,7 @@ define koha::apache::site
 		owner	=> $apache_sites_dir_conf_file_owner,
 		group	=> $koha_user,
 		mode	=> $apache_sites_dir_conf_file_mode,
-		require	=> [ File["$apache_sites_available_dir/$site_name.conf"], ::Concat["${site_name}::apache_site_conf"], ::Koha::User[$site_name] ],
+		require	=> [ Class["::koha::install"], ::Koha::System_resources[$site_name], ::Concat["${site_name}::apache_site_conf"] ],
 		before	=> Class["::koha::service"],
 		notify	=> Class["::apache::service"],
 	}
