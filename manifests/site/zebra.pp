@@ -66,15 +66,23 @@ define koha::site::zebra
 {
 	if ($ensure == "present" and $id == "biblioserver")
 	{
-		::Koha::Files::Koha_conf_xml::Config <| site_name == $site_name |>
-		{
+		::koha::site::koha_conf_xml::config_index_mode
+		{ $name:
+			ensure			=> $ensure,
+			site_name		=> $site_name,
+			id			=> $id,
+
 			zebra_bib_index_mode	=> $server_indexing_mode,
 		}
 	}
 	elsif ($ensure == "present" and $id == "authorityserver")
 	{
-		::Koha::Files::Koha_conf_xml::Config <| site_name == $site_name |>
-		{
+		::koha::site::koha_conf_xml::config_index_mode
+		{ $name:
+			ensure			=> $ensure,
+			site_name		=> $site_name,
+			id			=> $id,
+
 			zebra_auth_index_mode	=> $server_indexing_mode,
 		}
 	}

@@ -116,10 +116,26 @@ define koha::files::koha_conf_xml::config
 	$_log4perl_conf = pick($log4perl_conf, "${koha_config_dir}/log4perl.conf")
 
 	::concat::fragment
-	{ "${site_name}::koha_conf_xml::config":
+	{ "${site_name}::koha_conf_xml::config_start":
 		target	=> "${site_name}::koha_conf_xml",
 		ensure	=> $ensure,
-		content	=> template("koha/koha_conf_xml/config.xml.erb"),
+		content	=> "<config>\n",
 		order	=> "05",
+	}
+
+	::concat::fragment
+	{ "${site_name}::koha_conf_xml::config_main":
+		target	=> "${site_name}::koha_conf_xml",
+		ensure	=> $ensure,
+		content	=> template("koha/koha_conf_xml/config_main.xml.erb"),
+		order	=> "06",
+	}
+
+	::concat::fragment
+	{ "${site_name}::koha_conf_xml::config_end":
+		target	=> "${site_name}::koha_conf_xml",
+		ensure	=> $ensure,
+		content	=> "</config>\n",
+		order	=> "08",
 	}
 }
