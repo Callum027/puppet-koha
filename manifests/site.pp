@@ -83,10 +83,9 @@ define koha::site
 	}
 
 	# Apache HTTP Server.
-	if (defined(::Koha::Apache::Site[$site_name]))
-	{
-		Class["::koha::install"] -> ::Koha::Apache::Site[$site_name]
-	}
+	Class["::koha::install"] -> ::Koha::Apache::Site[$site_name]
+
+	unless (defined(::Koha::Apache::Site[$site_name]))
 	{
 		# Apache vhost for the Koha site.
 		::koha::apache::site
