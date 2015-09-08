@@ -5,14 +5,14 @@
 
 <% if @ssl_only != true -%>
 # OPAC
-<VirtualHost *:<%= @opac_port %>>
+<VirtualHost *:<%= @_opac_port %>>
    Include /etc/koha/apache-shared.conf
 #  Include /etc/koha/apache-shared-disable.conf
    Include /etc/koha/apache-shared-opac.conf
 
    ServerName <%= @_opac_server_name %>
-   SetEnv KOHA_CONF "<%= @koha_site_dir %>/<%= @site_name %>/koha-conf.xml"
-   AssignUserID <%= @_koha_user %> <%= @_koha_user %>
+   SetEnv KOHA_CONF "<%= @koha_conf_xml %>"
+   AssignUserID <%= @koha_user %> <%= @koha_user %>
 
 <% if @_opac_error_log -%>
    ErrorLog    <%= @_opac_error_log %>
@@ -20,22 +20,22 @@
 <%- if @_opac_access_log -%>
    TransferLog <%= @_opac_access_log %>
 <%- end -%>
-<% if @_use_rewrite_log == true and @_opac_rewrite_log -%>
+<% if @use_rewrite_log == true and @_opac_rewrite_log -%>
    RewriteLog  <%= @_opac_rewrite_log %>
 <%- end -%>
 </VirtualHost>
 
 <%- end -%>
-<% if @_opac_ssl == true and @opac_ssl_port -%>
+<% if @_opac_ssl == true and @_opac_ssl_port -%>
 # OPAC (SSL)
-<VirtualHost *:<%= @opac_ssl_port %>>
+<VirtualHost *:<%= @_opac_ssl_port %>>
    Include /etc/koha/apache-shared.conf
 #  Include /etc/koha/apache-shared-disable.conf
    Include /etc/koha/apache-shared-opac.conf
 
    ServerName <%= @_opac_server_name %>
-   SetEnv KOHA_CONF "<%= @koha_site_dir %>/<%= @site_name %>/koha-conf.xml"
-   AssignUserID <%= @_koha_user %> <%= @_koha_user %>
+   SetEnv KOHA_CONF "<%= @koha_conf_xml %>"
+   AssignUserID <%= @koha_user %> <%= @koha_user %>
 
 <% if @_opac_error_ssl_log -%>
    ErrorLog    <%= @_opac_error_ssl_log %>
@@ -43,7 +43,7 @@
 <%- if @_opac_access_ssl_log -%>
    TransferLog <%= @_opac_access_ssl_log %>
 <%- end -%>
-<% if @_use_rewrite_log == true and @_opac_rewrite_ssl_log -%>
+<% if @use_rewrite_log == true and @_opac_rewrite_ssl_log -%>
    RewriteLog  <%= @_opac_rewrite_ssl_log %>
 <%- end -%>
 
@@ -56,14 +56,14 @@
 <%- end -%>
 <% if @ssl_only != true -%>
 # Intranet
-<VirtualHost *:<%= @intra_port %>>
+<VirtualHost *:<%= @_intra_port %>>
    Include /etc/koha/apache-shared.conf
 #  Include /etc/koha/apache-shared-disable.conf
    Include /etc/koha/apache-shared-intranet.conf
    
    ServerName <%= @_intra_server_name %>
-   SetEnv KOHA_CONF "<%= @koha_site_dir %>/<%= @site_name %>/koha-conf.xml"
-   AssignUserID <%= @_koha_user %> <%= @_koha_user %>
+   SetEnv KOHA_CONF "<%= @koha_conf_xml %>"
+   AssignUserID <%= @koha_user %> <%= @koha_user %>
 
 <% if @_intranet_error_log -%>
    ErrorLog    <%= @_intranet_error_log %>
@@ -71,22 +71,22 @@
 <%- if @_intranet_access_log -%>
    TransferLog <%= @_intranet_access_log %>
 <%- end -%>
-<%- if @_use_rewrite_log == true and @_intranet_rewrite_log -%>
+<%- if @use_rewrite_log == true and @_intranet_rewrite_log -%>
    RewriteLog  <%= @_intranet_rewrite_log %>
 <%- end -%>
 </VirtualHost>
 
 <%- end -%>
-<% if @_intra_ssl == true and @intra_ssl_port -%>
+<% if @_intra_ssl == true and @_intra_ssl_port -%>
 # Intranet (SSL)
-<VirtualHost *:<%= @intra_ssl_port %>>
+<VirtualHost *:<%= @_intra_ssl_port %>>
    Include /etc/koha/apache-shared.conf
 #  Include /etc/koha/apache-shared-disable.conf
    Include /etc/koha/apache-shared-intranet.conf
    
    ServerName <%= @_intra_server_name %>
-   SetEnv KOHA_CONF "<%= @koha_site_dir %>/<%= @site_name %>/koha-conf.xml"
-   AssignUserID <%= @_koha_user %> <%= @_koha_user %>
+   SetEnv KOHA_CONF "<%= @koha_conf_xml %>"
+   AssignUserID <%= @koha_user %> <%= @koha_user %>
 
 <% if @_intranet_error_ssl_log -%>
    ErrorLog    <%= @_intranet_error_ssl_log %>
@@ -94,7 +94,7 @@
 <%- if @_intranet_access_ssl_log -%>
    TransferLog <%= @_intranet_access_ssl_log %>
 <%- end -%>
-<%- if @_use_rewrite_ssl_log == true and @_intranet_rewrite_ssl_log -%>
+<%- if @use_rewrite_log == true and @_intranet_rewrite_ssl_log -%>
    RewriteLog  <%= @_intranet_rewrite_ssl_log %>
 <%- end -%>
 

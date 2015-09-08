@@ -76,8 +76,8 @@ define koha::files::koha_conf_xml::config
 	$useldapserver		= 0,
 	$useshibboleth		= 0,
 
-	$zebra_bib_index_mode, # Filled in by ::koha::site::zebra
-	$zebra_auth_index_mode, # Filled in by ::koha::site::zebra
+	$zebra_bib_index_mode	= undef, # Filled in by ::koha::site::zebra
+	$zebra_auth_index_mode	= undef, # Filled in by ::koha::site::zebra
 
 	$zebra_lockdir		= undef, # Defined in resource body
 	$use_zebra_facets	= 1,
@@ -85,6 +85,7 @@ define koha::files::koha_conf_xml::config
 	$log4perl_conf		= undef, # Defined in resource body
 
 	# koha::params default values.
+	$koha_config_dir	= $::koha::params::koha_config_dir,
 	$koha_doc_dir		= $::koha::params::koha_doc_dir,
 	$koha_lib_dir		= $::koha::params::koha_lib_dir,
 	$koha_lock_dir		= $::koha::params::koha_lock_dir,
@@ -105,6 +106,7 @@ define koha::files::koha_conf_xml::config
 	$_intrahtdocs = pick($intrahtdocs, "${koha_share_dir}/intranet/htdocs/intranet-tmpl")
 	$_includes = pick($includes, "${koha_share_dir}/intranet/htdocs/intranet-tmpl/prog/en/includes/")
 	$_logdir = pick($logdir, "${koha_log_dir}/${site_name}")
+	$_docdir = pick($docdir, $koha_doc_dir)
 	$_backupdir = pick($backupdir, "${koha_spool_dir}/${site_name}")
 
 	$_install_log = pick($install_log, "${koha_share_dir}/misc/koha-install-log")

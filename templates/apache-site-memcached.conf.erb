@@ -1,4 +1,4 @@
-<If %{SERVER_NAME} == <%= @opac_server_name %> || %{SERVER_NAME} == <%= @intra_server_name %>>
-   SetEnv MEMCACHED_SERVERS "<%= @_memcached_servers %>"
+<If "%{SERVER_NAME} == '<%= @opac_server_name %>' || %{SERVER_NAME} == '<%= @intra_server_name %>'">
+   SetEnv MEMCACHED_SERVERS "<%= @memcached_servers %>"
    SetEnv MEMCACHED_NAMESPACE "<%= @memcached_namespace %>"
 </If>

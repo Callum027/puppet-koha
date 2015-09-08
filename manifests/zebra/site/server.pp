@@ -68,6 +68,9 @@ define koha::zebra::site::server
 	$serverinfo_ccl2rpn,
 	$serverinfo_user,
 	$serverinfo_password,
+
+	# koha::params default values.
+	$koha_run_dir			= $::koha::params::koha_run_dir
 )
 {
 	case $listen_scheme

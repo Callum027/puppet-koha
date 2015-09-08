@@ -45,6 +45,6 @@ define koha::site::memcached
 {
 	::koha::apache::memcached
 	{ $site_name:
-		namespace	=> $namespace,
+		memcached_namespace	=> $namespace,
 	}
 }

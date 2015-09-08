@@ -152,7 +152,7 @@ define koha::zebra::site
 	# Biblioserver options.
 	$_authorityserver_server_directory = pick($authorityserver_server_directory, "$koha_lib_dir/${site_name}/authorities")
 	$_authorityserver_server_config_grs1 = pick($authorityserver_server_config_grs1, "$koha_site_dir/${site_name}/zebra-authorities.cfg")
-	$_authorityserver_server_config_dom = pick($authorityserver_server_config_dom, "$koha_site_dir/${site_name}/zebra-authoritiess-dom.cfg")
+	$_authorityserver_server_config_dom = pick($authorityserver_server_config_dom, "$koha_site_dir/${site_name}/zebra-authorities-dom.cfg")
 	$_authorityserver_server_cql2rpn = pick($authorityserver_server_cql2rpn, $_server_cql2rpn)
 	$_authorityserver_server_retrieval_config = pick($authorityserver_server_retieval_config, "$koha_config_dir/${marc_format}-retrieval-info-auth-dom.xml")
 	$_authorityserver_server_sru_explain = pick($authorityserver_server_sru_explain, "$koha_config_dir/explain-authorities.xml")

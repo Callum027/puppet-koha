@@ -42,6 +42,8 @@ define koha::apache::site
 	$site_name				= $name,
 	$site_intra				= undef, # Defined in resource body
 
+	$use_rewrite_log			= false,
+
 	$ssl					= true,
 	$ssl_only				= false,
 	$opac_ssl				= undef, # Defined in resource body
