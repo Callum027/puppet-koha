@@ -74,14 +74,14 @@ define koha::zebra::site::server
 	{
 		"unix": { $_listen_socket = pick($listen_socket, "unix:$koha_run_dir/$listen_unix_socket") }
 		"tcp": { $_listen_socket = pick($listen_socket, "tcp:@:$listen_tcp_port") }
-		default: { fail("invalid listen scheme '$listen_scheme' for '$id', valid values are 'unix' and 'tcp'") }
+		default: { fail("invalid listen scheme 'listen_scheme' for '$id', valid values are 'unix' and 'tcp'") }
 	}
 
-	case $indexing_mode
+	case $server_indexing_mode
 	{
 		"grs1": { $_server_config = pick($server_config, $server_config_grs1) }
 		"dom": { $_server_config = pick($server_config, $server_config_dom) }
-		default: { fail("invalid indexing mode '$indexing_mode' for '$id', valid values are 'dom' and 'grs1'") }
+		default: { fail("invalid indexing mode '$server_indexing_mode' for '$id', valid values are 'dom' and 'grs1'") }
 	}
 
 	::koha::site::zebra
