@@ -95,11 +95,6 @@ define koha::files::koha_conf_xml
 		order	=> "99",
 	}
 
-	::koha::site::koha_conf_xml
-	{ $site_name:
-		koha_conf_xml	=> $_file,
-	}
-
 	::koha::files::koha_conf_xml_file
 	{ $site_name:
 		filename	=> $_file,
