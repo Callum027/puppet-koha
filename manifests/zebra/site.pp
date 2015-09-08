@@ -44,8 +44,9 @@ define koha::zebra::site
 	$user						= "kohauser",
 	$password,
 
-	$language					= $::koha::params::language,
-	$marc_format					= $::koha::params::marc_format,
+	$language					= $::koha::params::koha_language,
+	$marc_format					= "marc21",
+	$indexing_mode					= "dom",
 
 	# Global (both biblioserver and authorityserver) SRU server options.
 	$public_sru_server				= false,
