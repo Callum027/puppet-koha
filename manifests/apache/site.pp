@@ -41,6 +41,9 @@ define koha::apache::site
 
 	$site_name				= $name,
 	$site_intra				= undef, # Defined in resource body
+	$base_domain				= $::
+
+	$site_file				= $name,
 
 	$use_rewrite_log			= false,
 
@@ -183,7 +186,7 @@ define koha::apache::site
 
 	::concat
 	{ "${site_name}::apache_site_conf":
-		path	=> "$apache_sites_available_dir/$site_name.conf",
+		path	=> "$apache_sites_available_dir/$site_file.conf",
 		ensure	=> $ensure,
 		owner	=> $apache_sites_dir_conf_file_owner,
 		group	=> $koha_user,
@@ -202,9 +205,9 @@ define koha::apache::site
 	}
 
 	file
-	{ "$apache_sites_enabled_dir/$site_name.conf":
+	{ "$apache_sites_enabled_dir/$site_file.conf":
 		ensure	=> $link_ensure,
-		target	=> "$apache_sites_available_dir/$site_name.conf",
+		target	=> "$apache_sites_available_dir/$site_file.conf",
 		owner	=> $apache_sites_dir_conf_file_owner,
 		group	=> $koha_user,
 		mode	=> $apache_sites_dir_conf_file_mode,

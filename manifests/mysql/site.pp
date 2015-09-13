@@ -47,6 +47,8 @@ define koha::mysql::site
 
 	$hostname_use_fqdn	= false,
 
+	$sql			= undef,
+
 	$pass
 )
 {
@@ -87,6 +89,8 @@ define koha::mysql::site
 		password	=> $pass,
 		host		=> '%',
 		grant		=> 'ALL',
+		sql		=> $sql,
+
 		require		=> Class["::koha::mysql"],
 	}
 
