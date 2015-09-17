@@ -81,4 +81,10 @@ class koha::system_resources
 		group	=> $koha_dir_group,
 		mode	=> $koha_dir_mode,
 	}
+
+	package
+	{ "mysql2":
+		provider	=> "gem",
+		ensure		=> $ensure,
+	}
 }

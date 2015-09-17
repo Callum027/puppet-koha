@@ -1,6 +1,6 @@
-# == Class: koha::mysql
+# == Class: koha::site
 #
-# Configure the MySQL database.
+# Set up a Koha site instance.
 #
 # === Parameters
 #
@@ -35,18 +35,15 @@
 #
 # Copyright 2015 Callum Dickinson.
 #
-class koha::memcached($ensure = "present")
+class koha::depends($ensure = "present")
 {
-	require ::koha::params
-	require ::koha::depends
+	##
+	# Resource declaration.
+	##
 
-	unless (defined(Class["::koha::memcached::install"]))
-	{
-		class
-		{ "::koha::memcached::install":
-			ensure	=> $ensure,
-		}
-
-		contain "::koha::memcached::install"
+	package
+	{ "mysql2":
+		provider	=> "gem",
+		ensure		=> $ensure,
 	}
 }
