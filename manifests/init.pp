@@ -23,7 +23,6 @@
 class koha($ensure = "present")
 {
 	require ::koha::params
-	require ::koha::depends
 
 	# Include other related resources used by other parts of the module.
 	include ::koha::system_resources

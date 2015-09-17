@@ -38,7 +38,6 @@
 class koha::mysql($ensure = "present")
 {
 	require ::koha::params
-	require ::koha::depends
 
 	unless (defined(Class["::koha::mysql::install"]))
 	{

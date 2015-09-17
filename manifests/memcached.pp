@@ -38,7 +38,6 @@
 class koha::memcached($ensure = "present")
 {
 	require ::koha::params
-	require ::koha::depends
 
 	unless (defined(Class["::koha::memcached::install"]))
 	{
