@@ -41,9 +41,9 @@ define koha::files::koha_conf_xml
 	$site_name	= $name,
 
 	$file		= undef, # Defined in resource body
-	$owner		= $::koha::params::koha_conf_xml::file_owner,
+	$owner		= "root",
 	$group		= undef, # Fetched from ::koha::user
-	$mode		= $::koha::params::koha_conf_xml::file_mode,
+	$mode		= "640",
 
 	# koha::params default values.
 	$koha_site_dir	= $::koha::params::koha_site_dir
@@ -56,11 +56,6 @@ define koha::files::koha_conf_xml
 	unless (defined(Class["::koha::params"]))
 	{
 		fail("You must define koha::params for this resource to work properly")
-	}
-
-	unless (defined(Class["::koha::params::koha_conf_xml"]))
-	{
-		fail("You must define koha::params::koha_conf_xml for this resource to work properly")
 	}
 
 	##
