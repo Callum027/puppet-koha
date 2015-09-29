@@ -41,7 +41,6 @@ define koha::apache::site
 
 	$site_name				= $name,
 	$site_intra				= undef, # Defined in resource body
-	$base_domain				= $::
 
 	$site_file				= $name,
 
