@@ -1,0 +1,97 @@
+{
+  "name": "Callum027-koha",
+  "version": "0.0.1",
+  "source": "https://github.com/Callum027/puppet-koha",
+  "author": "Callum027",
+  "license": "Apache License, Version 2.0",
+  "summary": "Koha - Free Library System",
+  "description": "A Puppet module for the Koha open source ILS",
+  "project_page": "https://github.com/Callum027/puppet-koha",
+  "dependencies": [
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 4.6.0 <5.0.0"
+    },
+    {
+      "name": "puppetlabs/apt",
+      "version_requirement": ">= 1.8.0 <2.0.0"
+    },
+    {
+      "name": "dalen/puppetdbquery",
+      "version_requirement": ">= 1.5.3 <2.0.0"
+    },
+    {
+      "name": "puppetlabs/apache",
+      "version_requirement": ">= 1.4.0 <2.0.0"
+    },
+    {
+      "name": "puppetlabs/mysql",
+      "version_requirement": ">= 3.3.0 <4.0.0"
+    },
+    {
+      "name": "saz/memcached",
+      "version_requirement": ">= 2.7.1 <3.0.0"
+    }
+  ],
+  "types": [
+
+  ],
+  "checksums": {
+    "Modulefile": "7c89acea4babfb5375a48708e9a062b3",
+    "README": "d152c226b561e58ca4e631704e5d31f0",
+    "manifests/apache/memcached.pp": "49287aa14226edaaeca215c3f31449a4",
+    "manifests/apache/site.pp": "8dc0d85fa4e56649fe47b599531fe439",
+    "manifests/apache/site_name.pp": "81e7d049fa71a25883f7ff2357b883fc",
+    "manifests/db/site.pp": "f9b1a6f47e846984a8a3fb7fa5fa3857",
+    "manifests/files/koha_conf_xml/config.pp": "34f3ce3bcdcb56abb55e1d7e64d0831d",
+    "manifests/files/koha_conf_xml/config_index_mode.pp": "72f25386ff8fc2b53c503791a03533cd",
+    "manifests/files/koha_conf_xml/elasticsearch.pp": "f62a4fc93e540cca34a601ed61af5286",
+    "manifests/files/koha_conf_xml/elasticsearch_server.pp": "a4ef5d148c92a3659203e678a10dbe4a",
+    "manifests/files/koha_conf_xml/listen.pp": "59e327fbc061787b8942a081ad0394ce",
+    "manifests/files/koha_conf_xml/server.pp": "60389772b5e61b42f3392967d3dac84a",
+    "manifests/files/koha_conf_xml/serverinfo.pp": "b0de740f35ef8178ff988de3a7d278e5",
+    "manifests/files/koha_conf_xml.pp": "f562b64184a8dd872284597c922baab8",
+    "manifests/files/koha_conf_xml_file.pp": "452bd2529d761f6ab52084d52a571f62",
+    "manifests/init.pp": "0532e3d40af505b9480387e1527b779b",
+    "manifests/install.pp": "db5589e24c375f7e1b18ab64025077c7",
+    "manifests/log_dir.pp": "75047e4f303d71945f6fc2397670f9b9",
+    "manifests/memcached/install.pp": "4edb702d8cfa2205cc8880a93aa2cdd3",
+    "manifests/memcached/site.pp": "fefd872cc5e5e4f64a17986041a14a4f",
+    "manifests/memcached.pp": "08ffeb8e92ed041ad3c749c784259e5c",
+    "manifests/mysql/install.pp": "22df383a73ef4e1f95b1e93053c0d31a",
+    "manifests/mysql/site.pp": "d679c39b5e3b74739529c560374af9b5",
+    "manifests/mysql.pp": "e6f82b2c3ee427c2142861fe2e111b75",
+    "manifests/params.pp": "5dc0047d7ae04a8e0711381e10a33901",
+    "manifests/repo.pp": "477ba9b3a449d38358ee8b8f5c64ff94",
+    "manifests/service.pp": "21ab87f2d34e404a25dda786883ae409",
+    "manifests/site/db.pp": "6284bd251df70a3190997286837da230",
+    "manifests/site/elasticsearch.pp": "5b89f08f0c501092b344408491eeafe6",
+    "manifests/site/memcached.pp": "789d1c465e5d528909a9b4284ce2aac9",
+    "manifests/site/zebra.pp": "c7d56e6e16310edec141f2531dc8b891",
+    "manifests/site.pp": "ec228eb9bb8b597f6650d04a9fbd63f1",
+    "manifests/site_resources.pp": "70f6274b97620fe31412f9099cdf3e5b",
+    "manifests/system_resources.pp": "2537e31f1124cbbd615dac32988ee1e4",
+    "manifests/translate.pp": "00121f95c138df191d3ae625fcec1b70",
+    "manifests/user.pp": "326a01b0b99de0aefbd45fc074138a8f",
+    "manifests/user_name.pp": "ee5fad64221ea02118c62ce86827ad17",
+    "manifests/zebra/install.pp": "a23aa52648aa44f62fe8c21a8c4cadc3",
+    "manifests/zebra/service.pp": "c2205feb58701bc96709ad3a23f456c6",
+    "manifests/zebra/site/client.pp": "c0139a226fe0d7385862033a8c50b5cd",
+    "manifests/zebra/site/server.pp": "b598feb937c699267038ddfdbc2896d1",
+    "manifests/zebra/site.pp": "c2d73ad3878a7aec5f4aa2b1cedc2369",
+    "manifests/zebra.pp": "3f18fafe20493778d416a69a65cfcee2",
+    "spec/spec_helper.rb": "a55d1e6483344f8ec6963fcb2c220372",
+    "templates/apache-site-memcached.conf.erb": "f7cec118f77bcb61715d596dcd7962e4",
+    "templates/apache-site.conf.erb": "d1c7299ec74cb0ce990d35e733905c1f",
+    "templates/koha_conf_xml/config_main.xml.erb": "1f06330507b1d49df9cbf22640501b33",
+    "templates/koha_conf_xml/listen.xml.erb": "f0b9cf12288eec92bfe8c660c1f92d0c",
+    "templates/koha_conf_xml/server.xml.erb": "85caf6ff689b6d6dd8a0258df44ff56b",
+    "templates/koha_conf_xml/serverinfo.xml.erb": "10f88ec22252d8b7aac052fe7d50ae59",
+    "templates/zebra-authorities-dom-site.cfg.erb": "d99934d2e3617c131dd4747f33d45241",
+    "templates/zebra-authorities-site.cfg.erb": "c5c438ed4b4b87c569f0bd72f1327b3c",
+    "templates/zebra-biblios-dom-site.cfg.erb": "b9d1d3845c336f19651dca9b685fd2b4",
+    "templates/zebra-biblios-site.cfg.erb": "c3ca117e4a3018fdf93608675632d34f",
+    "templates/zebra.passwd.erb": "9aa3bee6bcaef9307e7c8dea04aa5cb7",
+    "tests/init.pp": "1f9e28e61f5326607632d13792c72e93"
+  }
+}
